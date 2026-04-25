@@ -150,7 +150,7 @@
       height: 260px; position: relative; overflow: hidden;
       display: flex; align-items: center; justify-content: center;
     }
-    .product-img-bg { width: 100%; height: 100%; transition: transform 0.5s ease; }
+    .product-img-bg { width: 100%; height: 100%; transition: transform 0.5s ease; object-fit: cover; }
     .product-card:hover .product-img-bg { transform: scale(1.04); }
     .product-img-overlay {
       position: absolute; inset: 0;
@@ -333,7 +333,7 @@
       border-radius: 0.4rem; margin-bottom: 0.5rem;
       background: #FAFAF8;
     }
-    .admin-product-color { width: 44px; height: 44px; border-radius: 0.3rem; flex-shrink: 0; }
+    .admin-product-thumb { width: 44px; height: 44px; border-radius: 0.3rem; flex-shrink: 0; object-fit: cover; }
     .admin-product-info { flex: 1; min-width: 0; }
     .admin-product-name { font-weight: 500; font-size: 0.92rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .admin-product-meta { font-size: 0.75rem; color: var(--mist); }
@@ -364,12 +364,21 @@
     .product-form .form-group select:focus { outline: none; border-color: var(--coral); }
     .product-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
     .product-form .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.8rem; }
-    .color-preview { width: 100%; height: 80px; border-radius: 0.3rem; margin-top: 0.5rem; transition: background 0.3s; }
+    .color-preview { width: 100%; height: 60px; border-radius: 0.3rem; margin-top: 0.5rem; transition: background 0.3s; }
     .form-actions { display: flex; gap: 0.8rem; margin-top: 1.2rem; }
     .btn-save { background: var(--coral); color: white; border: none; padding: 0.75rem 1.8rem; border-radius: 0.3rem; font-family: 'Jost', sans-serif; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: background 0.2s; }
     .btn-save:hover { background: var(--ink); }
     .btn-cancel { background: white; color: var(--mist); border: 1.5px solid var(--light-border); padding: 0.75rem 1.5rem; border-radius: 0.3rem; font-family: 'Jost', sans-serif; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
     .btn-cancel:hover { border-color: var(--mist); color: var(--ink); }
+
+    /* Image field */
+    .image-preview-box {
+      margin-top: 0.7rem; border-radius: 0.4rem; overflow: hidden;
+      border: 1.5px solid rgba(100,80,50,0.15);
+      background: #f9f6f0;
+    }
+    .image-preview-box img { width: 100%; height: 150px; object-fit: cover; display: block; }
+    .image-preview-error { padding: 0.8rem; font-size: 0.78rem; color: var(--coral); }
 
     /* Password settings */
     .settings-section { margin-bottom: 2rem; }
@@ -601,10 +610,16 @@
       grid.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🎨</div><h3>Próximamente</h3><p>Entra al panel de <strong>Edición</strong> para añadir tus primeras obras.</p></div>`;
       return;
     }
-    grid.innerHTML = products.map((p, i) => `
+    grid.innerHTML = products.map((p, i) => {
+      const imgSrc = p.image ? 'imagenes/' + p.image : null;
+      const imgHtml = imgSrc
+        ? `<img class="product-img-bg" src="${imgSrc}" alt="${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">`
+          + `<div class="product-img-bg" style="background:${p.color || 'linear-gradient(135deg,#D4603A,#C8942A)'};display:none;"></div>`
+        : `<div class="product-img-bg" style="background:${p.color || 'linear-gradient(135deg,#D4603A,#C8942A)'}"></div>`;
+      return `
       <div class="product-card">
         <div class="product-img">
-          <div class="product-img-bg" style="background: ${p.color || 'linear-gradient(135deg,#D4603A,#C8942A)'}; width:100%; height:100%;"></div>
+          ${imgHtml}
           <div class="product-img-overlay">
             <button class="product-img-btn" onclick="addToCart('${p.name}')">Añadir al carrito</button>
           </div>
@@ -622,8 +637,8 @@
             <button class="add-btn" onclick="addToCart('${p.name}')" ${p.soldOut ? 'disabled' : ''}>${p.soldOut ? 'Vendido' : 'Comprar'}</button>
           </div>
         </div>
-      </div>
-    `).join('');
+      </div>`;
+    }).join('');
   }
 
   // ===== CART =====
@@ -712,19 +727,24 @@
     }
     el.innerHTML = `
       <div class="admin-product-list">
-        ${products.map((p, i) => `
+        ${products.map((p, i) => {
+          const thumbSrc = p.image ? 'imagenes/' + p.image : null;
+          const thumbHtml = thumbSrc
+            ? `<img class="admin-product-thumb" src="${thumbSrc}" alt="${p.name}" onerror="this.style.background='${p.color||'#ccc'}';this.src=''">`
+            : `<div class="admin-product-thumb" style="background:${p.color||'#ccc'}"></div>`;
+          return `
           <div class="admin-product-item">
-            <div class="admin-product-color" style="background:${p.color || '#ccc'}"></div>
+            ${thumbHtml}
             <div class="admin-product-info">
               <div class="admin-product-name">${p.name}</div>
-              <div class="admin-product-meta">${p.price ? p.price + ' €' : ''} ${p.technique ? '· ' + p.technique : ''} ${p.soldOut ? '· VENDIDO' : ''}</div>
+              <div class="admin-product-meta">${p.price ? p.price + ' €' : ''} ${p.technique ? '· ' + p.technique : ''} ${p.soldOut ? '· VENDIDO' : ''} ${p.image ? '· 📷 ' + p.image : ''}</div>
             </div>
             <div class="admin-product-actions">
               <button class="admin-btn-edit" onclick="startEdit(${i})">Editar</button>
               <button class="admin-btn-del" onclick="deleteProduct(${i})">Eliminar</button>
             </div>
-          </div>
-        `).join('')}
+          </div>`;
+        }).join('')}
       </div>
     `;
   }
@@ -779,13 +799,29 @@
             </select>
           </div>
         </div>
+
         <div class="form-group">
-          <label>Color de muestra (mientras no tengas fotos)</label>
+          <label>📷 Nombre del archivo de imagen</label>
+          <input type="text" id="pImage" value="${p.image||''}" placeholder="Ej: foto_playa.jpg" oninput="updateImagePreview()">
+          <span style="font-size:0.75rem;color:var(--mist);display:block;margin-top:0.3rem">
+            Escribe el nombre exacto del archivo subido a la carpeta <strong>imagenes/</strong> en GitHub
+          </span>
+          <div id="imagePreviewWrap" style="display:${p.image?'block':'none'}">
+            <div class="image-preview-box">
+              <img id="imagePreview" src="${p.image ? 'imagenes/' + p.image : ''}" alt="Vista previa"
+                onerror="this.parentElement.innerHTML='<p class=\'image-preview-error\'>⚠️ No se encontró la imagen. Comprueba el nombre del archivo.</p>'">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Color de fondo (si no hay foto)</label>
           <input type="color" id="pColor1" value="${extractColor1(p.color)}" oninput="updatePreview()">
           <input type="color" id="pColor2" value="${extractColor2(p.color)}" oninput="updatePreview()" style="margin-left:0.5rem">
-          <span style="font-size:0.75rem;color:var(--mist);margin-left:0.5rem">← Elige dos colores para representar la obra</span>
+          <span style="font-size:0.75rem;color:var(--mist);margin-left:0.5rem">← Solo se usará si no hay foto</span>
           <div class="color-preview" id="colorPreview" style="background:${p.color || 'linear-gradient(135deg,#D4603A,#C8942A)'}"></div>
         </div>
+
         <div class="form-group" style="display:flex;align-items:center;gap:0.8rem;margin-top:0.5rem">
           <input type="checkbox" id="pNew" ${p.isNew?'checked':''} style="width:auto">
           <label for="pNew" style="text-transform:none;letter-spacing:0;font-size:0.88rem;color:var(--ink)">Marcar como "Nuevo"</label>
@@ -796,6 +832,17 @@
         </div>
       </div>
     `;
+  }
+
+  function updateImagePreview() {
+    const val = document.getElementById('pImage').value.trim();
+    const wrap = document.getElementById('imagePreviewWrap');
+    if (!val) { wrap.style.display = 'none'; return; }
+    wrap.style.display = 'block';
+    wrap.innerHTML = `<div class="image-preview-box">
+      <img id="imagePreview" src="imagenes/${val}" alt="Vista previa"
+        onerror="this.parentElement.innerHTML='<p class=\'image-preview-error\'>⚠️ No se encontró la imagen. Comprueba el nombre del archivo.</p>'">
+    </div>`;
   }
 
   function extractColor1(gradient) {
@@ -830,6 +877,7 @@
       soldOut: document.getElementById('pSold').value === '1',
       isNew: document.getElementById('pNew').checked,
       color: `linear-gradient(135deg, ${c1}, ${c2})`,
+      image: document.getElementById('pImage').value.trim(),
     };
     const products = getProducts();
     if (index >= 0) products[index] = product;

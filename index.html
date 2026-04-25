@@ -602,6 +602,11 @@
     localStorage.setItem(PASS_KEY, p);
   }
 
+  // ===== HELPERS =====
+  function imgUrl(filename) {
+    return 'imagenes/' + encodeURIComponent(filename);
+  }
+
   // ===== RENDER SHOP =====
   function renderShop() {
     const products = getProducts();
@@ -611,7 +616,7 @@
       return;
     }
     grid.innerHTML = products.map((p, i) => {
-      const imgSrc = p.image ? 'imagenes/' + p.image : null;
+      const imgSrc = p.image ? imgUrl(p.image) : null;
       const imgHtml = imgSrc
         ? `<img class="product-img-bg" src="${imgSrc}" alt="${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">`
           + `<div class="product-img-bg" style="background:${p.color || 'linear-gradient(135deg,#D4603A,#C8942A)'};display:none;"></div>`
@@ -728,7 +733,7 @@
     el.innerHTML = `
       <div class="admin-product-list">
         ${products.map((p, i) => {
-          const thumbSrc = p.image ? 'imagenes/' + p.image : null;
+          const thumbSrc = p.image ? imgUrl(p.image) : null;
           const thumbHtml = thumbSrc
             ? `<img class="admin-product-thumb" src="${thumbSrc}" alt="${p.name}" onerror="this.style.background='${p.color||'#ccc'}';this.src=''">`
             : `<div class="admin-product-thumb" style="background:${p.color||'#ccc'}"></div>`;
@@ -808,7 +813,7 @@
           </span>
           <div id="imagePreviewWrap" style="display:${p.image?'block':'none'}">
             <div class="image-preview-box">
-              <img id="imagePreview" src="${p.image ? 'imagenes/' + p.image : ''}" alt="Vista previa"
+              <img id="imagePreview" src="${p.image ? imgUrl(p.image) : ''}" alt="Vista previa"
                 onerror="this.parentElement.innerHTML='<p class=\'image-preview-error\'>⚠️ No se encontró la imagen. Comprueba el nombre del archivo.</p>'">
             </div>
           </div>
@@ -840,7 +845,7 @@
     if (!val) { wrap.style.display = 'none'; return; }
     wrap.style.display = 'block';
     wrap.innerHTML = `<div class="image-preview-box">
-      <img id="imagePreview" src="imagenes/${val}" alt="Vista previa"
+      <img id="imagePreview" src="${imgUrl(val)}" alt="Vista previa"
         onerror="this.parentElement.innerHTML='<p class=\'image-preview-error\'>⚠️ No se encontró la imagen. Comprueba el nombre del archivo.</p>'">
     </div>`;
   }

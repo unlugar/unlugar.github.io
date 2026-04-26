@@ -911,7 +911,7 @@
       if (videoId) {
         wrap.innerHTML = `<iframe class="lightbox-video" src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="autoplay" allowfullscreen></iframe>`;
       } else {
-        wrap.innerHTML = `<video class="lightbox-media" src="${item.src}" controls autoplay playsinline style="max-height:70vh;width:100%;border-radius:0.4rem"></video>`;
+        wrap.innerHTML = `<video class="lightbox-media" src="${item.src}" controls autoplay playsinline style="max-height:70vh;width:100%;border-radius:0.4rem" onerror="this.parentElement.innerHTML='<p style=\'color:white;padding:2rem\'>⚠️ No se encontró el vídeo. Comprueba el nombre del archivo.</p>'"></video>`;
       }
     } else {
       wrap.innerHTML = `<img class="lightbox-media" src="${item.src}" alt="${item.label||''}">`;
@@ -960,7 +960,7 @@
       const mediaItems = [];
       const allImages = p.images && p.images.length ? p.images : (p.image ? [p.image] : []);
       allImages.forEach(img => mediaItems.push({type:'img', src: imgUrl(img), label: p.name}));
-      if (p.video) mediaItems.push({type:'video', src: p.video, label: p.name + ' · Vídeo'});
+      if (p.video) mediaItems.push({type:'video', src: imgUrl(p.video), label: p.name + ' · Vídeo'});
 
       const firstImg = allImages[0];
       const mainSrc = firstImg ? imgUrl(firstImg) : null;
@@ -1015,7 +1015,7 @@
     const items = [];
     const allImages = p.images && p.images.length ? p.images : (p.image ? [p.image] : []);
     allImages.forEach(img => items.push({type:'img', src: imgUrl(img), label: p.name}));
-    if (p.video) items.push({type:'video', src: p.video, label: p.name + ' · Vídeo'});
+    if (p.video) items.push({type:'video', src: imgUrl(p.video), label: p.name + ' · Vídeo'});
     return items;
   }
 

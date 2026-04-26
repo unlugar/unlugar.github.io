@@ -882,6 +882,7 @@
     return 'imagenes/' + encodeURIComponent(filename);
   }
   function videoUrl(filename) {
+    if (filename.startsWith('http')) return filename;
     return 'https://raw.githubusercontent.com/unlugar/unlugar.github.io/main/imagenes/' + encodeURIComponent(filename);
   }
 
@@ -914,7 +915,7 @@
       if (videoId) {
         wrap.innerHTML = `<iframe class="lightbox-video" src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="autoplay" allowfullscreen></iframe>`;
       } else {
-        wrap.innerHTML = `<video class="lightbox-media" src="${item.src}" controls autoplay playsinline style="max-height:70vh;width:100%;border-radius:0.4rem" onerror="this.parentElement.innerHTML='<p style=\'color:white;padding:2rem\'>⚠️ No se encontró el vídeo. Comprueba el nombre del archivo.</p>'"></video>`;
+        wrap.innerHTML = `<video class="lightbox-media" src="${item.src}" controls autoplay playsinline style="max-height:70vh;width:100%;border-radius:0.4rem" onerror="this.parentElement.innerHTML='<p style=&quot;color:white;padding:2rem&quot;>⚠️ No se encontró el vídeo.</p>'"></video>`;
       }
     } else {
       wrap.innerHTML = `<img class="lightbox-media" src="${item.src}" alt="${item.label||''}">`;

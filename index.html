@@ -385,6 +385,98 @@
     .settings-section h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; }
     .settings-note { font-size: 0.8rem; color: var(--mist); margin-top: 0.5rem; }
 
+
+    /* ===== LIGHTBOX ===== */
+    .lightbox {
+      display: none; position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.95); align-items: center; justify-content: center;
+      padding: 1rem;
+    }
+    .lightbox.open { display: flex; flex-direction: column; }
+    .lightbox-inner { position: relative; max-width: 900px; width: 100%; }
+    .lightbox-media { width: 100%; max-height: 70vh; object-fit: contain; border-radius: 0.4rem; display: block; }
+    .lightbox-video { width: 100%; aspect-ratio: 16/9; border-radius: 0.4rem; border: none; }
+    .lightbox-close {
+      position: absolute; top: -2.5rem; right: 0;
+      background: none; border: none; color: white; font-size: 2rem;
+      cursor: pointer; line-height: 1;
+    }
+    .lightbox-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,0.15); border: none; color: white;
+      width: 44px; height: 44px; border-radius: 50%; font-size: 1.2rem;
+      cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center;
+    }
+    .lightbox-nav:hover { background: var(--coral); }
+    .lightbox-prev { left: -3rem; }
+    .lightbox-next { right: -3rem; }
+    .lightbox-dots { display: flex; gap: 0.5rem; justify-content: center; margin-top: 1rem; }
+    .lightbox-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,0.3); border: none; cursor: pointer; transition: background 0.2s;
+    }
+    .lightbox-dot.active { background: var(--coral); }
+    .lightbox-caption { color: rgba(255,255,255,0.7); text-align: center; margin-top: 0.8rem; font-size: 0.85rem; }
+
+    /* ===== GALLERY THUMBS on card ===== */
+    .card-thumbs {
+      display: flex; gap: 0.35rem; padding: 0.5rem 0.8rem;
+      overflow-x: auto; background: #f9f6f0;
+      scrollbar-width: none;
+    }
+    .card-thumbs::-webkit-scrollbar { display: none; }
+    .card-thumb {
+      width: 40px; height: 40px; border-radius: 0.25rem;
+      object-fit: cover; cursor: pointer; flex-shrink: 0;
+      border: 2px solid transparent; transition: border-color 0.2s;
+    }
+    .card-thumb.active { border-color: var(--coral); }
+    .card-thumb-video {
+      width: 40px; height: 40px; border-radius: 0.25rem;
+      background: var(--ink); display: flex; align-items: center; justify-content: center;
+      cursor: pointer; flex-shrink: 0; border: 2px solid transparent; transition: border-color 0.2s;
+      color: white; font-size: 1rem;
+    }
+    .card-thumb-video:hover, .card-thumb-video.active { border-color: var(--coral); }
+
+    /* ===== SHARE BUTTONS ===== */
+    .share-bar {
+      display: flex; gap: 0.4rem; padding: 0.6rem 1rem 0.8rem;
+      border-top: 1px solid var(--light-border); flex-wrap: wrap;
+      align-items: center;
+    }
+    .share-label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mist); margin-right: 0.2rem; }
+    .share-btn {
+      display: flex; align-items: center; gap: 0.3rem;
+      padding: 0.3rem 0.7rem; border-radius: 2rem; border: 1.5px solid var(--light-border);
+      font-size: 0.72rem; font-family: 'Jost', sans-serif; font-weight: 500;
+      cursor: pointer; background: white; color: var(--ink);
+      transition: all 0.2s; text-decoration: none;
+    }
+    .share-btn:hover { border-color: var(--coral); color: var(--coral); }
+    .share-btn.whatsapp:hover { border-color: #25D366; color: #25D366; }
+    .share-btn.facebook:hover { border-color: #1877F2; color: #1877F2; }
+    .share-btn.copy:hover { border-color: var(--forest); color: var(--forest); }
+
+    /* ===== INSTAGRAM BANNER ===== */
+    .instagram-banner {
+      background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+      padding: 3rem; text-align: center; color: white;
+    }
+    .instagram-banner h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 3vw, 2.5rem); margin-bottom: 0.8rem;
+    }
+    .instagram-banner p { opacity: 0.85; margin-bottom: 1.5rem; font-weight: 300; }
+    .instagram-link {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      background: white; color: #833ab4;
+      padding: 0.8rem 2rem; border-radius: 2rem;
+      text-decoration: none; font-weight: 600; font-size: 0.9rem;
+      transition: all 0.3s;
+    }
+    .instagram-link:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+
     @media (max-width: 768px) {
       nav { padding: 0.9rem 1.2rem; }
       nav ul { display: none; }
@@ -557,6 +649,16 @@
   </div>
 </section>
 
+
+<!-- INSTAGRAM BANNER -->
+<section class="instagram-banner">
+  <h3>📸 Sígueme en Instagram</h3>
+  <p>Proceso creativo, obras nuevas y todo lo que pasa en el estudio</p>
+  <a href="https://instagram.com/elberta.woodandpencil" target="_blank" class="instagram-link">
+    📷 @elberta.woodandpencil
+  </a>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-logo">Elberta <span>Wood & Pencil</span></div>
@@ -572,6 +674,19 @@
 <div class="toast" id="toast">
   <div class="toast-accent"></div>
   <span id="toast-msg">Mensaje enviado</span>
+</div>
+
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightboxOnBg(event)">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <button class="lightbox-nav lightbox-prev" onclick="lightboxNav(-1)">‹</button>
+    <button class="lightbox-nav lightbox-next" onclick="lightboxNav(1)">›</button>
+    <div id="lightbox-media-wrap"></div>
+    <div class="lightbox-dots" id="lightbox-dots"></div>
+    <div class="lightbox-caption" id="lightbox-caption"></div>
+  </div>
 </div>
 
 <!-- ADMIN OVERLAY -->
@@ -611,6 +726,69 @@
     return 'imagenes/' + encodeURIComponent(filename);
   }
 
+  // ===== LIGHTBOX =====
+  let lbItems = []; // [{type:'img'|'video', src, label}]
+  let lbIndex = 0;
+
+  function openLightbox(items, startIndex) {
+    lbItems = items;
+    lbIndex = startIndex;
+    document.getElementById('lightbox').classList.add('open');
+    renderLightbox();
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.getElementById('lightbox-media-wrap').innerHTML = '';
+  }
+  function closeLightboxOnBg(e) {
+    if (e.target === document.getElementById('lightbox')) closeLightbox();
+  }
+  function lightboxNav(dir) {
+    lbIndex = (lbIndex + dir + lbItems.length) % lbItems.length;
+    renderLightbox();
+  }
+  function renderLightbox() {
+    const item = lbItems[lbIndex];
+    const wrap = document.getElementById('lightbox-media-wrap');
+    if (item.type === 'video') {
+      const videoId = extractYoutubeId(item.src);
+      wrap.innerHTML = videoId
+        ? `<iframe class="lightbox-video" src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="autoplay" allowfullscreen></iframe>`
+        : `<iframe class="lightbox-video" src="${item.src}" allowfullscreen></iframe>`;
+    } else {
+      wrap.innerHTML = `<img class="lightbox-media" src="${item.src}" alt="${item.label||''}">`;
+    }
+    document.getElementById('lightbox-caption').textContent = item.label || '';
+    const dots = document.getElementById('lightbox-dots');
+    dots.innerHTML = lbItems.length > 1 ? lbItems.map((_, i) =>
+      `<button class="lightbox-dot ${i===lbIndex?'active':''}" onclick="lbIndex=${i};renderLightbox()"></button>`
+    ).join('') : '';
+  }
+  function extractYoutubeId(url) {
+    const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]{11})/);
+    return m ? m[1] : null;
+  }
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lightbox').classList.contains('open')) return;
+    if (e.key === 'ArrowLeft') lightboxNav(-1);
+    if (e.key === 'ArrowRight') lightboxNav(1);
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+  // ===== SHARE =====
+  function shareProduct(name, idx) {
+    const url = encodeURIComponent(window.location.href + '#obra-' + idx);
+    const text = encodeURIComponent('¡Mira esta obra de Elberta Wood & Pencil! "' + name + '"');
+    return {
+      whatsapp: `https://wa.me/?text=${text}%20${url}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+    };
+  }
+  function copyLink(idx) {
+    const url = window.location.href.split('#')[0] + '#obra-' + idx;
+    navigator.clipboard.writeText(url).then(() => showToast('🔗 Enlace copiado'));
+  }
+
   // ===== RENDER SHOP =====
   function renderShop() {
     const products = getProducts();
@@ -620,34 +798,67 @@
       return;
     }
     grid.innerHTML = products.map((p, i) => {
-      const imgSrc = p.image ? imgUrl(p.image) : null;
-      const imgHtml = imgSrc
-        ? `<img class="product-img-bg" src="${imgSrc}" alt="${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">`
-          + `<div class="product-img-bg" style="background:${p.color || 'linear-gradient(135deg,#D4603A,#C8942A)'};display:none;"></div>`
-        : `<div class="product-img-bg" style="background:${p.color || 'linear-gradient(135deg,#D4603A,#C8942A)'}"></div>`;
+      // Build media items array for lightbox
+      const mediaItems = [];
+      const allImages = p.images && p.images.length ? p.images : (p.image ? [p.image] : []);
+      allImages.forEach(img => mediaItems.push({type:'img', src: imgUrl(img), label: p.name}));
+      if (p.video) mediaItems.push({type:'video', src: p.video, label: p.name + ' · Vídeo'});
+
+      const firstImg = allImages[0];
+      const mainSrc = firstImg ? imgUrl(firstImg) : null;
+      const mainHtml = mainSrc
+        ? `<img class="product-img-bg" src="${mainSrc}" alt="${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="product-img-bg" style="background:${p.color||'linear-gradient(135deg,#D4603A,#C8942A)'};display:none;"></div>`
+        : `<div class="product-img-bg" style="background:${p.color||'linear-gradient(135deg,#D4603A,#C8942A)'}"></div>`;
+
+      // Thumbnails strip
+      const thumbsHtml = mediaItems.length > 1 ? `<div class="card-thumbs">
+        ${allImages.map((img, ti) => `<img class="card-thumb${ti===0?' active':''}" src="${imgUrl(img)}" onclick="openLightbox(getMediaItems(${i}),${ti})">`).join('')}
+        ${p.video ? `<div class="card-thumb-video" onclick="openLightbox(getMediaItems(${i}),${allImages.length})">▶</div>` : ''}
+      </div>` : '';
+
+      const shareLinks = shareProduct(p.name, i);
+      const sharebar = `<div class="share-bar">
+        <span class="share-label">Compartir</span>
+        <a class="share-btn whatsapp" href="${shareLinks.whatsapp}" target="_blank">💬 WhatsApp</a>
+        <a class="share-btn facebook" href="${shareLinks.facebook}" target="_blank">📘 Facebook</a>
+        <button class="share-btn copy" onclick="copyLink(${i})">🔗 Copiar</button>
+      </div>`;
+
       return `
-      <div class="product-card">
-        <div class="product-img">
-          ${imgHtml}
+      <div class="product-card" id="obra-${i}">
+        <div class="product-img" style="cursor:pointer" onclick="openLightbox(getMediaItems(${i}),0)">
+          ${mainHtml}
           <div class="product-img-overlay">
-            <button class="product-img-btn" onclick="addToCart('${p.name}')">Añadir al carrito</button>
+            <button class="product-img-btn">Ver obra ${mediaItems.length > 1 ? '('+mediaItems.length+')' : ''}</button>
           </div>
           <div class="product-badge-wrap">
             ${p.isNew ? '<span class="badge badge-new">Nuevo</span>' : ''}
             ${p.soldOut ? '<span class="badge badge-sold">Vendido</span>' : '<span class="badge badge-original">Original</span>'}
+            ${p.video ? '<span class="badge" style="background:var(--ink);color:white;">▶ Vídeo</span>' : ''}
           </div>
         </div>
+        ${thumbsHtml}
         <div class="product-body">
-          <div class="product-technique">${p.technique || ''} ${p.material ? '· ' + p.material : ''}</div>
+          <div class="product-technique">${p.technique||''} ${p.material ? '· '+p.material : ''}</div>
           <div class="product-name">${p.name}</div>
-          <div class="product-dims">${p.width && p.height ? p.width + ' × ' + p.height + ' cm' : ''}</div>
+          <div class="product-dims">${p.width && p.height ? p.width+' × '+p.height+' cm' : ''}</div>
           <div class="product-footer">
-            <div class="product-price ${p.soldOut ? 'sold-out' : ''}">${p.price ? p.price + ' €' : ''}</div>
-            <button class="add-btn" onclick="addToCart('${p.name}')" ${p.soldOut ? 'disabled' : ''}>${p.soldOut ? 'Vendido' : 'Comprar'}</button>
+            <div class="product-price ${p.soldOut?'sold-out':''}">${p.price ? p.price+' €' : ''}</div>
+            <button class="add-btn" onclick="addToCart('${p.name}')" ${p.soldOut?'disabled':''}>${p.soldOut?'Vendido':'Comprar'}</button>
           </div>
         </div>
+        ${sharebar}
       </div>`;
     }).join('');
+  }
+
+  function getMediaItems(i) {
+    const p = getProducts()[i];
+    const items = [];
+    const allImages = p.images && p.images.length ? p.images : (p.image ? [p.image] : []);
+    allImages.forEach(img => items.push({type:'img', src: imgUrl(img), label: p.name}));
+    if (p.video) items.push({type:'video', src: p.video, label: p.name + ' · Vídeo'});
+    return items;
   }
 
   // ===== CART =====
@@ -746,7 +957,7 @@
             ${thumbHtml}
             <div class="admin-product-info">
               <div class="admin-product-name">${p.name}</div>
-              <div class="admin-product-meta">${p.price ? p.price + ' €' : ''} ${p.technique ? '· ' + p.technique : ''} ${p.soldOut ? '· VENDIDO' : ''} ${p.image ? '· 📷 ' + p.image : ''}</div>
+              <div class="admin-product-meta">${p.price ? p.price + ' €' : ''} ${p.technique ? '· ' + p.technique : ''} ${p.soldOut ? '· VENDIDO' : ''} ${p.images && p.images.length ? '· 📷 '+p.images.length+' foto'+(p.images.length>1?'s':'') : (p.image ? '· 📷 1 foto' : '')} ${p.video ? '· ▶ vídeo' : ''}</div>
             </div>
             <div class="admin-product-actions">
               <button class="admin-btn-edit" onclick="startEdit(${i})">Editar</button>
@@ -810,17 +1021,19 @@
         </div>
 
         <div class="form-group">
-          <label>📷 Nombre del archivo de imagen</label>
-          <input type="text" id="pImage" value="${p.image||''}" placeholder="Ej: foto_playa.jpg" oninput="updateImagePreview()">
+          <label>📷 Fotos (hasta 6) — escribe los nombres separados por comas</label>
+          <textarea id="pImages" rows="3" placeholder="Ej: foto1.jpg, foto2.jpg, Imagen de WhatsApp 2025-07-14.jpg" style="width:100%;padding:0.75rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;font-size:0.88rem;resize:vertical">${(p.images||[]).join(', ')||(p.image||'')}</textarea>
           <span style="font-size:0.75rem;color:var(--mist);display:block;margin-top:0.3rem">
-            Escribe el nombre exacto del archivo subido a la carpeta <strong>imagenes/</strong> en GitHub
+            Nombres exactos de los archivos en la carpeta <strong>imagenes/</strong>. Separa con comas. Máximo 6.
           </span>
-          <div id="imagePreviewWrap" style="display:${p.image?'block':'none'}">
-            <div class="image-preview-box">
-              <img id="imagePreview" src="${p.image ? imgUrl(p.image) : ''}" alt="Vista previa"
-                onerror="this.parentElement.innerHTML='<p class=\'image-preview-error\'>⚠️ No se encontró la imagen. Comprueba el nombre del archivo.</p>'">
-            </div>
-          </div>
+          <div id="imagePreviewWrap" style="margin-top:0.5rem;display:flex;gap:0.5rem;flex-wrap:wrap"></div>
+        </div>
+        <div class="form-group">
+          <label>▶ Vídeo (opcional) — pega el enlace de YouTube</label>
+          <input type="text" id="pVideo" value="${p.video||''}" placeholder="Ej: https://www.youtube.com/watch?v=XXXXXXX">
+          <span style="font-size:0.75rem;color:var(--mist);display:block;margin-top:0.3rem">
+            También puedes pegar un enlace de YouTube Shorts o un Reel de Instagram
+          </span>
         </div>
 
         <div class="form-group">
@@ -843,16 +1056,7 @@
     `;
   }
 
-  function updateImagePreview() {
-    const val = document.getElementById('pImage').value.trim();
-    const wrap = document.getElementById('imagePreviewWrap');
-    if (!val) { wrap.style.display = 'none'; return; }
-    wrap.style.display = 'block';
-    wrap.innerHTML = `<div class="image-preview-box">
-      <img id="imagePreview" src="${imgUrl(val)}" alt="Vista previa"
-        onerror="this.parentElement.innerHTML='<p class=\'image-preview-error\'>⚠️ No se encontró la imagen. Comprueba el nombre del archivo.</p>'">
-    </div>`;
-  }
+
 
   function extractColor1(gradient) {
     if (!gradient) return '#D4603A';
@@ -876,6 +1080,8 @@
     if (!name) { alert('El nombre de la obra es obligatorio'); return; }
     const c1 = document.getElementById('pColor1').value;
     const c2 = document.getElementById('pColor2').value;
+    const rawImages = document.getElementById('pImages').value;
+    const imagesArr = rawImages.split(',').map(s=>s.trim()).filter(Boolean).slice(0,6);
     const product = {
       name,
       technique: document.getElementById('pTechnique').value.trim(),
@@ -886,7 +1092,9 @@
       soldOut: document.getElementById('pSold').value === '1',
       isNew: document.getElementById('pNew').checked,
       color: `linear-gradient(135deg, ${c1}, ${c2})`,
-      image: document.getElementById('pImage').value.trim(),
+      image: imagesArr[0] || '',
+      images: imagesArr,
+      video: document.getElementById('pVideo').value.trim(),
     };
     const products = getProducts();
     if (index >= 0) products[index] = product;

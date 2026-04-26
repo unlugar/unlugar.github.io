@@ -68,10 +68,20 @@
       clip-path: polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%);
       z-index: 0;
     }
-    .hero-decor::after {
+    .hero-decor::before {
       content: '';
-      position: absolute; inset: 0;
+      position: absolute; inset: 0; z-index: 1;
       background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-decor-img {
+      position: absolute; inset: 0; z-index: 0;
+      width: 100%; height: 100%; object-fit: cover; object-position: center top;
+      opacity: 0.28; mix-blend-mode: luminosity;
+    }
+    .hero-decor-fade {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(to right, rgba(42,61,43,0.85) 0%, rgba(26,42,27,0.3) 60%, transparent 100%),
+                  linear-gradient(to top, rgba(26,42,27,0.7) 0%, transparent 40%);
     }
     .hero-content { position: relative; z-index: 1; max-width: 560px; }
     .hero-eyebrow {
@@ -386,6 +396,39 @@
     .settings-note { font-size: 0.8rem; color: var(--mist); margin-top: 0.5rem; }
 
 
+
+    /* ===== EXPOSICIONES ===== */
+    .exposiciones { padding: 6rem 3rem; background: var(--sand); }
+    .expo-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    .expo-card {
+      border-radius: 0.5rem; overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      transition: all 0.3s cubic-bezier(0.23,1,0.32,1);
+      cursor: pointer; background: white;
+    }
+    .expo-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.15); }
+    .expo-card img { width: 100%; height: 320px; object-fit: cover; display: block; }
+    .expo-card-body { padding: 1rem 1.2rem; }
+    .expo-card-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; }
+    .expo-card-year { font-size: 0.75rem; color: var(--mist); margin-top: 0.2rem; }
+
+    /* ===== DOCUMENTOS ===== */
+    .documentos { padding: 5rem 3rem; background: var(--ink); }
+    .doc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
+    .doc-card {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 0.5rem; padding: 1.8rem 1.5rem; text-align: center;
+      transition: all 0.3s; text-decoration: none; display: block;
+    }
+    .doc-card:hover { background: rgba(255,255,255,0.1); transform: translateY(-3px); border-color: var(--gold); }
+    .doc-icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+    .doc-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: white; font-weight: 600; margin-bottom: 0.4rem; }
+    .doc-desc { font-size: 0.78rem; color: rgba(255,255,255,0.4); }
+    .doc-btn { display: inline-block; margin-top: 1rem; padding: 0.4rem 1rem; border-radius: 2rem; background: var(--gold); color: var(--ink); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+
     /* ===== LIGHTBOX ===== */
     .lightbox {
       display: none; position: fixed; inset: 0; z-index: 1000;
@@ -500,6 +543,8 @@
   <div class="nav-logo">Elberta <span>Wood & Pencil</span></div>
   <ul>
     <li><a href="#tienda">Tienda</a></li>
+    <li><a href="#exposiciones">Exposiciones</a></li>
+    <li><a href="#documentos">Documentos</a></li>
     <li><a href="#sobre-mi">Sobre mí</a></li>
     <li><a href="#contacto">Contacto</a></li>
     <li><button class="nav-admin-btn" onclick="openAdmin()">✦ Edición</button></li>
@@ -509,7 +554,10 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
-  <div class="hero-decor"></div>
+  <div class="hero-decor">
+    <img class="hero-decor-img" src="imagenes/hero-obra.jpg" alt="Obra de Luis Berta">
+    <div class="hero-decor-fade"></div>
+  </div>
   <div class="hero-content">
     <p class="hero-eyebrow">Arte original · Fuerteventura</p>
     <h1>Arte hecho<br>con el <em>alma</em></h1>
@@ -556,6 +604,96 @@
       <div class="empty-state-icon">🎨</div>
       <h3>Próximamente</h3>
       <p>Entra al panel de <strong>Edición</strong> para añadir tus primeras obras.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- EXPOSICIONES -->
+<section class="exposiciones" id="exposiciones">
+  <p class="section-label">✦ Trayectoria</p>
+  <h2 class="section-title">Exposiciones <em>realizadas</em></h2>
+  <div class="expo-grid">
+        <div class="expo-card" onclick="openLightbox([{type:'img',src:'exposiciones/April 30, 2022.png',label:'Exposición Abril 2022'}],0)">
+          <img src="exposiciones/April 30, 2022.png" alt="Exposición Abril 2022" onerror="this.parentElement.style.display='none'">
+          <div class="expo-card-body">
+            <div class="expo-card-title">Exposición Abril 2022</div>
+            <div class="expo-card-year">2022</div>
+          </div>
+        </div>
+        <div class="expo-card" onclick="openLightbox([{type:'img',src:'exposiciones/Black White Minimalist 3D Art Expo Poster.png',label:'Art Expo · Minimalismo 3D'}],0)">
+          <img src="exposiciones/Black White Minimalist 3D Art Expo Poster.png" alt="Art Expo · Minimalismo 3D" onerror="this.parentElement.style.display='none'">
+          <div class="expo-card-body">
+            <div class="expo-card-title">Art Expo · Minimalismo 3D</div>
+            
+          </div>
+        </div>
+        <div class="expo-card" onclick="openLightbox([{type:'img',src:'exposiciones/Blue Minimal Professional Software Engineer Cover Letter.png',label:'Exposición Profesional'}],0)">
+          <img src="exposiciones/Blue Minimal Professional Software Engineer Cover Letter.png" alt="Exposición Profesional" onerror="this.parentElement.style.display='none'">
+          <div class="expo-card-body">
+            <div class="expo-card-title">Exposición Profesional</div>
+            
+          </div>
+        </div>
+        <div class="expo-card" onclick="openLightbox([{type:'img',src:'exposiciones/Brown White Minimalist Art Exhibition Poster.png',label:'Art Exhibition · Brown & White'}],0)">
+          <img src="exposiciones/Brown White Minimalist Art Exhibition Poster.png" alt="Art Exhibition · Brown & White" onerror="this.parentElement.style.display='none'">
+          <div class="expo-card-body">
+            <div class="expo-card-title">Art Exhibition · Brown & White</div>
+            
+          </div>
+        </div>
+        <div class="expo-card" onclick="openLightbox([{type:'img',src:'exposiciones/Documento A4 Bloc Notas Campo de Frutas Plátanos Escritura Documento hoja To Do Sencillas Carta Apuntes Amarillo....png',label:'Notas de Campo'}],0)">
+          <img src="exposiciones/Documento A4 Bloc Notas Campo de Frutas Plátanos Escritura Documento hoja To Do Sencillas Carta Apuntes Amarillo....png" alt="Notas de Campo" onerror="this.parentElement.style.display='none'">
+          <div class="expo-card-body">
+            <div class="expo-card-title">Notas de Campo</div>
+            
+          </div>
+        </div>
+        <div class="expo-card" onclick="openLightbox([{type:'img',src:'exposiciones/Imagen de WhatsApp 2024-10-02 a las 13.32.28_c5362a8b.jpg',label:'Exposición Octubre 2024'}],0)">
+          <img src="exposiciones/Imagen de WhatsApp 2024-10-02 a las 13.32.28_c5362a8b.jpg" alt="Exposición Octubre 2024" onerror="this.parentElement.style.display='none'">
+          <div class="expo-card-body">
+            <div class="expo-card-title">Exposición Octubre 2024</div>
+            <div class="expo-card-year">2024</div>
+          </div>
+        </div>
+        <div class="expo-card" onclick="openLightbox([{type:'img',src:'exposiciones/Llamativo póster exposición de arte minimalista colorido.png',label:'Arte Minimalista Colorido'}],0)">
+          <img src="exposiciones/Llamativo póster exposición de arte minimalista colorido.png" alt="Arte Minimalista Colorido" onerror="this.parentElement.style.display='none'">
+          <div class="expo-card-body">
+            <div class="expo-card-title">Arte Minimalista Colorido</div>
+            
+          </div>
+        </div>
+        <div class="expo-card" onclick="openLightbox([{type:'img',src:'exposiciones/elberta woodandpencil.jpg',label:'Elberta Wood & Pencil'}],0)">
+          <img src="exposiciones/elberta woodandpencil.jpg" alt="Elberta Wood & Pencil" onerror="this.parentElement.style.display='none'">
+          <div class="expo-card-body">
+            <div class="expo-card-title">Elberta Wood & Pencil</div>
+            
+          </div>
+        </div>
+  </div>
+</section>
+
+<!-- DOCUMENTOS -->
+<section class="documentos" id="documentos">
+  <p class="section-label" style="color:var(--gold)">✦ Documentación</p>
+  <h2 class="section-title" style="color:white">Perfil <em>artístico</em></h2>
+  <div class="doc-grid">
+    <a class="doc-card" href="documentos/Presentaci%C3%B3n%20dossier%20art%C3%ADstico%20luis%20berta" target="_blank">
+      <span class="doc-icon">📁</span>
+      <div class="doc-title">Dossier Artístico</div>
+      <div class="doc-desc">Presentación completa de la obra y trayectoria de Luis Berta</div>
+      <span class="doc-btn">Ver / Descargar</span>
+    </a>
+    <a class="doc-card" href="documentos/portafolioelbertawoodandpencil%20(2)" target="_blank">
+      <span class="doc-icon">🎨</span>
+      <div class="doc-title">Portafolio</div>
+      <div class="doc-desc">Selección de obras de Elberta Wood & Pencil</div>
+      <span class="doc-btn">Ver / Descargar</span>
+    </a>
+    <div class="doc-card" style="border-style:dashed;cursor:default">
+      <span class="doc-icon">📄</span>
+      <div class="doc-title">Currículum</div>
+      <div class="doc-desc" style="color:rgba(255,255,255,0.3)">Próximamente</div>
     </div>
   </div>
 </section>
@@ -918,6 +1056,8 @@
       <div class="admin-tabs">
         <button class="admin-tab ${activeTab==='productos'?'active':''}" onclick="switchTab('productos')">Mis Obras</button>
         <button class="admin-tab ${activeTab==='agregar'?'active':''}" onclick="switchTab('agregar')">Añadir Obra</button>
+        <button class="admin-tab ${activeTab==='exposiciones'?'active':''}" onclick="switchTab('exposiciones')">Exposiciones</button>
+        <button class="admin-tab ${activeTab==='docs'?'active':''}" onclick="switchTab('docs')">Documentos</button>
         <button class="admin-tab ${activeTab==='ajustes'?'active':''}" onclick="switchTab('ajustes')">Ajustes</button>
       </div>
       <div id="tab-content"></div>
@@ -935,6 +1075,8 @@
     const el = document.getElementById('tab-content');
     if (activeTab === 'productos') renderProductList(el);
     else if (activeTab === 'agregar') renderProductForm(el, -1);
+    else if (activeTab === 'exposiciones') renderExposiciones(el);
+    else if (activeTab === 'docs') renderDocs(el);
     else if (activeTab === 'ajustes') renderSettings(el);
   }
 
@@ -1120,6 +1262,60 @@
   function cancelEdit() {
     editingIndex = -1;
     renderAdminContent();
+  }
+
+  function renderExposiciones(el) {
+    el.innerHTML = `
+      <div class="settings-section">
+        <h3>Pósters de exposiciones</h3>
+        <p style="color:var(--mist);font-size:0.88rem;margin-bottom:1rem">Los pósters se muestran automáticamente desde la carpeta <strong>exposiciones/</strong> de GitHub. Para añadir o quitar, sube o elimina archivos directamente en GitHub.</p>
+        <div style="background:var(--sand);border-radius:0.4rem;padding:1rem;font-size:0.85rem;line-height:1.8">
+          <strong>Archivos actuales:</strong><br>
+          📌 April 30, 2022.png<br>
+          📌 Black White Minimalist 3D Art Expo Poster.png<br>
+          📌 Blue Minimal Professional Software Engineer Cover Letter.png<br>
+          📌 Brown White Minimalist Art Exhibition Poster.png<br>
+          📌 Documento A4 Bloc Notas Campo de Frutas...<br>
+          📌 Imagen de WhatsApp 2024-10-02 a las 13.32.28_c5362a8b.jpg<br>
+          📌 Llamativo póster exposición de arte minimalista colorido.png<br>
+          📌 elberta woodandpencil.jpg
+        </div>
+      </div>
+    `;
+  }
+
+  function renderDocs(el) {
+    el.innerHTML = `
+      <div class="settings-section">
+        <h3>Documentos artísticos</h3>
+        <p style="color:var(--mist);font-size:0.88rem;margin-bottom:1rem">Para actualizar los documentos, sube los PDFs a la carpeta <strong>documentos/</strong> de GitHub con el mismo nombre.</p>
+        <div style="display:flex;flex-direction:column;gap:0.8rem">
+          <div style="background:var(--sand);border-radius:0.4rem;padding:1rem;display:flex;align-items:center;gap:1rem">
+            <span style="font-size:1.5rem">📁</span>
+            <div>
+              <div style="font-weight:600;font-size:0.9rem">Dossier Artístico</div>
+              <div style="font-size:0.78rem;color:var(--mist)">Presentación dossier artístico luis berta.pdf</div>
+            </div>
+            <span style="margin-left:auto;font-size:0.75rem;color:var(--forest);font-weight:600">✓ Subido</span>
+          </div>
+          <div style="background:var(--sand);border-radius:0.4rem;padding:1rem;display:flex;align-items:center;gap:1rem">
+            <span style="font-size:1.5rem">🎨</span>
+            <div>
+              <div style="font-weight:600;font-size:0.9rem">Portafolio</div>
+              <div style="font-size:0.78rem;color:var(--mist)">portafolioelbertawoodandpencil (2).pdf</div>
+            </div>
+            <span style="margin-left:auto;font-size:0.75rem;color:var(--forest);font-weight:600">✓ Subido</span>
+          </div>
+          <div style="background:var(--sand);border-radius:0.4rem;padding:1rem;display:flex;align-items:center;gap:1rem;opacity:0.5">
+            <span style="font-size:1.5rem">📄</span>
+            <div>
+              <div style="font-weight:600;font-size:0.9rem">Currículum</div>
+              <div style="font-size:0.78rem;color:var(--mist)">Pendiente de subir</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
   }
 
   function renderSettings(el) {

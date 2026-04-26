@@ -141,7 +141,18 @@
     @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
     /* ===== SHOP ===== */
-    .shop { padding: 6rem 3rem; }
+    .shop {
+      padding: 6rem 3rem;
+      position: relative;
+    }
+    .shop::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("imagenes/fondo.jpg") center center / cover no-repeat;
+      opacity: 0.30;
+      z-index: 0;
+    }
+    .shop > * { position: relative; z-index: 1; }
     .shop-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 3rem; }
     .section-label { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--coral); font-weight: 600; margin-bottom: 0.8rem; }
     .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 3vw, 3rem); line-height: 1.1; }

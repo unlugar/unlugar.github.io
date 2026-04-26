@@ -881,6 +881,9 @@
   function imgUrl(filename) {
     return 'imagenes/' + encodeURIComponent(filename);
   }
+  function videoUrl(filename) {
+    return 'https://raw.githubusercontent.com/unlugar/unlugar.github.io/main/imagenes/' + encodeURIComponent(filename);
+  }
 
   // ===== LIGHTBOX =====
   let lbItems = []; // [{type:'img'|'video', src, label}]
@@ -923,7 +926,7 @@
     ).join('') : '';
   }
   function extractYoutubeId(url) {
-    const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]{11})/);
+    const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/);
     return m ? m[1] : null;
   }
   document.addEventListener('keydown', e => {
@@ -960,7 +963,7 @@
       const mediaItems = [];
       const allImages = p.images && p.images.length ? p.images : (p.image ? [p.image] : []);
       allImages.forEach(img => mediaItems.push({type:'img', src: imgUrl(img), label: p.name}));
-      if (p.video) mediaItems.push({type:'video', src: imgUrl(p.video), label: p.name + ' · Vídeo'});
+      if (p.video) mediaItems.push({type:'video', src: videoUrl(p.video), label: p.name + ' · Vídeo'});
 
       const firstImg = allImages[0];
       const mainSrc = firstImg ? imgUrl(firstImg) : null;
@@ -1015,7 +1018,7 @@
     const items = [];
     const allImages = p.images && p.images.length ? p.images : (p.image ? [p.image] : []);
     allImages.forEach(img => items.push({type:'img', src: imgUrl(img), label: p.name}));
-    if (p.video) items.push({type:'video', src: imgUrl(p.video), label: p.name + ' · Vídeo'});
+    if (p.video) items.push({type:'video', src: videoUrl(p.video), label: p.name + ' · Vídeo'});
     return items;
   }
 

@@ -144,12 +144,19 @@
     .shop {
       padding: 6rem 3rem;
       position: relative;
+      background: none;
     }
     .shop::before {
       content: '';
       position: absolute; inset: 0;
       background: url("imagenes/fondo.jpg") center center / cover no-repeat;
       opacity: 0.30;
+      z-index: 0;
+    }
+    .shop::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(255, 248, 240, 0.55);
       z-index: 0;
     }
     .shop > * { position: relative; z-index: 1; }

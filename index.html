@@ -68,7 +68,28 @@
       clip-path: polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%);
       z-index: 0;
     }
+    .hero-decor::before {
+      content: '';
+      position: absolute; inset: 0; z-index: 1;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-decor-img {
+      position: absolute; inset: 0; z-index: 0;
+      width: 100%; height: 100%; object-fit: cover; object-position: center top;
+      opacity: 0.28; mix-blend-mode: luminosity;
+    }
+    .hero-decor-fade {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(to right, rgba(42,61,43,0.85) 0%, rgba(26,42,27,0.3) 60%, transparent 100%),
+                  linear-gradient(to top, rgba(26,42,27,0.7) 0%, transparent 40%);
+    }
     .hero-content { position: relative; z-index: 1; max-width: 560px; }
+    .hero-eyebrow {
+      font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--forest); font-weight: 600; margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 0.8rem;
+    }
+    .hero-eyebrow::before { content: ''; display: block; width: 30px; height: 1.5px; background: var(--forest); }
     .hero h1 {
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(3rem, 6vw, 6rem);
@@ -80,6 +101,7 @@
       font-size: 1rem; color: var(--mist); line-height: 1.8;
       font-weight: 300; max-width: 400px; margin-bottom: 3rem;
     }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
     .btn-main {
       background: var(--coral); color: white;
       padding: 0.9rem 2.2rem; border-radius: 0.3rem;
@@ -89,21 +111,202 @@
       cursor: pointer; transition: all 0.3s; text-decoration: none;
       display: inline-block;
     }
+    .btn-main:hover { background: var(--ink); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(212,96,58,0.3); }
+    .btn-ghost {
+      background: transparent; color: var(--ink);
+      padding: 0.9rem 2.2rem; border-radius: 0.3rem;
+      border: 1.5px solid var(--ink); font-family: 'Jost', sans-serif;
+      font-size: 0.85rem; font-weight: 500;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      cursor: pointer; transition: all 0.3s; text-decoration: none;
+      display: inline-block;
+    }
+    .btn-ghost:hover { background: var(--ink); color: var(--warm); }
+    .hero-float {
+      position: absolute; right: 5%; top: 50%; transform: translateY(-50%);
+      z-index: 2; text-align: center; color: white;
+    }
+    .hero-float-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 5rem; font-weight: 600; line-height: 1;
+      color: rgba(255,255,255,0.15);
+    }
+    .hero-float-label { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.5; }
+
+    /* ===== MARQUEE ===== */
+    .marquee { background: var(--ink); padding: 0.8rem 0; overflow: hidden; white-space: nowrap; }
+    .marquee-track { display: inline-flex; animation: marquee 25s linear infinite; }
+    .marquee-item { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.6); padding: 0 2rem; }
+    .marquee-sep { color: var(--coral); }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
     /* ===== SHOP ===== */
-    .shop { padding: 6rem 3rem; position: relative; }
-    #products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; }
+    .shop {
+      padding: 6rem 3rem;
+      position: relative;
+      background: none;
+    }
+    .shop::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("imagenes/fondo.jpg") center center / cover no-repeat;
+      opacity: 0.30;
+      z-index: 0;
+    }
+    .shop::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(255, 248, 240, 0.55);
+      z-index: 0;
+    }
+    .shop > * { position: relative; z-index: 1; }
+    .shop-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 3rem; }
+    .section-label { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--coral); font-weight: 600; margin-bottom: 0.8rem; }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 3vw, 3rem); line-height: 1.1; }
+    .section-title em { font-style: italic; color: var(--coral); }
+
+    #products-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem;
+    }
     .product-card {
       background: white; border-radius: 0.5rem; overflow: hidden;
       border: 1px solid var(--light-border);
       transition: all 0.4s cubic-bezier(0.23,1,0.32,1);
     }
-    .product-img { height: 260px; overflow: hidden; }
-    .product-img img { width: 100%; height: 100%; object-fit: cover; }
-    .product-body { padding: 1.3rem; }
+    .product-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
+    .product-img {
+      height: 260px; position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .product-img-bg { width: 100%; height: 100%; transition: transform 0.5s ease; object-fit: cover; }
+    .product-card:hover .product-img-bg { transform: scale(1.04); }
+    .product-img-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0); transition: background 0.3s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .product-card:hover .product-img-overlay { background: rgba(0,0,0,0.15); }
+    .product-img-btn {
+      opacity: 0; transform: translateY(10px);
+      background: white; color: var(--ink);
+      border: none; padding: 0.7rem 1.5rem;
+      border-radius: 2rem; font-family: 'Jost', sans-serif;
+      font-size: 0.8rem; font-weight: 500; cursor: pointer;
+      transition: all 0.3s; letter-spacing: 0.05em;
+    }
+    .product-card:hover .product-img-btn { opacity: 1; transform: translateY(0); }
+    .product-img-btn:hover { background: var(--coral); color: white; }
+    .product-badge-wrap { position: absolute; top: 1rem; left: 1rem; display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .badge {
+      font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.25rem 0.7rem; border-radius: 2rem;
+    }
+    .badge-new { background: var(--coral); color: white; }
+    .badge-sold { background: var(--mist); color: white; }
+    .badge-original { background: var(--forest); color: white; }
+    .product-body { padding: 1.3rem 1.4rem 1.5rem; }
+    .product-technique { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.4rem; }
+    .product-name { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; margin-bottom: 0.3rem; }
+    .product-dims { font-size: 0.78rem; color: var(--mist); margin-bottom: 1rem; }
+    .product-footer { display: flex; align-items: center; justify-content: space-between; }
     .product-price { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; color: var(--coral); }
-    
-    /* ===== ADMIN ===== */
+    .product-price.sold-out { color: var(--mist); text-decoration: line-through; font-size: 1rem; }
+    .add-btn {
+      background: var(--ink); color: white; border: none;
+      padding: 0.5rem 1.2rem; border-radius: 0.25rem;
+      font-family: 'Jost', sans-serif; font-size: 0.78rem;
+      font-weight: 500; cursor: pointer; transition: all 0.2s;
+      letter-spacing: 0.05em;
+    }
+    .add-btn:hover { background: var(--coral); }
+    .add-btn:disabled { background: #ccc; cursor: not-allowed; }
+    .empty-state {
+      grid-column: 1/-1; text-align: center; padding: 5rem 2rem;
+      color: var(--mist);
+    }
+    .empty-state-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .empty-state h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; margin-bottom: 0.5rem; }
+
+    /* ===== ABOUT ===== */
+    .about {
+      padding: 7rem 3rem;
+      background: var(--ink);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center;
+    }
+    .about-art {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; height: 450px;
+    }
+    .art-block { border-radius: 0.5rem; overflow: hidden; }
+    .art-block:nth-child(1) { background: linear-gradient(145deg, var(--coral), var(--gold)); grid-row: span 2; }
+    .art-block:nth-child(2) { background: linear-gradient(135deg, var(--forest), #5A8C5B); }
+    .art-block:nth-child(3) { background: linear-gradient(135deg, #8B6914, var(--gold)); }
+    .about-eyebrow { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; }
+    .about h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 3vw, 3rem); color: white; line-height: 1.15; margin-bottom: 1.5rem; }
+    .about h2 em { font-style: italic; color: var(--coral); }
+    .about p { color: rgba(255,255,255,0.6); line-height: 1.85; font-weight: 300; margin-bottom: 1.5rem; }
+    .about-details { display: flex; gap: 2rem; margin-top: 2rem; }
+    .about-detail { }
+    .about-detail-num { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--gold); font-weight: 600; }
+    .about-detail-label { font-size: 0.75rem; color: rgba(255,255,255,0.4); letter-spacing: 0.1em; text-transform: uppercase; }
+    .signature { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 2rem; color: var(--gold); margin-top: 2rem; }
+
+    /* ===== CONTACT ===== */
+    .contact { padding: 7rem 3rem; background: var(--sand); }
+    .contact-inner { max-width: 900px; margin: 0 auto; }
+    .contact-top { text-align: center; margin-bottom: 4rem; }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    .contact-info { }
+    .contact-item { display: flex; gap: 1.2rem; align-items: flex-start; margin-bottom: 2rem; }
+    .contact-icon { width: 44px; height: 44px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; box-shadow: 0 4px 15px rgba(0,0,0,0.06); }
+    .contact-item-label { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.2rem; }
+    .contact-item-value { font-weight: 500; font-size: 0.95rem; color: var(--ink); }
+    .contact-social { display: flex; gap: 0.8rem; margin-top: 2rem; }
+    .social-link {
+      display: flex; align-items: center; gap: 0.5rem;
+      background: white; padding: 0.6rem 1.2rem; border-radius: 2rem;
+      text-decoration: none; color: var(--ink);
+      font-size: 0.8rem; font-weight: 500;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      transition: all 0.2s;
+    }
+    .social-link:hover { background: var(--coral); color: white; transform: translateY(-2px); }
+    .contact-form-wrap { }
+    .form-group { margin-bottom: 1rem; }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%; padding: 0.9rem 1.1rem;
+      border: 1.5px solid rgba(100,80,50,0.2); border-radius: 0.35rem;
+      font-family: 'Jost', sans-serif; font-size: 0.92rem;
+      background: white; transition: border-color 0.2s; color: var(--ink);
+    }
+    .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--coral); }
+    .form-group textarea { min-height: 110px; resize: vertical; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* ===== FOOTER ===== */
+    footer { background: #0F0C07; padding: 2.5rem 3rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: rgba(255,255,255,0.7); }
+    .footer-logo span { color: var(--coral); font-style: italic; }
+    .footer-copy { font-size: 0.75rem; color: rgba(255,255,255,0.3); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.78rem; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--gold); }
+
+    /* ===== TOAST ===== */
+    .toast {
+      position: fixed; bottom: 2rem; right: 2rem;
+      background: var(--ink); color: white;
+      padding: 1rem 1.5rem; border-radius: 0.5rem;
+      font-size: 0.88rem; z-index: 9999;
+      display: flex; align-items: center; gap: 0.7rem;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      transform: translateY(100px); opacity: 0;
+      transition: all 0.4s cubic-bezier(0.23,1,0.32,1);
+      max-width: 300px;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast-accent { width: 3px; height: 100%; background: var(--coral); border-radius: 2px; align-self: stretch; }
+
+    /* ===== ADMIN PANEL ===== */
     .admin-overlay {
       display: none; position: fixed; inset: 0; z-index: 500;
       background: rgba(15,12,7,0.7); backdrop-filter: blur(4px);
@@ -111,155 +314,1071 @@
     }
     .admin-overlay.open { display: flex; }
     .admin-panel {
-      background: white; border-radius: 1rem; width: 100%; max-width: 600px;
-      max-height: 90vh; overflow-y: auto; padding: 2rem;
+      background: white; border-radius: 1rem; width: 100%; max-width: 700px;
+      max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.3);
     }
-    .form-group { margin-bottom: 1rem; }
-    .form-group label { display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--mist); margin-bottom: 0.4rem; }
-    .form-group input { width: 100%; padding: 0.75rem; border: 1.5px solid var(--light-border); border-radius: 0.3rem; }
+    .admin-header {
+      padding: 1.8rem 2rem 1.2rem;
+      border-bottom: 1px solid var(--light-border);
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; background: white; z-index: 10;
+    }
+    .admin-title { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 600; }
+    .admin-title span { font-style: italic; color: var(--coral); }
+    .admin-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--mist); line-height: 1; padding: 0.2rem; transition: color 0.2s; }
+    .admin-close:hover { color: var(--coral); }
+    .admin-body { padding: 1.5rem 2rem 2rem; }
+
+    /* Login */
+    .login-screen { text-align: center; padding: 2rem 0; }
+    .login-screen p { color: var(--mist); margin-bottom: 1.5rem; font-size: 0.9rem; }
+    .login-input {
+      width: 100%; padding: 0.9rem 1.1rem; margin-bottom: 1rem;
+      border: 1.5px solid rgba(100,80,50,0.2); border-radius: 0.35rem;
+      font-family: 'Jost', sans-serif; font-size: 0.92rem; text-align: center;
+    }
+    .login-input:focus { outline: none; border-color: var(--coral); }
+    .login-error { color: var(--coral); font-size: 0.82rem; margin-bottom: 1rem; display: none; }
+
+    /* Tabs */
+    .admin-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--light-border); margin-bottom: 1.5rem; }
+    .admin-tab {
+      padding: 0.7rem 1.3rem; font-size: 0.82rem; font-weight: 500;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      background: none; border: none; cursor: pointer;
+      color: var(--mist); border-bottom: 2px solid transparent;
+      transition: all 0.2s; font-family: 'Jost', sans-serif;
+      margin-bottom: -1px;
+    }
+    .admin-tab.active { color: var(--coral); border-color: var(--coral); }
+
+    /* Product list in admin */
+    .admin-product-list { margin-bottom: 1.5rem; }
+    .admin-product-item {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.9rem; border: 1px solid var(--light-border);
+      border-radius: 0.4rem; margin-bottom: 0.5rem;
+      background: #FAFAF8;
+    }
+    .admin-product-thumb { width: 44px; height: 44px; border-radius: 0.3rem; flex-shrink: 0; object-fit: cover; }
+    .admin-product-info { flex: 1; min-width: 0; }
+    .admin-product-name { font-weight: 500; font-size: 0.92rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .admin-product-meta { font-size: 0.75rem; color: var(--mist); }
+    .admin-product-actions { display: flex; gap: 0.5rem; }
+    .admin-btn-edit, .admin-btn-del {
+      padding: 0.35rem 0.8rem; border-radius: 0.25rem;
+      font-size: 0.75rem; font-family: 'Jost', sans-serif;
+      cursor: pointer; transition: all 0.2s; font-weight: 500; border: none;
+    }
+    .admin-btn-edit { background: var(--sand); color: var(--ink); }
+    .admin-btn-edit:hover { background: var(--forest); color: white; }
+    .admin-btn-del { background: #FEE; color: #C0392B; }
+    .admin-btn-del:hover { background: #C0392B; color: white; }
+
+    /* Add/Edit form */
+    .product-form { background: var(--sand); border-radius: 0.5rem; padding: 1.5rem; }
+    .product-form h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; margin-bottom: 1.2rem; font-weight: 600; }
+    .product-form .form-group label { display: block; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.4rem; font-weight: 500; }
+    .product-form .form-group input,
+    .product-form .form-group select,
+    .product-form .form-group textarea {
+      width: 100%; padding: 0.75rem 0.9rem;
+      border: 1.5px solid rgba(100,80,50,0.2); border-radius: 0.3rem;
+      font-family: 'Jost', sans-serif; font-size: 0.88rem;
+      background: white; transition: border-color 0.2s;
+    }
+    .product-form .form-group input:focus,
+    .product-form .form-group select:focus { outline: none; border-color: var(--coral); }
+    .product-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+    .product-form .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.8rem; }
+    .color-preview { width: 100%; height: 60px; border-radius: 0.3rem; margin-top: 0.5rem; transition: background 0.3s; }
+    .form-actions { display: flex; gap: 0.8rem; margin-top: 1.2rem; }
+    .btn-save { background: var(--coral); color: white; border: none; padding: 0.75rem 1.8rem; border-radius: 0.3rem; font-family: 'Jost', sans-serif; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: background 0.2s; }
+    .btn-save:hover { background: var(--ink); }
+    .btn-cancel { background: white; color: var(--mist); border: 1.5px solid var(--light-border); padding: 0.75rem 1.5rem; border-radius: 0.3rem; font-family: 'Jost', sans-serif; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+    .btn-cancel:hover { border-color: var(--mist); color: var(--ink); }
+
+    /* Image field */
+    .image-preview-box {
+      margin-top: 0.7rem; border-radius: 0.4rem; overflow: hidden;
+      border: 1.5px solid rgba(100,80,50,0.15);
+      background: #f9f6f0;
+    }
+    .image-preview-box img { width: 100%; height: 150px; object-fit: cover; display: block; }
+    .image-preview-error { padding: 0.8rem; font-size: 0.78rem; color: var(--coral); }
+
+    /* Password settings */
+    .settings-section { margin-bottom: 2rem; }
+    .settings-section h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; }
+    .settings-note { font-size: 0.8rem; color: var(--mist); margin-top: 0.5rem; }
+
+
+
+    /* ===== EXPOSICIONES ===== */
+    .exposiciones { padding: 6rem 3rem; background: var(--sand); }
+    .expo-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    .expo-card {
+      border-radius: 0.5rem; overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      transition: all 0.3s cubic-bezier(0.23,1,0.32,1);
+      cursor: pointer; background: white;
+    }
+    .expo-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.15); }
+    .expo-card img { width: 100%; height: 320px; object-fit: cover; display: block; }
+    .expo-card-body { padding: 1rem 1.2rem; }
+    .expo-card-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; }
+    .expo-card-year { font-size: 0.75rem; color: var(--mist); margin-top: 0.2rem; }
+
+    /* ===== DOCUMENTOS ===== */
+    .documentos { padding: 5rem 3rem; background: var(--ink); }
+    .doc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
+    .doc-card {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 0.5rem; padding: 1.8rem 1.5rem; text-align: center;
+      transition: all 0.3s; text-decoration: none; display: block;
+    }
+    .doc-card:hover { background: rgba(255,255,255,0.1); transform: translateY(-3px); border-color: var(--gold); }
+    .doc-icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+    .doc-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: white; font-weight: 600; margin-bottom: 0.4rem; }
+    .doc-desc { font-size: 0.78rem; color: rgba(255,255,255,0.4); }
+    .doc-btn { display: inline-block; margin-top: 1rem; padding: 0.4rem 1rem; border-radius: 2rem; background: var(--gold); color: var(--ink); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+
+    /* ===== LIGHTBOX ===== */
+    .lightbox {
+      display: none; position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.95); align-items: center; justify-content: center;
+      padding: 1rem;
+    }
+    .lightbox.open { display: flex; flex-direction: column; }
+    .lightbox-inner { position: relative; max-width: 900px; width: 100%; }
+    .lightbox-media { width: 100%; max-height: 70vh; object-fit: contain; border-radius: 0.4rem; display: block; }
+    .lightbox-video { width: 100%; aspect-ratio: 16/9; border-radius: 0.4rem; border: none; }
+    .lightbox-close {
+      position: absolute; top: -2.5rem; right: 0;
+      background: none; border: none; color: white; font-size: 2rem;
+      cursor: pointer; line-height: 1;
+    }
+    .lightbox-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,0.15); border: none; color: white;
+      width: 44px; height: 44px; border-radius: 50%; font-size: 1.2rem;
+      cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center;
+    }
+    .lightbox-nav:hover { background: var(--coral); }
+    .lightbox-prev { left: -3rem; }
+    .lightbox-next { right: -3rem; }
+    .lightbox-dots { display: flex; gap: 0.5rem; justify-content: center; margin-top: 1rem; }
+    .lightbox-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,0.3); border: none; cursor: pointer; transition: background 0.2s;
+    }
+    .lightbox-dot.active { background: var(--coral); }
+    .lightbox-caption { color: rgba(255,255,255,0.7); text-align: center; margin-top: 0.8rem; font-size: 0.85rem; }
+
+    /* ===== GALLERY THUMBS on card ===== */
+    .card-thumbs {
+      display: flex; gap: 0.35rem; padding: 0.5rem 0.8rem;
+      overflow-x: auto; background: #f9f6f0;
+      scrollbar-width: none;
+    }
+    .card-thumbs::-webkit-scrollbar { display: none; }
+    .card-thumb {
+      width: 40px; height: 40px; border-radius: 0.25rem;
+      object-fit: cover; cursor: pointer; flex-shrink: 0;
+      border: 2px solid transparent; transition: border-color 0.2s;
+    }
+    .card-thumb.active { border-color: var(--coral); }
+    .card-thumb-video {
+      width: 40px; height: 40px; border-radius: 0.25rem;
+      background: var(--ink); display: flex; align-items: center; justify-content: center;
+      cursor: pointer; flex-shrink: 0; border: 2px solid transparent; transition: border-color 0.2s;
+      color: white; font-size: 1rem;
+    }
+    .card-thumb-video:hover, .card-thumb-video.active { border-color: var(--coral); }
+
+    /* ===== SHARE BUTTONS ===== */
+    .share-bar {
+      display: flex; gap: 0.4rem; padding: 0.6rem 1rem 0.8rem;
+      border-top: 1px solid var(--light-border); flex-wrap: wrap;
+      align-items: center;
+    }
+    .share-label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mist); margin-right: 0.2rem; }
+    .share-btn {
+      display: flex; align-items: center; gap: 0.3rem;
+      padding: 0.3rem 0.7rem; border-radius: 2rem; border: 1.5px solid var(--light-border);
+      font-size: 0.72rem; font-family: 'Jost', sans-serif; font-weight: 500;
+      cursor: pointer; background: white; color: var(--ink);
+      transition: all 0.2s; text-decoration: none;
+    }
+    .share-btn:hover { border-color: var(--coral); color: var(--coral); }
+    .share-btn.whatsapp:hover { border-color: #25D366; color: #25D366; }
+    .share-btn.facebook:hover { border-color: #1877F2; color: #1877F2; }
+    .share-btn.copy:hover { border-color: var(--forest); color: var(--forest); }
+
+    /* ===== INSTAGRAM BANNER ===== */
+    .instagram-banner {
+      background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+      padding: 3rem; text-align: center; color: white;
+    }
+    .instagram-banner h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 3vw, 2.5rem); margin-bottom: 0.8rem;
+    }
+    .instagram-banner p { opacity: 0.85; margin-bottom: 1.5rem; font-weight: 300; }
+    .instagram-link {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      background: white; color: #833ab4;
+      padding: 0.8rem 2rem; border-radius: 2rem;
+      text-decoration: none; font-weight: 600; font-size: 0.9rem;
+      transition: all 0.3s;
+    }
+    .instagram-link:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+
+    @media (max-width: 768px) {
+      nav { padding: 0.9rem 1.2rem; }
+      nav ul { display: none; }
+      .hero { padding: 7rem 1.5rem 4rem; }
+      .hero-decor { display: none; }
+      .shop { padding: 4rem 1.5rem; }
+      .about { grid-template-columns: 1fr; padding: 4rem 1.5rem; gap: 3rem; }
+      .about-art { height: 250px; }
+      .contact { padding: 4rem 1.5rem; }
+      .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
+      .admin-body { padding: 1rem 1.2rem 1.5rem; }
+      .product-form .form-row, .product-form .form-row-3 { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav>
   <div class="nav-logo">Elberta <span>Wood & Pencil</span></div>
   <ul>
     <li><a href="#tienda">Tienda</a></li>
+    <li><a href="#exposiciones">Exposiciones</a></li>
+    <li><a href="#documentos">Documentos</a></li>
+    <li><a href="#sobre-mi">Sobre mí</a></li>
+    <li><a href="#contacto">Contacto</a></li>
     <li><button class="nav-admin-btn" onclick="openAdmin()">✦ Edición</button></li>
   </ul>
 </nav>
 
+<!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
-  <div class="hero-decor"></div>
+  <div class="hero-decor">
+    <img class="hero-decor-img" src="imagenes/hero-obra.jpg" alt="Obra de Luis Berta">
+    <div class="hero-decor-fade"></div>
+  </div>
   <div class="hero-content">
+    <p class="hero-eyebrow">Arte original · Fuerteventura</p>
     <h1>Arte hecho<br>con el <em>alma</em></h1>
-    <p class="hero-sub">Maderas rescatadas del olvido en Fuerteventura.</p>
-    <a href="#tienda" class="btn-main">Ver obras →</a>
+    <p class="hero-sub">Maderas rescatadas del olvido, lienzos cargados de vida, colores que gritan y una locura que no tiene cura. Cada pieza nace en Puerto del Rosario y viaja hasta donde tenga que llegar.</p>
+    <div class="hero-actions">
+      <a href="#tienda" class="btn-main">Ver obras →</a>
+      <a href="#sobre-mi" class="btn-ghost">Conocerme</a>
+    </div>
+  </div>
+  <div class="hero-float">
+    <div class="hero-float-num">100%</div>
+    <div class="hero-float-label">Piezas originales</div>
   </div>
 </section>
 
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span class="marquee-item">Arte Original <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Wood & Pencil <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Puerto del Rosario <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Fuerteventura <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Piezas Únicas <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Encargos Personalizados <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Arte Original <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Wood & Pencil <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Puerto del Rosario <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Fuerteventura <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Piezas Únicas <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Encargos Personalizados <span class="marquee-sep">✦</span></span>
+  </div>
+</div>
+
+<!-- SHOP -->
 <section class="shop" id="tienda">
-  <div id="products-grid"></div>
+  <div class="shop-header">
+    <div>
+      <p class="section-label">✦ Galería</p>
+      <h2 class="section-title">Obras <em>disponibles</em></h2>
+    </div>
+  </div>
+  <div id="products-grid">
+    <div class="empty-state">
+      <div class="empty-state-icon">🎨</div>
+      <h3>Próximamente</h3>
+      <p>Entra al panel de <strong>Edición</strong> para añadir tus primeras obras.</p>
+    </div>
+  </div>
 </section>
 
-<!-- PANEL EDICIÓN -->
+
+<!-- EXPOSICIONES -->
+<section class="exposiciones" id="exposiciones">
+  <p class="section-label">✦ Trayectoria</p>
+  <h2 class="section-title">Exposiciones <em>realizadas</em></h2>
+  <div class="expo-grid">
+        <div class="expo-card" onclick="openLightbox([{type:'img',src:'exposiciones/April 30, 2022.png',label:'Exposición Abril 2022'}],0)">
+          <img src="exposiciones/April 30, 2022.png" alt="Exposición Abril 2022" onerror="this.parentElement.style.display='none'">
+          <div class="expo-card-body">
+            <div class="expo-card-title">Exposición Abril 2022</div>
+            <div class="expo-card-year">2022</div>
+          </div>
+        </div>
+        <div class="expo-card" onclick="openLightbox([{type:'img',src:'exposiciones/Black White Minimalist 3D Art Expo Poster.png',label:'Art Expo · Minimalismo 3D'}],0)">
+          <img src="exposiciones/Black White Minimalist 3D Art Expo Poster.png" alt="Art Expo · Minimalismo 3D" onerror="this.parentElement.style.display='none'">
+          <div class="expo-card-body">
+            <div class="expo-card-title">Art Expo · Minimalismo 3D</div>
+            
+          </div>
+        </div>
+        <div class="expo-card" onclick="openLightbox([{type:'img',src:'exposiciones/Blue Minimal Professional Software Engineer Cover Letter.png',label:'Exposición Profesional'}],0)">
+          <img src="exposiciones/Blue Minimal Professional Software Engineer Cover Letter.png" alt="Exposición Profesional" onerror="this.parentElement.style.display='none'">
+          <div class="expo-card-body">
+            <div class="expo-card-title">Exposición Profesional</div>
+            
+          </div>
+        </div>
+        <div class="expo-card" onclick="openLightbox([{type:'img',src:'exposiciones/Brown White Minimalist Art Exhibition Poster.png',label:'Art Exhibition · Brown & White'}],0)">
+          <img src="exposiciones/Brown White Minimalist Art Exhibition Poster.png" alt="Art Exhibition · Brown & White" onerror="this.parentElement.style.display='none'">
+          <div class="expo-card-body">
+            <div class="expo-card-title">Art Exhibition · Brown & White</div>
+            
+          </div>
+        </div>
+        <div class="expo-card" onclick="openLightbox([{type:'img',src:'exposiciones/Documento A4 Bloc Notas Campo de Frutas Plátanos Escritura Documento hoja To Do Sencillas Carta Apuntes Amarillo....png',label:'Notas de Campo'}],0)">
+          <img src="exposiciones/Documento A4 Bloc Notas Campo de Frutas Plátanos Escritura Documento hoja To Do Sencillas Carta Apuntes Amarillo....png" alt="Notas de Campo" onerror="this.parentElement.style.display='none'">
+          <div class="expo-card-body">
+            <div class="expo-card-title">Notas de Campo</div>
+            
+          </div>
+        </div>
+        <div class="expo-card" onclick="openLightbox([{type:'img',src:'exposiciones/Imagen de WhatsApp 2024-10-02 a las 13.32.28_c5362a8b.jpg',label:'Exposición Octubre 2024'}],0)">
+          <img src="exposiciones/Imagen de WhatsApp 2024-10-02 a las 13.32.28_c5362a8b.jpg" alt="Exposición Octubre 2024" onerror="this.parentElement.style.display='none'">
+          <div class="expo-card-body">
+            <div class="expo-card-title">Exposición Octubre 2024</div>
+            <div class="expo-card-year">2024</div>
+          </div>
+        </div>
+        <div class="expo-card" onclick="openLightbox([{type:'img',src:'exposiciones/Llamativo póster exposición de arte minimalista colorido.png',label:'Arte Minimalista Colorido'}],0)">
+          <img src="exposiciones/Llamativo póster exposición de arte minimalista colorido.png" alt="Arte Minimalista Colorido" onerror="this.parentElement.style.display='none'">
+          <div class="expo-card-body">
+            <div class="expo-card-title">Arte Minimalista Colorido</div>
+            
+          </div>
+        </div>
+        <div class="expo-card" onclick="openLightbox([{type:'img',src:'exposiciones/elberta woodandpencil.jpg',label:'Elberta Wood & Pencil'}],0)">
+          <img src="exposiciones/elberta woodandpencil.jpg" alt="Elberta Wood & Pencil" onerror="this.parentElement.style.display='none'">
+          <div class="expo-card-body">
+            <div class="expo-card-title">Elberta Wood & Pencil</div>
+            
+          </div>
+        </div>
+  </div>
+</section>
+
+<!-- DOCUMENTOS -->
+<section class="documentos" id="documentos">
+  <p class="section-label" style="color:var(--gold)">✦ Documentación</p>
+  <h2 class="section-title" style="color:white">Perfil <em>artístico</em></h2>
+  <div class="doc-grid">
+    <a class="doc-card" href="documentos/Presentaci%C3%B3n%20dossier%20art%C3%ADstico%20luis%20berta.pdf" target="_blank">
+      <span class="doc-icon">📁</span>
+      <div class="doc-title">Dossier Artístico</div>
+      <div class="doc-desc">Presentación completa de la obra y trayectoria de Luis Berta</div>
+      <span class="doc-btn">Ver / Descargar</span>
+    </a>
+    <a class="doc-card" href="documentos/portafolioelbertawoodandpencil%20(2).pdf" target="_blank">
+      <span class="doc-icon">🎨</span>
+      <div class="doc-title">Portafolio</div>
+      <div class="doc-desc">Selección de obras de Elberta Wood & Pencil</div>
+      <span class="doc-btn">Ver / Descargar</span>
+    </a>
+    <div class="doc-card" style="border-style:dashed;cursor:default">
+      <span class="doc-icon">📄</span>
+      <div class="doc-title">Currículum</div>
+      <div class="doc-desc" style="color:rgba(255,255,255,0.3)">Próximamente</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="sobre-mi">
+  <div class="about-art">
+    <div class="art-block" style="background:none;grid-row:span 2;">
+      <img src="sobre-mi/WhatsApp%20Image%202026-04-23%20at%2009.48.17.jpeg" alt="Luis Berta pintando" style="width:100%;height:100%;object-fit:cover;">
+    </div>
+    <div class="art-block" style="background:none;">
+      <img src="sobre-mi/photo_5911203471791603367_y.jpg" alt="Luis Berta en el estudio" style="width:100%;height:100%;object-fit:cover;">
+    </div>
+    <div class="art-block" style="background: linear-gradient(135deg, #8B6914, var(--gold));"></div>
+  </div>
+  <div>
+    <p class="about-eyebrow">✦ El artista</p>
+    <h2>Madera, lienzos,<br>lápices y mucho <em>color!</em></h2>
+    <p>Soy Luis Berta, bajo mi nombre artístico <em style="color:var(--gold)">Elberta.woodandpencil</em>, artista plástico con estudio en Puerto del Rosario, Fuerteventura. Trabajo principalmente con madera y lienzo, creando piezas que fusionan la textura natural con el color.</p>
+    <p>Lápices, tintas, poscas, rotuladores... cualquier herramienta vale cuando hay algo que decir. Cada obra es única, irrepetible, y lleva el espíritu salvaje de las islas.</p>
+    <div class="about-details">
+      <div class="about-detail">
+        <div class="about-detail-num">100%</div>
+        <div class="about-detail-label">Original</div>
+      </div>
+      <div class="about-detail">
+        <div class="about-detail-num">✦</div>
+        <div class="about-detail-label">Hecho a mano</div>
+      </div>
+      <div class="about-detail">
+        <div class="about-detail-num">🌊</div>
+        <div class="about-detail-label">Fuerteventura</div>
+      </div>
+    </div>
+    <div class="signature">— Elberta</div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contacto">
+  <div class="contact-inner">
+    <div class="contact-top">
+      <p class="section-label">✦ Hablemos</p>
+      <h2 class="section-title">¿Tienes alguna <em>pregunta</em>?</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-icon">📧</div>
+          <div>
+            <div class="contact-item-label">Email</div>
+            <div class="contact-item-value">patagoniaberta@gmail.com</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📱</div>
+          <div>
+            <div class="contact-item-label">WhatsApp / Teléfono</div>
+            <div class="contact-item-value">+34 637 196 259</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div>
+            <div class="contact-item-label">Estudio</div>
+            <div class="contact-item-value">Puerto del Rosario, Fuerteventura</div>
+          </div>
+        </div>
+        <div class="contact-social">
+          <a href="https://instagram.com/elberta.woodandpencil" target="_blank" class="social-link">
+            📸 @elberta.woodandpencil
+          </a>
+        </div>
+      </div>
+      <div class="contact-form-wrap">
+        <div class="form-group">
+          <input type="text" placeholder="Tu nombre">
+        </div>
+        <div class="form-group">
+          <input type="email" placeholder="Tu email">
+        </div>
+        <div class="form-group">
+          <input type="text" placeholder="Asunto (ej: encargo personalizado)">
+        </div>
+        <div class="form-group">
+          <textarea placeholder="¿En qué puedo ayudarte?"></textarea>
+        </div>
+        <button class="btn-main" style="width:100%; justify-content:center;" onclick="showToast('✉️ Mensaje enviado — ¡te escribo pronto!')">Enviar mensaje</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- INSTAGRAM BANNER -->
+<section class="instagram-banner">
+  <h3>📸 Sígueme en Instagram</h3>
+  <p>Proceso creativo, obras nuevas y todo lo que pasa en el estudio</p>
+  <a href="https://instagram.com/elberta.woodandpencil" target="_blank" class="instagram-link">
+    📷 @elberta.woodandpencil
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Elberta <span>Wood & Pencil</span></div>
+  <div class="footer-links">
+    <a href="#tienda">Tienda</a>
+    <a href="#sobre-mi">Sobre mí</a>
+    <a href="#contacto">Contacto</a>
+  </div>
+  <div class="footer-copy">© 2026 Elberta Wood & Pencil Shop · Puerto del Rosario</div>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-accent"></div>
+  <span id="toast-msg">Mensaje enviado</span>
+</div>
+
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightboxOnBg(event)">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <button class="lightbox-nav lightbox-prev" onclick="lightboxNav(-1)">‹</button>
+    <button class="lightbox-nav lightbox-next" onclick="lightboxNav(1)">›</button>
+    <div id="lightbox-media-wrap"></div>
+    <div class="lightbox-dots" id="lightbox-dots"></div>
+    <div class="lightbox-caption" id="lightbox-caption"></div>
+  </div>
+</div>
+
+<!-- ADMIN OVERLAY -->
 <div class="admin-overlay" id="adminOverlay">
   <div class="admin-panel">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
-      <h3>Panel de Administración</h3>
-      <button onclick="closeAdmin()" style="cursor:pointer; background:none; border:none; font-size:1.5rem;">&times;</button>
+    <div class="admin-header">
+      <div class="admin-title">Panel de <span>Edición</span></div>
+      <button class="admin-close" onclick="closeAdmin()">✕</button>
     </div>
-
-    <!-- SECCIÓN IBAN -->
-    <div style="background:var(--sand); padding:1rem; border-radius:0.5rem; margin-bottom:2rem;">
-      <label style="font-size:0.7rem; font-weight:bold;">IBAN PARA TRANSFERENCIA:</label>
-      <input type="text" id="settingIban" style="width:100%; padding:0.5rem; margin-top:0.5rem;">
-      <button onclick="saveIban()" style="margin-top:0.5rem; padding:0.4rem 1rem; cursor:pointer;">Guardar IBAN</button>
+    <div class="admin-body" id="adminBody">
+      <!-- Login screen shown first -->
     </div>
-
-    <!-- FORMULARIO PRODUCTO -->
-    <div class="form-group"><label>Nombre de la obra</label><input type="text" id="pName"></div>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-      <div class="form-group"><label>Precio (€)</label><input type="number" id="pPrice"></div>
-      <div class="form-group"><label>Costo Envío (€)</label><input type="number" id="pShipping"></div>
-    </div>
-    <div class="form-group"><label>URL Imagen</label><input type="text" id="pImage"></div>
-    <div class="form-group"><label>Técnica</label><input type="text" id="pTech"></div>
-    <button class="btn-main" onclick="saveProduct()" style="width:100%">Publicar Obra</button>
-
-    <div id="adminList" style="margin-top:2rem; border-top:1px solid #eee; padding-top:1rem;"></div>
   </div>
 </div>
 
 <script>
-  let products = JSON.parse(localStorage.getItem('elberta_products')) || [];
-  let iban = localStorage.getItem('elberta_iban') || "ES00 0000 0000 0000 0000";
-  const paypalEmail = "pachiberta@gmail.com";
+  // ===== STORAGE =====
+  const STORAGE_KEY = 'elberta_products';
+  const PASS_KEY = 'elberta_password';
 
-  function renderProducts() {
+  function getProducts() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+    catch { return []; }
+  }
+  function saveProducts(products) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+  }
+  function getPassword() {
+    return localStorage.getItem(PASS_KEY) || 'elberta2024';
+  }
+  function savePassword(p) {
+    localStorage.setItem(PASS_KEY, p);
+  }
+
+  // ===== HELPERS =====
+  function imgUrl(filename) {
+    return 'imagenes/' + encodeURIComponent(filename);
+  }
+  function videoUrl(filename) {
+    if (filename.startsWith('http')) return filename;
+    return 'https://raw.githubusercontent.com/unlugar/unlugar.github.io/main/imagenes/' + encodeURIComponent(filename);
+  }
+
+  // ===== LIGHTBOX =====
+  let lbItems = []; // [{type:'img'|'video', src, label}]
+  let lbIndex = 0;
+
+  function openLightbox(items, startIndex) {
+    lbItems = items;
+    lbIndex = startIndex;
+    document.getElementById('lightbox').classList.add('open');
+    renderLightbox();
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.getElementById('lightbox-media-wrap').innerHTML = '';
+  }
+  function closeLightboxOnBg(e) {
+    if (e.target === document.getElementById('lightbox')) closeLightbox();
+  }
+  function lightboxNav(dir) {
+    lbIndex = (lbIndex + dir + lbItems.length) % lbItems.length;
+    renderLightbox();
+  }
+  function renderLightbox() {
+    const item = lbItems[lbIndex];
+    const wrap = document.getElementById('lightbox-media-wrap');
+    if (item.type === 'video') {
+      const videoId = extractYoutubeId(item.src);
+      if (videoId) {
+        wrap.innerHTML = `<iframe class="lightbox-video" src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="autoplay" allowfullscreen></iframe>`;
+      } else {
+        wrap.innerHTML = `<video class="lightbox-media" src="${item.src}" controls autoplay playsinline style="max-height:70vh;width:100%;border-radius:0.4rem" onerror="this.parentElement.innerHTML='<p style=&quot;color:white;padding:2rem&quot;>⚠️ No se encontró el vídeo.</p>'"></video>`;
+      }
+    } else {
+      wrap.innerHTML = `<img class="lightbox-media" src="${item.src}" alt="${item.label||''}">`;
+    }
+    document.getElementById('lightbox-caption').textContent = item.label || '';
+    const dots = document.getElementById('lightbox-dots');
+    dots.innerHTML = lbItems.length > 1 ? lbItems.map((_, i) =>
+      `<button class="lightbox-dot ${i===lbIndex?'active':''}" onclick="lbIndex=${i};renderLightbox()"></button>`
+    ).join('') : '';
+  }
+  function extractYoutubeId(url) {
+    const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/);
+    return m ? m[1] : null;
+  }
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lightbox').classList.contains('open')) return;
+    if (e.key === 'ArrowLeft') lightboxNav(-1);
+    if (e.key === 'ArrowRight') lightboxNav(1);
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+  // ===== SHARE =====
+  function shareProduct(name, idx) {
+    const url = encodeURIComponent(window.location.href + '#obra-' + idx);
+    const text = encodeURIComponent('¡Mira esta obra de Elberta Wood & Pencil! "' + name + '"');
+    return {
+      whatsapp: `https://wa.me/34637196259?text=${text}%20${url}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+    };
+  }
+  function copyLink(idx) {
+    const url = window.location.href.split('#')[0] + '#obra-' + idx;
+    navigator.clipboard.writeText(url).then(() => showToast('🔗 Enlace copiado'));
+  }
+
+  // ===== RENDER SHOP =====
+  function renderShop() {
+    const products = getProducts();
     const grid = document.getElementById('products-grid');
-    if (products.length === 0) {
-      grid.innerHTML = '<p style="grid-column:1/-1; text-align:center;">Usa el panel de edición para añadir obras.</p>';
+    if (!products.length) {
+      grid.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🎨</div><h3>Próximamente</h3><p>Entra al panel de <strong>Edición</strong> para añadir tus primeras obras.</p></div>`;
       return;
     }
     grid.innerHTML = products.map((p, i) => {
-      const price = parseFloat(p.price || 0);
-      const ship = parseFloat(p.shipping || 0);
-      const total = price + ship;
+      // Build media items array for lightbox
+      const mediaItems = [];
+      const allImages = p.images && p.images.length ? p.images : (p.image ? [p.image] : []);
+      allImages.forEach(img => mediaItems.push({type:'img', src: imgUrl(img), label: p.name}));
+      if (p.video) mediaItems.push({type:'video', src: videoUrl(p.video), label: p.name + ' · Vídeo'});
+
+      const firstImg = allImages[0];
+      const mainSrc = firstImg ? imgUrl(firstImg) : null;
+      const mainHtml = mainSrc
+        ? `<img class="product-img-bg" src="${mainSrc}" alt="${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="product-img-bg" style="background:${p.color||'linear-gradient(135deg,#D4603A,#C8942A)'};display:none;"></div>`
+        : `<div class="product-img-bg" style="background:${p.color||'linear-gradient(135deg,#D4603A,#C8942A)'}"></div>`;
+
+      // Thumbnails strip
+      const thumbsHtml = mediaItems.length > 1 ? `<div class="card-thumbs">
+        ${allImages.map((img, ti) => `<img class="card-thumb${ti===0?' active':''}" src="${imgUrl(img)}" onclick="openLightbox(getMediaItems(${i}),${ti})">`).join('')}
+        ${p.video ? `<div class="card-thumb-video" onclick="openLightbox(getMediaItems(${i}),${allImages.length})">▶</div>` : ''}
+      </div>` : '';
+
+      const shareLinks = shareProduct(p.name, i);
+      const sharebar = `<div class="share-bar">
+        <span class="share-label">Compartir</span>
+        <a class="share-btn whatsapp" href="${shareLinks.whatsapp}" target="_blank">💬 WhatsApp</a>
+        <a class="share-btn facebook" href="${shareLinks.facebook}" target="_blank">📘 Facebook</a>
+        <button class="share-btn copy" onclick="copyLink(${i})">🔗 Copiar</button>
+      </div>`;
+
       return `
-        <div class="product-card">
-          <div class="product-img"><img src="${p.image}"></div>
-          <div class="product-body">
-            <p style="font-size:0.7rem; text-transform:uppercase; color:var(--mist);">${p.technique}</p>
-            <h3 class="product-name">${p.name}</h3>
-            <p style="font-size:0.8rem; margin:0.5rem 0;">Obra: ${price}€ | Envío: ${ship}€</p>
-            <div class="product-price">Total: ${total}€</div>
-            <div style="margin-top:1rem; display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
-              <button onclick="payPayPal('${p.name}', ${total})" style="background:#0070ba; color:white; border:none; padding:0.6rem; border-radius:0.3rem; cursor:pointer; font-weight:600;">PayPal</button>
-              <button onclick="payTransfer(${total})" style="background:var(--ink); color:white; border:none; padding:0.6rem; border-radius:0.3rem; cursor:pointer; font-weight:600;">Transferencia</button>
-            </div>
+      <div class="product-card" id="obra-${i}">
+        <div class="product-img" style="cursor:pointer" onclick="openLightbox(getMediaItems(${i}),0)">
+          ${mainHtml}
+          <div class="product-img-overlay">
+            <button class="product-img-btn">Ver obra ${mediaItems.length > 1 ? '('+mediaItems.length+')' : ''}</button>
+          </div>
+          <div class="product-badge-wrap">
+            ${p.isNew ? '<span class="badge badge-new">Nuevo</span>' : ''}
+            ${p.soldOut ? '<span class="badge badge-sold">Vendido</span>' : '<span class="badge badge-original">Original</span>'}
+            ${p.video ? '<span class="badge" style="background:var(--ink);color:white;">▶ Vídeo</span>' : ''}
           </div>
         </div>
-      `;
+        ${thumbsHtml}
+        <div class="product-body">
+          <div class="product-technique">${p.technique||''} ${p.material ? '· '+p.material : ''}</div>
+          <div class="product-name">${p.name}</div>
+          <div class="product-dims">${p.width && p.height ? p.width+' × '+p.height+' cm' : ''}</div>
+          <div class="product-footer">
+            <div class="product-price ${p.soldOut?'sold-out':''}">${p.price ? p.price+' €' : ''}</div>
+            <button class="add-btn" onclick="addToCart('${p.name}')" ${p.soldOut?'disabled':''}>${p.soldOut?'Vendido':'Comprar'}</button>
+          </div>
+        </div>
+        ${sharebar}
+      </div>`;
     }).join('');
   }
 
-  function payPayPal(name, total) {
-    const url = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${paypalEmail}&item_name=${encodeURIComponent(name)}&amount=${total}&currency_code=EUR`;
-    window.open(url, '_blank');
+  function getMediaItems(i) {
+    const p = getProducts()[i];
+    const items = [];
+    const allImages = p.images && p.images.length ? p.images : (p.image ? [p.image] : []);
+    allImages.forEach(img => items.push({type:'img', src: imgUrl(img), label: p.name}));
+    if (p.video) items.push({type:'video', src: videoUrl(p.video), label: p.name + ' · Vídeo'});
+    return items;
   }
 
-  function payTransfer(total) {
-    alert(`Por favor, realiza una transferencia de ${total}€ a:\n\nIBAN: ${iban}\n\nIndica el nombre de la obra en el concepto.`);
+  // ===== CART =====
+  function addToCart(name) {
+    showToast(`🎨 "${name}" añadida al carrito`);
   }
 
-  function openAdmin() { document.getElementById('adminOverlay').classList.add('open'); }
-  function closeAdmin() { document.getElementById('adminOverlay').classList.remove('open'); }
-
-  function saveIban() {
-    iban = document.getElementById('settingIban').value;
-    localStorage.setItem('elberta_iban', iban);
-    alert("IBAN actualizado correctamente");
+  // ===== TOAST =====
+  function showToast(msg) {
+    document.getElementById('toast-msg').textContent = msg;
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
   }
 
-  function saveProduct() {
-    const p = {
-      name: document.getElementById('pName').value,
-      price: document.getElementById('pPrice').value,
-      shipping: document.getElementById('pShipping').value || 0,
-      image: document.getElementById('pImage').value,
-      technique: document.getElementById('pTech').value
-    };
-    products.push(p);
-    localStorage.setItem('elberta_products', JSON.stringify(products));
-    renderProducts();
-    renderAdminList();
-    alert("Obra añadida");
+  // ===== ADMIN =====
+  let adminLoggedIn = false;
+  let editingIndex = -1;
+  let activeTab = 'productos';
+
+  function openAdmin() {
+    document.getElementById('adminOverlay').classList.add('open');
+    if (!adminLoggedIn) renderLogin();
+    else renderAdminContent();
+  }
+  function closeAdmin() {
+    document.getElementById('adminOverlay').classList.remove('open');
+  }
+  document.getElementById('adminOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeAdmin();
+  });
+
+  function renderLogin() {
+    document.getElementById('adminBody').innerHTML = `
+      <div class="login-screen">
+        <p>Introduce tu contraseña para acceder al panel de edición</p>
+        <div class="login-error" id="loginError">Contraseña incorrecta</div>
+        <input class="login-input" type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+        <button class="btn-main" style="width:100%" onclick="doLogin()">Entrar</button>
+      </div>
+    `;
+    setTimeout(() => document.getElementById('loginPass')?.focus(), 100);
   }
 
-  function deleteProduct(i) {
-    if(confirm("¿Eliminar obra?")) {
-      products.splice(i, 1);
-      localStorage.setItem('elberta_products', JSON.stringify(products));
-      renderProducts();
-      renderAdminList();
+  function doLogin() {
+    const val = document.getElementById('loginPass').value;
+    if (val === getPassword()) {
+      adminLoggedIn = true;
+      renderAdminContent();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
     }
   }
 
-  function renderAdminList() {
-    const list = document.getElementById('adminList');
-    list.innerHTML = products.map((p, i) => `
-      <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; font-size:0.8rem; background:#f9f9f9; padding:0.5rem;">
-        <span>${p.name}</span>
-        <button onclick="deleteProduct(${i})" style="color:red; cursor:pointer; border:none; background:none;">Eliminar</button>
+  function renderAdminContent() {
+    document.getElementById('adminBody').innerHTML = `
+      <div class="admin-tabs">
+        <button class="admin-tab ${activeTab==='productos'?'active':''}" onclick="switchTab('productos')">Mis Obras</button>
+        <button class="admin-tab ${activeTab==='agregar'?'active':''}" onclick="switchTab('agregar')">Añadir Obra</button>
+        <button class="admin-tab ${activeTab==='exposiciones'?'active':''}" onclick="switchTab('exposiciones')">Exposiciones</button>
+        <button class="admin-tab ${activeTab==='docs'?'active':''}" onclick="switchTab('docs')">Documentos</button>
+        <button class="admin-tab ${activeTab==='ajustes'?'active':''}" onclick="switchTab('ajustes')">Ajustes</button>
       </div>
-    `).join('');
+      <div id="tab-content"></div>
+    `;
+    renderTab();
   }
 
-  document.getElementById('settingIban').value = iban;
-  window.onload = () => { renderProducts(); renderAdminList(); };
-</script>
+  function switchTab(tab) {
+    activeTab = tab;
+    editingIndex = -1;
+    renderAdminContent();
+  }
 
+  function renderTab() {
+    const el = document.getElementById('tab-content');
+    if (activeTab === 'productos') renderProductList(el);
+    else if (activeTab === 'agregar') renderProductForm(el, -1);
+    else if (activeTab === 'exposiciones') renderExposiciones(el);
+    else if (activeTab === 'docs') renderDocs(el);
+    else if (activeTab === 'ajustes') renderSettings(el);
+  }
+
+  function renderProductList(el) {
+    const products = getProducts();
+    if (editingIndex >= 0) { renderProductForm(el, editingIndex); return; }
+    if (!products.length) {
+      el.innerHTML = `<p style="color:var(--mist);text-align:center;padding:2rem 0;">Aún no tienes obras. Ve a <strong>Añadir Obra</strong> para empezar.</p>`;
+      return;
+    }
+    el.innerHTML = `
+      <div class="admin-product-list">
+        ${products.map((p, i) => {
+          const thumbSrc = p.image ? imgUrl(p.image) : null;
+          const thumbHtml = thumbSrc
+            ? `<img class="admin-product-thumb" src="${thumbSrc}" alt="${p.name}" onerror="this.style.background='${p.color||'#ccc'}';this.src=''">`
+            : `<div class="admin-product-thumb" style="background:${p.color||'#ccc'}"></div>`;
+          return `
+          <div class="admin-product-item">
+            ${thumbHtml}
+            <div class="admin-product-info">
+              <div class="admin-product-name">${p.name}</div>
+              <div class="admin-product-meta">${p.price ? p.price + ' €' : ''} ${p.technique ? '· ' + p.technique : ''} ${p.soldOut ? '· VENDIDO' : ''} ${p.images && p.images.length ? '· 📷 '+p.images.length+' foto'+(p.images.length>1?'s':'') : (p.image ? '· 📷 1 foto' : '')} ${p.video ? '· ▶ vídeo' : ''}</div>
+            </div>
+            <div class="admin-product-actions">
+              <button class="admin-btn-edit" onclick="startEdit(${i})">Editar</button>
+              <button class="admin-btn-del" onclick="deleteProduct(${i})">Eliminar</button>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    `;
+  }
+
+  function startEdit(i) {
+    editingIndex = i;
+    const el = document.getElementById('tab-content');
+    renderProductForm(el, i);
+  }
+
+  function renderProductForm(el, index) {
+    const products = getProducts();
+    const p = index >= 0 ? products[index] : {};
+    const isEdit = index >= 0;
+    el.innerHTML = `
+      <div class="product-form">
+        <h3>${isEdit ? '✏️ Editar obra' : '✦ Nueva obra'}</h3>
+        <div class="form-group">
+          <label>Nombre de la obra *</label>
+          <input type="text" id="pName" value="${p.name||''}" placeholder="Ej: Atardecer en Cofete">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Técnica</label>
+            <input type="text" id="pTechnique" value="${p.technique||''}" placeholder="Ej: Lápiz, Acrílico, Mixta...">
+          </div>
+          <div class="form-group">
+            <label>Material / Soporte</label>
+            <input type="text" id="pMaterial" value="${p.material||''}" placeholder="Ej: Madera, Lienzo, Papel...">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Ancho (cm)</label>
+            <input type="number" id="pWidth" value="${p.width||''}" placeholder="Ej: 40">
+          </div>
+          <div class="form-group">
+            <label>Alto (cm)</label>
+            <input type="number" id="pHeight" value="${p.height||''}" placeholder="Ej: 60">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Precio (€)</label>
+            <input type="number" id="pPrice" value="${p.price||''}" placeholder="Ej: 250">
+          </div>
+          <div class="form-group">
+            <label>Estado</label>
+            <select id="pSold">
+              <option value="0" ${!p.soldOut?'selected':''}>Disponible</option>
+              <option value="1" ${p.soldOut?'selected':''}>Vendido</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>📷 Fotos (hasta 6) — escribe los nombres separados por comas</label>
+          <textarea id="pImages" rows="3" placeholder="Ej: foto1.jpg, foto2.jpg, Imagen de WhatsApp 2025-07-14.jpg" style="width:100%;padding:0.75rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;font-size:0.88rem;resize:vertical">${(p.images||[]).join(', ')||(p.image||'')}</textarea>
+          <span style="font-size:0.75rem;color:var(--mist);display:block;margin-top:0.3rem">
+            Nombres exactos de los archivos en la carpeta <strong>imagenes/</strong>. Separa con comas. Máximo 6.
+          </span>
+          <div id="imagePreviewWrap" style="margin-top:0.5rem;display:flex;gap:0.5rem;flex-wrap:wrap"></div>
+        </div>
+        <div class="form-group">
+          <label>▶ Vídeo (opcional) — pega el enlace de YouTube</label>
+          <input type="text" id="pVideo" value="${p.video||''}" placeholder="Ej: https://www.youtube.com/watch?v=XXXXXXX">
+          <span style="font-size:0.75rem;color:var(--mist);display:block;margin-top:0.3rem">
+            También puedes pegar un enlace de YouTube Shorts o un Reel de Instagram
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label>Color de fondo (si no hay foto)</label>
+          <input type="color" id="pColor1" value="${extractColor1(p.color)}" oninput="updatePreview()">
+          <input type="color" id="pColor2" value="${extractColor2(p.color)}" oninput="updatePreview()" style="margin-left:0.5rem">
+          <span style="font-size:0.75rem;color:var(--mist);margin-left:0.5rem">← Solo se usará si no hay foto</span>
+          <div class="color-preview" id="colorPreview" style="background:${p.color || 'linear-gradient(135deg,#D4603A,#C8942A)'}"></div>
+        </div>
+
+        <div class="form-group" style="display:flex;align-items:center;gap:0.8rem;margin-top:0.5rem">
+          <input type="checkbox" id="pNew" ${p.isNew?'checked':''} style="width:auto">
+          <label for="pNew" style="text-transform:none;letter-spacing:0;font-size:0.88rem;color:var(--ink)">Marcar como "Nuevo"</label>
+        </div>
+        <div class="form-actions">
+          <button class="btn-save" onclick="saveProduct(${index})">${isEdit ? 'Guardar cambios' : 'Añadir obra'}</button>
+          <button class="btn-cancel" onclick="${isEdit ? 'cancelEdit()' : "switchTab('productos')"}">${isEdit ? 'Cancelar' : 'Ver lista'}</button>
+        </div>
+      </div>
+    `;
+  }
+
+
+
+  function extractColor1(gradient) {
+    if (!gradient) return '#D4603A';
+    const match = gradient.match(/#[0-9a-fA-F]{6}/);
+    return match ? match[0] : '#D4603A';
+  }
+  function extractColor2(gradient) {
+    if (!gradient) return '#C8942A';
+    const matches = gradient.match(/#[0-9a-fA-F]{6}/g);
+    return matches && matches[1] ? matches[1] : '#C8942A';
+  }
+
+  function updatePreview() {
+    const c1 = document.getElementById('pColor1').value;
+    const c2 = document.getElementById('pColor2').value;
+    document.getElementById('colorPreview').style.background = `linear-gradient(135deg, ${c1}, ${c2})`;
+  }
+
+  function saveProduct(index) {
+    const name = document.getElementById('pName').value.trim();
+    if (!name) { alert('El nombre de la obra es obligatorio'); return; }
+    const c1 = document.getElementById('pColor1').value;
+    const c2 = document.getElementById('pColor2').value;
+    const rawImages = document.getElementById('pImages').value;
+    const imagesArr = rawImages.split(',').map(s=>s.trim()).filter(Boolean).slice(0,6);
+    const product = {
+      name,
+      technique: document.getElementById('pTechnique').value.trim(),
+      material: document.getElementById('pMaterial').value.trim(),
+      width: document.getElementById('pWidth').value,
+      height: document.getElementById('pHeight').value,
+      price: document.getElementById('pPrice').value,
+      soldOut: document.getElementById('pSold').value === '1',
+      isNew: document.getElementById('pNew').checked,
+      color: `linear-gradient(135deg, ${c1}, ${c2})`,
+      image: imagesArr[0] || '',
+      images: imagesArr,
+      video: document.getElementById('pVideo').value.trim(),
+    };
+    const products = getProducts();
+    if (index >= 0) products[index] = product;
+    else products.push(product);
+    saveProducts(products);
+    renderShop();
+    showToast(index >= 0 ? `✅ "${name}" actualizada` : `✅ "${name}" añadida`);
+    activeTab = 'productos';
+    editingIndex = -1;
+    renderAdminContent();
+  }
+
+  function deleteProduct(i) {
+    const products = getProducts();
+    if (!confirm(`¿Eliminar "${products[i].name}"?`)) return;
+    products.splice(i, 1);
+    saveProducts(products);
+    renderShop();
+    showToast('🗑️ Obra eliminada');
+    renderAdminContent();
+  }
+
+  function cancelEdit() {
+    editingIndex = -1;
+    renderAdminContent();
+  }
+
+  function renderExposiciones(el) {
+    el.innerHTML = `
+      <div class="settings-section">
+        <h3>Pósters de exposiciones</h3>
+        <p style="color:var(--mist);font-size:0.88rem;margin-bottom:1rem">Los pósters se muestran automáticamente desde la carpeta <strong>exposiciones/</strong> de GitHub. Para añadir o quitar, sube o elimina archivos directamente en GitHub.</p>
+        <div style="background:var(--sand);border-radius:0.4rem;padding:1rem;font-size:0.85rem;line-height:1.8">
+          <strong>Archivos actuales:</strong><br>
+          📌 April 30, 2022.png<br>
+          📌 Black White Minimalist 3D Art Expo Poster.png<br>
+          📌 Blue Minimal Professional Software Engineer Cover Letter.png<br>
+          📌 Brown White Minimalist Art Exhibition Poster.png<br>
+          📌 Documento A4 Bloc Notas Campo de Frutas...<br>
+          📌 Imagen de WhatsApp 2024-10-02 a las 13.32.28_c5362a8b.jpg<br>
+          📌 Llamativo póster exposición de arte minimalista colorido.png<br>
+          📌 elberta woodandpencil.jpg
+        </div>
+      </div>
+    `;
+  }
+
+  function renderDocs(el) {
+    el.innerHTML = `
+      <div class="settings-section">
+        <h3>Documentos artísticos</h3>
+        <p style="color:var(--mist);font-size:0.88rem;margin-bottom:1rem">Para actualizar los documentos, sube los PDFs a la carpeta <strong>documentos/</strong> de GitHub con el mismo nombre.</p>
+        <div style="display:flex;flex-direction:column;gap:0.8rem">
+          <div style="background:var(--sand);border-radius:0.4rem;padding:1rem;display:flex;align-items:center;gap:1rem">
+            <span style="font-size:1.5rem">📁</span>
+            <div>
+              <div style="font-weight:600;font-size:0.9rem">Dossier Artístico</div>
+              <div style="font-size:0.78rem;color:var(--mist)">Presentación dossier artístico luis berta.pdf</div>
+            </div>
+            <span style="margin-left:auto;font-size:0.75rem;color:var(--forest);font-weight:600">✓ Subido</span>
+          </div>
+          <div style="background:var(--sand);border-radius:0.4rem;padding:1rem;display:flex;align-items:center;gap:1rem">
+            <span style="font-size:1.5rem">🎨</span>
+            <div>
+              <div style="font-weight:600;font-size:0.9rem">Portafolio</div>
+              <div style="font-size:0.78rem;color:var(--mist)">portafolioelbertawoodandpencil (2).pdf</div>
+            </div>
+            <span style="margin-left:auto;font-size:0.75rem;color:var(--forest);font-weight:600">✓ Subido</span>
+          </div>
+          <div style="background:var(--sand);border-radius:0.4rem;padding:1rem;display:flex;align-items:center;gap:1rem;opacity:0.5">
+            <span style="font-size:1.5rem">📄</span>
+            <div>
+              <div style="font-weight:600;font-size:0.9rem">Currículum</div>
+              <div style="font-size:0.78rem;color:var(--mist)">Pendiente de subir</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderSettings(el) {
+    el.innerHTML = `
+      <div class="settings-section">
+        <h3>Cambiar contraseña</h3>
+        <div class="form-group" style="margin-bottom:0.8rem">
+          <input type="password" id="newPass1" placeholder="Nueva contraseña" style="width:100%;padding:0.75rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;font-size:0.88rem">
+        </div>
+        <div class="form-group" style="margin-bottom:0.8rem">
+          <input type="password" id="newPass2" placeholder="Repetir contraseña" style="width:100%;padding:0.75rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;font-size:0.88rem">
+        </div>
+        <button class="btn-save" onclick="changePassword()">Guardar contraseña</button>
+        <p class="settings-note">Contraseña actual: guardada en este dispositivo</p>
+      </div>
+      <div class="settings-section">
+        <h3>Cerrar sesión</h3>
+        <button class="btn-cancel" onclick="logout()">Cerrar sesión del panel</button>
+      </div>
+    `;
+  }
+
+  function changePassword() {
+    const p1 = document.getElementById('newPass1').value;
+    const p2 = document.getElementById('newPass2').value;
+    if (!p1) { alert('Introduce una contraseña'); return; }
+    if (p1 !== p2) { alert('Las contraseñas no coinciden'); return; }
+    if (p1.length < 4) { alert('La contraseña debe tener al menos 4 caracteres'); return; }
+    savePassword(p1);
+    showToast('🔒 Contraseña actualizada');
+  }
+
+  function logout() {
+    adminLoggedIn = false;
+    closeAdmin();
+  }
+
+  // ===== INIT =====
+  renderShop();
+</script>
 </body>
 </html>

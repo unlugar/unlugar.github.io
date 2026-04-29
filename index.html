@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-<html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Elberta Wood & Pencil Shop</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <!-- EmailJS -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <!-- PayPal SDK -->
   <script src="https://www.paypal.com/sdk/js?client-id=test&currency=EUR"></script>
   <style>
     :root {
@@ -25,77 +25,231 @@
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 200;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0.8rem 1.5rem;
-      background: rgba(255,248,240,0.95);
+      padding: 1rem 3rem;
+      background: rgba(255,248,240,0.92);
       backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--light-border);
     }
-    .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; }
-    .nav-logo span { color: var(--coral); }
-    nav ul { display: flex; gap: 1rem; list-style: none; align-items: center; }
-    nav a { text-decoration: none; color: var(--ink); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; }
+    .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; color: var(--ink); }
+    .nav-logo span { color: var(--coral); font-style: italic; }
+    nav ul { display: flex; gap: 2rem; list-style: none; align-items: center; }
+    nav a { text-decoration: none; color: var(--ink); font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; transition: color 0.2s; }
+    nav a:hover { color: var(--coral); }
     .nav-cart-btn, .nav-admin-btn {
       background: none; border: 1.5px solid var(--coral);
-      padding: 0.3rem 0.8rem; border-radius: 2rem;
-      font-size: 0.7rem; cursor: pointer;
+      padding: 0.4rem 1rem; border-radius: 2rem;
+      font-size: 0.75rem; cursor: pointer; font-family: 'Jost', sans-serif;
+      transition: all 0.2s; position: relative;
     }
     .nav-admin-btn { border-color: var(--mist); color: var(--mist); }
+    .nav-admin-btn:hover { border-color: var(--coral); color: var(--coral); }
+    .nav-cart-btn:hover { background: var(--coral); color: white; }
     .cart-count {
-      position: absolute; top: -6px; right: -6px;
+      position: absolute; top: -8px; right: -8px;
       background: var(--coral); color: white; border-radius: 50%;
-      width: 16px; height: 16px; font-size: 0.6rem;
+      width: 18px; height: 18px; font-size: 0.7rem;
       display: flex; align-items: center; justify-content: center;
     }
-    .hero { padding: 6rem 1.5rem 3rem; position: relative; }
-    .hero-content { max-width: 100%; }
-    .hero h1 { font-size: clamp(2rem, 8vw, 4rem); }
-    .btn-main, .btn-ghost { padding: 0.6rem 1.5rem; font-size: 0.75rem; }
-    .shop { padding: 3rem 1.5rem; }
-    #products-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
-    @media (min-width: 640px) { #products-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (min-width: 1024px) { #products-grid { grid-template-columns: repeat(3, 1fr); } }
-    
-    .product-card { background: white; border-radius: 0.5rem; overflow: hidden; border: 1px solid var(--light-border); }
-    .product-img { height: 220px; position: relative; }
-    .product-img-bg { width: 100%; height: 100%; object-fit: cover; }
-    .badge { font-size: 0.6rem; padding: 0.2rem 0.5rem; border-radius: 2rem; }
+
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 8rem 3rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #F5EFE0 0%, #FFF8F0 40%, #EEF5EE 100%);
+      z-index: 0;
+    }
+    .hero-decor {
+      position: absolute; right: 0; top: 0; bottom: 0;
+      width: 45%;
+      background: linear-gradient(160deg, var(--forest) 0%, #2A3D2B 50%, #1A2A1B 100%);
+      clip-path: polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%);
+      z-index: 0;
+    }
+    .hero-decor-img {
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+      opacity: 0.28; mix-blend-mode: luminosity;
+    }
+    .hero-decor-fade {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(to right, rgba(42,61,43,0.85) 0%, rgba(26,42,27,0.3) 60%, transparent 100%);
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 560px; }
+    .hero-eyebrow {
+      font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--forest); font-weight: 600; margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 0.8rem;
+    }
+    .hero-eyebrow::before { content: ''; display: block; width: 30px; height: 1.5px; background: var(--forest); }
+    .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(3rem, 6vw, 6rem); line-height: 1.0; font-weight: 600; color: var(--ink); margin-bottom: 1.5rem; }
+    .hero h1 em { font-style: italic; color: var(--coral); }
+    .hero-sub { font-size: 1rem; color: var(--mist); line-height: 1.8; font-weight: 300; max-width: 400px; margin-bottom: 3rem; }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-main {
+      background: var(--coral); color: white; padding: 0.9rem 2.2rem; border-radius: 0.3rem;
+      border: none; font-family: 'Jost', sans-serif; font-size: 0.85rem; font-weight: 500;
+      letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: all 0.3s;
+      text-decoration: none; display: inline-block;
+    }
+    .btn-main:hover { background: var(--ink); transform: translateY(-2px); }
+    .btn-ghost {
+      background: transparent; color: var(--ink); padding: 0.9rem 2.2rem; border-radius: 0.3rem;
+      border: 1.5px solid var(--ink); font-family: 'Jost', sans-serif; font-size: 0.85rem;
+      font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;
+      transition: all 0.3s; text-decoration: none; display: inline-block;
+    }
+    .btn-ghost:hover { background: var(--ink); color: var(--warm); }
+
+    .marquee { background: var(--ink); padding: 0.8rem 0; overflow: hidden; white-space: nowrap; }
+    .marquee-track { display: inline-flex; animation: marquee 25s linear infinite; }
+    .marquee-item { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.6); padding: 0 2rem; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    .shop { padding: 6rem 3rem; position: relative; background: none; }
+    .shop::before {
+      content: ''; position: absolute; inset: 0;
+      background: url("imagenes/fondo.jpg") center center / cover no-repeat;
+      opacity: 0.30; z-index: 0;
+    }
+    .shop::after { content: ''; position: absolute; inset: 0; background: rgba(255, 248, 240, 0.55); z-index: 0; }
+    .shop > * { position: relative; z-index: 1; }
+    .shop-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 3rem; }
+    .section-label { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--coral); font-weight: 600; margin-bottom: 0.8rem; }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 3vw, 3rem); line-height: 1.1; }
+    .section-title em { font-style: italic; color: var(--coral); }
+
+    #products-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem;
+    }
+    .product-card {
+      background: white; border-radius: 0.5rem; overflow: hidden;
+      border: 1px solid var(--light-border);
+      transition: all 0.4s cubic-bezier(0.23,1,0.32,1);
+    }
+    .product-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
+    .product-img {
+      height: 280px; position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .product-img-bg { width: 100%; height: 100%; transition: transform 0.5s ease; object-fit: cover; }
+    .product-card:hover .product-img-bg { transform: scale(1.04); }
+    .product-badge-wrap { position: absolute; top: 1rem; left: 1rem; display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .badge { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.25rem 0.7rem; border-radius: 2rem; }
     .badge-new { background: var(--coral); color: white; }
     .badge-sold { background: var(--mist); color: white; }
-    .product-body { padding: 1rem; }
-    .product-name { font-size: 1rem; }
-    .product-price { font-size: 1.2rem; color: var(--coral); font-weight: 600; }
-    .shipping-select { width: 100%; padding: 0.3rem; margin: 0.5rem 0; font-size: 0.75rem; }
-    .add-btn { width: 100%; padding: 0.5rem; background: var(--ink); color: white; border: none; border-radius: 0.3rem; cursor: pointer; }
-    .copy-link-btn { width: 100%; padding: 0.4rem; margin-top: 0.5rem; background: var(--sand); border: 1px solid var(--light-border); border-radius: 0.3rem; font-size: 0.7rem; cursor: pointer; }
-    
-    .cart-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; }
+    .product-body { padding: 1.3rem 1.4rem 1.5rem; }
+    .product-technique { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.4rem; }
+    .product-name { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; margin-bottom: 0.3rem; }
+    .product-dims { font-size: 0.78rem; color: var(--mist); margin-bottom: 1rem; }
+    .product-footer { margin-top: 1rem; }
+    .product-price { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; color: var(--coral); }
+    .shipping-select {
+      width: 100%; padding: 0.4rem; margin: 0.5rem 0; border-radius: 0.3rem;
+      border: 1px solid var(--light-border); font-family: 'Jost', sans-serif;
+    }
+    .add-btn {
+      background: var(--ink); color: white; border: none;
+      padding: 0.6rem 1.2rem; border-radius: 0.25rem;
+      font-family: 'Jost', sans-serif; font-size: 0.78rem;
+      font-weight: 500; cursor: pointer; transition: all 0.2s;
+      width: 100%;
+    }
+    .add-btn:hover { background: var(--coral); }
+    .add-btn:disabled { background: #ccc; cursor: not-allowed; }
+    .copy-link-btn {
+      width: 100%; padding: 0.4rem; margin-top: 0.5rem;
+      background: var(--sand); border: 1px solid var(--light-border);
+      border-radius: 0.3rem; font-size: 0.7rem; cursor: pointer;
+      font-family: 'Jost', sans-serif;
+    }
+    .copy-link-btn:hover { background: var(--gold); color: white; }
+
+    .cart-modal {
+      display: none; position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+      align-items: center; justify-content: center;
+    }
     .cart-modal.open { display: flex; }
-    .cart-panel { background: white; border-radius: 1rem; max-width: 90%; width: 400px; max-height: 80vh; overflow-y: auto; padding: 1.5rem; }
-    .cart-item { display: flex; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid var(--light-border); }
-    
-    .expo-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
-    @media (min-width: 640px) { .expo-grid { grid-template-columns: repeat(2, 1fr); } }
-    .expo-card img { height: 200px; width: 100%; object-fit: cover; }
-    
-    .contact-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
-    .toast { position: fixed; bottom: 1rem; left: 1rem; right: 1rem; background: var(--ink); color: white; padding: 0.8rem; border-radius: 0.5rem; text-align: center; z-index: 9999; transform: translateY(100px); opacity: 0; transition: all 0.3s; }
+    .cart-panel {
+      background: white; border-radius: 1rem; max-width: 500px; width: 90%;
+      max-height: 80vh; overflow-y: auto; padding: 2rem;
+    }
+    .cart-item { display: flex; justify-content: space-between; padding: 1rem 0; border-bottom: 1px solid var(--light-border); }
+    .cart-total { margin-top: 1rem; text-align: right; font-size: 1.2rem; font-weight: bold; }
+
+    .about { padding: 7rem 3rem; background: var(--ink); display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+    .about-art { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; height: 450px; }
+    .art-block { border-radius: 0.5rem; overflow: hidden; }
+    .art-block img { width: 100%; height: 100%; object-fit: cover; }
+    .about h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 3vw, 3rem); color: white; }
+    .about p { color: rgba(255,255,255,0.6); line-height: 1.85; }
+
+    .contact { padding: 7rem 3rem; background: var(--sand); }
+    .contact-inner { max-width: 900px; margin: 0 auto; }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group input, .form-group textarea {
+      width: 100%; padding: 0.9rem 1.1rem;
+      border: 1.5px solid rgba(100,80,50,0.2); border-radius: 0.35rem;
+      font-family: 'Jost', sans-serif; background: white;
+    }
+    .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--coral); }
+
+    .exposiciones { padding: 6rem 3rem; background: var(--sand); }
+    .expo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
+    .expo-card { border-radius: 0.5rem; overflow: hidden; cursor: pointer; background: white; transition: transform 0.3s; }
+    .expo-card:hover { transform: translateY(-5px); }
+    .expo-card img { width: 100%; height: 320px; object-fit: cover; }
+    .expo-card-body { padding: 1rem; }
+    .expo-card-title { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; }
+
+    .documentos { padding: 5rem 3rem; background: var(--ink); }
+    .doc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
+    .doc-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; padding: 1.8rem; text-align: center; text-decoration: none; display: block; transition: transform 0.3s; }
+    .doc-card:hover { transform: translateY(-3px); background: rgba(255,255,255,0.1); }
+    .doc-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: white; }
+
+    .instagram-banner { background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); padding: 3rem; text-align: center; color: white; }
+    .instagram-link { display: inline-flex; background: white; color: #833ab4; padding: 0.8rem 2rem; border-radius: 2rem; text-decoration: none; font-weight: 600; transition: transform 0.3s; }
+    .instagram-link:hover { transform: translateY(-2px); }
+
+    footer { background: #0F0C07; padding: 2rem 3rem; text-align: center; color: rgba(255,255,255,0.5); }
+    .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--ink); color: white; padding: 1rem 1.5rem; border-radius: 0.5rem; z-index: 9999; transition: all 0.3s; transform: translateY(100px); opacity: 0; }
     .toast.show { transform: translateY(0); opacity: 1; }
-    
-    .admin-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 500; align-items: center; justify-content: center; }
+
+    .admin-overlay { display: none; position: fixed; inset: 0; z-index: 500; background: rgba(15,12,7,0.7); backdrop-filter: blur(4px); align-items: center; justify-content: center; }
     .admin-overlay.open { display: flex; }
-    .admin-panel { background: white; border-radius: 1rem; width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
-    .admin-header { padding: 1rem; border-bottom: 1px solid var(--light-border); display: flex; justify-content: space-between; }
-    .admin-body { padding: 1rem; }
-    .admin-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
-    .admin-tab { padding: 0.4rem 0.8rem; background: var(--sand); border: none; border-radius: 0.3rem; cursor: pointer; }
+    .admin-panel { background: white; border-radius: 1rem; width: 100%; max-width: 700px; max-height: 90vh; overflow-y: auto; }
+    .admin-header { padding: 1.5rem; border-bottom: 1px solid var(--light-border); display: flex; justify-content: space-between; }
+    .admin-body { padding: 1.5rem; }
+    .admin-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .admin-tab { padding: 0.5rem 1rem; background: var(--sand); border: none; cursor: pointer; border-radius: 0.3rem; }
     .admin-tab.active { background: var(--coral); color: white; }
-    .form-group { margin-bottom: 0.8rem; }
-    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.6rem; border: 1px solid var(--light-border); border-radius: 0.3rem; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
-    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
-    .btn-save { background: var(--coral); color: white; padding: 0.5rem 1rem; border: none; border-radius: 0.3rem; cursor: pointer; }
-    .btn-ghost-small { background: none; border: 1px solid var(--light-border); padding: 0.4rem 0.8rem; border-radius: 0.3rem; cursor: pointer; }
-    .export-import { display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+    .btn-save { background: var(--coral); color: white; padding: 0.5rem 1.5rem; border: none; border-radius: 0.3rem; cursor: pointer; }
+    .export-import { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+
+    @media (max-width: 768px) {
+      nav { padding: 0.9rem 1.2rem; }
+      nav ul { display: none; }
+      .hero { padding: 7rem 1.5rem 4rem; }
+      .hero-decor { display: none; }
+      .shop { padding: 4rem 1.5rem; }
+      .about { grid-template-columns: 1fr; padding: 4rem 1.5rem; gap: 2rem; }
+      .about-art { height: 250px; }
+      .contact { padding: 4rem 1.5rem; }
+      .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .expo-grid { grid-template-columns: 1fr; }
+      .expo-card img { height: 220px; }
+      .documentos { padding: 3rem 1.5rem; }
+      .instagram-banner { padding: 2rem; }
+      footer { padding: 1.5rem; }
+    }
   </style>
 </head>
 <body>
@@ -105,18 +259,24 @@
   <ul>
     <li><a href="#tienda">Tienda</a></li>
     <li><a href="#exposiciones">Exposiciones</a></li>
+    <li><a href="#documentos">Documentos</a></li>
     <li><a href="#sobre-mi">Sobre mí</a></li>
     <li><a href="#contacto">Contacto</a></li>
-    <li><button class="nav-cart-btn" onclick="openCart()">🛒 <span id="cartCount" class="cart-count">0</span></button></li>
-    <li><button class="nav-admin-btn" onclick="openAdmin()">✦</button></li>
+    <li><button class="nav-cart-btn" onclick="openCart()">🛒 Carrito <span id="cartCount" class="cart-count">0</span></button></li>
+    <li><button class="nav-admin-btn" onclick="openAdmin()">✦ Edición</button></li>
   </ul>
 </nav>
 
 <section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-decor">
+    <img class="hero-decor-img" src="imagenes/hero-obra.jpg" alt="Obra de Luis Berta">
+    <div class="hero-decor-fade"></div>
+  </div>
   <div class="hero-content">
     <p class="hero-eyebrow">Arte original · Fuerteventura</p>
     <h1>Arte hecho<br>con el <em>alma</em></h1>
-    <p class="hero-sub">Maderas rescatadas, lienzos cargados de vida, colores que gritan.</p>
+    <p class="hero-sub">Maderas rescatadas del olvido, lienzos cargados de vida, colores que gritan y una locura que no tiene cura.</p>
     <div class="hero-actions">
       <a href="#tienda" class="btn-main">Ver obras →</a>
       <a href="#sobre-mi" class="btn-ghost">Conocerme</a>
@@ -124,57 +284,99 @@
   </div>
 </section>
 
+<div class="marquee"><div class="marquee-track"><span class="marquee-item">Arte Original ✦</span><span class="marquee-item">Wood & Pencil ✦</span><span class="marquee-item">Fuerteventura ✦</span><span class="marquee-item">Piezas Únicas ✦</span><span class="marquee-item">Hecho a mano ✦</span></div></div>
+
 <section class="shop" id="tienda">
   <div class="shop-header"><div><p class="section-label">✦ Galería</p><h2 class="section-title">Obras <em>disponibles</em></h2></div></div>
-  <div id="products-grid"><div style="text-align:center;padding:2rem;">Cargando obras...</div></div>
+  <div id="products-grid"></div>
 </section>
 
-<section class="exposiciones" id="exposiciones" style="padding:2rem 1.5rem;background:var(--sand);">
+<section class="exposiciones" id="exposiciones">
   <p class="section-label">✦ Trayectoria</p>
   <h2 class="section-title">Exposiciones <em>realizadas</em></h2>
   <div class="expo-grid" id="expoGrid"></div>
 </section>
 
-<section class="about" id="sobre-mi" style="padding:2rem 1.5rem;background:var(--ink);color:white;">
-  <div style="display:grid;gap:1.5rem;">
-    <div><img src="sobre-mi/WhatsApp%20Image%202026-04-23%20at%2009.48.17.jpeg" style="width:100%;border-radius:0.5rem;"></div>
-    <div>
-      <p class="about-eyebrow" style="color:var(--gold);">✦ El artista</p>
-      <h2 style="font-size:1.8rem;">Madera, lienzos y mucho <em style="color:var(--coral);">color</em></h2>
-      <p style="color:rgba(255,255,255,0.7);">Soy Luis Berta, artista plástico con estudio en Puerto del Rosario, Fuerteventura.</p>
-      <div style="font-size:1.5rem;color:var(--gold);margin-top:1rem;">— Elberta</div>
+<section class="documentos" id="documentos">
+  <p class="section-label" style="color:var(--gold)">✦ Documentación</p>
+  <h2 class="section-title" style="color:white">Perfil <em>artístico</em></h2>
+  <div class="doc-grid">
+    <a class="doc-card" href="documentos/Presentaci%C3%B3n%20dossier%20art%C3%ADstico%20luis%20berta.pdf" target="_blank"><div class="doc-title">📁 Dossier Artístico</div><div style="font-size:0.7rem;color:rgba(255,255,255,0.4);">Presentación completa</div></a>
+    <a class="doc-card" href="documentos/portafolioelbertawoodandpencil%20(2).pdf" target="_blank"><div class="doc-title">🎨 Portafolio</div><div style="font-size:0.7rem;color:rgba(255,255,255,0.4);">Selección de obras</div></a>
+    <div class="doc-card" style="opacity:0.5;cursor:default;"><div class="doc-title">📄 Currículum</div><div style="font-size:0.7rem;color:rgba(255,255,255,0.3);">Próximamente</div></div>
+  </div>
+</section>
+
+<section class="about" id="sobre-mi">
+  <div class="about-art">
+    <div class="art-block"><img src="sobre-mi/WhatsApp%20Image%202026-04-23%20at%2009.48.17.jpeg" alt="Luis Berta"></div>
+    <div class="art-block"><img src="sobre-mi/photo_5911203471791603367_y.jpg" alt="Luis Berta estudio"></div>
+    <div class="art-block" style="background: linear-gradient(135deg, #8B6914, var(--gold));"></div>
+  </div>
+  <div>
+    <p class="about-eyebrow">✦ El artista</p>
+    <h2>Madera, lienzos,<br>lápices y mucho <em>color!</em></h2>
+    <p>Soy Luis Berta, bajo mi nombre artístico <em style="color:var(--gold)">Elberta.woodandpencil</em>, artista plástico con estudio en Puerto del Rosario, Fuerteventura. Trabajo principalmente con madera y lienzo, creando piezas que fusionan la textura natural con el color.</p>
+    <div style="font-family:'Cormorant Garamond',serif; font-size:2rem; color:var(--gold); margin-top:2rem;">— Elberta</div>
+  </div>
+</section>
+
+<section class="contact" id="contacto">
+  <div class="contact-inner">
+    <div class="contact-top" style="text-align:center;margin-bottom:2rem;">
+      <p class="section-label">✦ Hablemos</p>
+      <h2 class="section-title">¿Tienes alguna <em>pregunta</em>?</h2>
+    </div>
+    <div class="contact-grid">
+      <div>
+        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;"><div style="background:white;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;">📧</div><div><strong>Email</strong><br>patagoniaberta@gmail.com</div></div>
+        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;"><div style="background:white;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;">📱</div><div><strong>WhatsApp / Teléfono</strong><br>+34 637 196 259</div></div>
+        <a href="https://instagram.com/elberta.woodandpencil" target="_blank" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;background:white;border-radius:2rem;text-decoration:none;color:var(--ink);">📸 @elberta.woodandpencil</a>
+      </div>
+      <div>
+        <div class="form-group"><input type="text" id="contactName" placeholder="Tu nombre"></div>
+        <div class="form-group"><input type="email" id="contactEmail" placeholder="Tu email"></div>
+        <div class="form-group"><input type="tel" id="contactPhone" placeholder="Teléfono (opcional)"></div>
+        <div class="form-group"><input type="text" id="contactSubject" placeholder="Asunto"></div>
+        <div class="form-group"><textarea id="contactMessage" placeholder="Tu mensaje..." rows="4"></textarea></div>
+        <button class="btn-main" style="width:100%" onclick="sendEmail()">Enviar mensaje ✉️</button>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="contact" id="contacto" style="padding:2rem 1.5rem;background:var(--sand);">
-  <div style="text-align:center;margin-bottom:1.5rem;">
-    <p class="section-label">✦ Hablemos</p>
-    <h2 class="section-title">¿Tienes alguna <em>pregunta</em>?</h2>
-  </div>
-  <div class="contact-grid">
-    <div>
-      <div style="display:flex;gap:1rem;margin-bottom:1rem;"><div>📧</div><div><strong>Email</strong><br>patagoniaberta@gmail.com</div></div>
-      <div style="display:flex;gap:1rem;margin-bottom:1rem;"><div>📱</div><div><strong>WhatsApp</strong><br>+34 637 196 259</div></div>
-      <a href="https://instagram.com/elberta.woodandpencil" target="_blank" style="display:inline-block;padding:0.4rem 1rem;background:white;border-radius:2rem;text-decoration:none;color:var(--ink);">📸 @elberta.woodandpencil</a>
-    </div>
-    <div>
-      <div class="form-group"><input type="text" id="contactName" placeholder="Tu nombre"></div>
-      <div class="form-group"><input type="email" id="contactEmail" placeholder="Tu email"></div>
-      <div class="form-group"><textarea id="contactMessage" placeholder="Tu mensaje..." rows="3"></textarea></div>
-      <button class="btn-main" style="width:100%" onclick="sendEmail()">Enviar mensaje ✉️</button>
-    </div>
-  </div>
+<section class="instagram-banner">
+  <h3>📸 Sígueme en Instagram</h3>
+  <p>Proceso creativo, obras nuevas y todo lo que pasa en el estudio</p>
+  <a href="https://instagram.com/elberta.woodandpencil" target="_blank" class="instagram-link">📷 @elberta.woodandpencil</a>
 </section>
 
-<footer style="background:#0F0C07;padding:1.5rem;text-align:center;color:rgba(255,255,255,0.5);font-size:0.7rem;">
-  <div>Elberta Wood & Pencil · Puerto del Rosario · Fuerteventura</div>
-  <div>© 2026</div>
+<footer>
+  <div>Elberta Wood & Pencil</div>
+  <div style="font-size:0.7rem;margin-top:0.5rem;">© 2026 · Puerto del Rosario · Fuerteventura</div>
 </footer>
 
-<div class="cart-modal" id="cartModal"><div class="cart-panel"><h3>🛒 Tu carrito</h3><div id="cartItems"></div><div class="cart-total" id="cartTotal">Total: 0 €</div><div id="paypal-button-container"></div><button class="btn-ghost" style="margin-top:1rem;width:100%" onclick="closeCart()">Cerrar</button></div></div>
+<div class="cart-modal" id="cartModal">
+  <div class="cart-panel">
+    <h3>🛒 Tu carrito</h3>
+    <div id="cartItems"></div>
+    <div class="cart-total" id="cartTotal">Total: 0 €</div>
+    <div id="paypal-button-container"></div>
+    <button class="btn-ghost" style="margin-top:1rem;width:100%" onclick="closeCart()">Cerrar</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"><span id="toastMsg"></span></div>
-<div class="admin-overlay" id="adminOverlay"><div class="admin-panel"><div class="admin-header"><div class="admin-title">Panel de <span>Edición</span></div><button onclick="closeAdmin()" style="background:none;border:none;font-size:1.2rem;">✕</button></div><div class="admin-body" id="adminBody"></div></div></div>
+
+<div class="admin-overlay" id="adminOverlay">
+  <div class="admin-panel">
+    <div class="admin-header">
+      <div class="admin-title">Panel de <span>Edición</span></div>
+      <button class="admin-close" onclick="closeAdmin()" style="background:none;border:none;font-size:1.2rem;cursor:pointer;">✕</button>
+    </div>
+    <div class="admin-body" id="adminBody"></div>
+  </div>
+</div>
 
 <script>
   const STORAGE_KEY = 'elberta_products';
@@ -184,16 +386,14 @@
   const EMAIL_SERVICE_ID = 'service_elberta';
   const EMAIL_TEMPLATE_ID = 'template_3j1pwuj';
 
-  function getProducts() {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
-    catch { return []; }
-  }
+  function getProducts() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch { return []; } }
   function saveProducts(products) { localStorage.setItem(STORAGE_KEY, JSON.stringify(products)); }
   function getPassword() { return localStorage.getItem(PASS_KEY) || 'elberta2024'; }
   function savePassword(p) { localStorage.setItem(PASS_KEY, p); }
   function imgUrl(filename) { return 'imagenes/' + encodeURIComponent(filename); }
+  function copyToClipboard(text) { navigator.clipboard.writeText(text).then(() => showToast('🔗 Enlace copiado')); }
 
-  // Exportar/Importar productos para sincronizar entre dispositivos
+  // EXPORTAR / IMPORTAR productos (para pasar del ordenador al móvil)
   function exportProducts() {
     const products = getProducts();
     const dataStr = JSON.stringify(products, null, 2);
@@ -218,7 +418,7 @@
           saveProducts(products);
           renderShop();
           showToast('✅ Productos importados correctamente');
-          renderAdminContent();
+          if (typeof renderAdminContent === 'function') renderAdminContent();
         } else throw new Error();
       } catch(err) {
         showToast('❌ Archivo inválido');
@@ -227,44 +427,42 @@
     reader.readAsText(file);
   }
 
-  function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(() => showToast('🔗 Enlace copiado')).catch(() => showToast('❌ No se pudo copiar'));
-  }
-
   function renderShop() {
     const products = getProducts();
     const grid = document.getElementById('products-grid');
     if (!products.length) {
-      grid.innerHTML = '<div style="text-align:center;padding:2rem;">🎨 No hay obras. Usa el panel Edición para añadir tus primeras obras.</div>';
+      grid.innerHTML = '<div style="text-align:center;padding:3rem;grid-column:1/-1;">🎨 No hay obras aún. Usa el panel Edición para añadir tus primeras obras.</div>';
       return;
     }
     grid.innerHTML = products.map((p, i) => {
       const mainImg = p.images && p.images[0] ? imgUrl(p.images[0]) : (p.image ? imgUrl(p.image) : null);
-      const zones = p.shippingZones || { canarias: 10, peninsula: 15, europa: 25, mundo: 45 };
+      const shippingZones = p.shippingZones || { canarias: 10, peninsula: 15, europa: 25, mundo: 45 };
       const obraUrl = window.location.href.split('#')[0] + '#obra-' + i;
       return `
         <div class="product-card" id="obra-${i}">
           <div class="product-img">
             ${mainImg ? `<img class="product-img-bg" src="${mainImg}" alt="${p.name}" onerror="this.style.display='none'">` : '<div class="product-img-bg" style="background:var(--coral)"></div>'}
-            <div class="product-badge-wrap" style="position:absolute;top:0.5rem;left:0.5rem;">
+            <div class="product-badge-wrap">
               ${p.isNew ? '<span class="badge badge-new">Nuevo</span>' : ''}
-              ${p.soldOut ? '<span class="badge badge-sold">Vendido</span>' : '<span class="badge badge-original" style="background:var(--forest);">Original</span>'}
+              ${p.soldOut ? '<span class="badge badge-sold">Vendido</span>' : '<span class="badge badge-original">Original</span>'}
             </div>
           </div>
           <div class="product-body">
-            <div class="product-technique" style="font-size:0.65rem;color:var(--mist);">${p.technique || ''} ${p.material || ''}</div>
-            <div class="product-name" style="font-weight:600;">${p.name}</div>
-            <div class="product-dims" style="font-size:0.7rem;color:var(--mist);">${p.width && p.height ? p.width+'×'+p.height+' cm' : ''}</div>
-            <div class="product-price">${p.price ? p.price+' €' : ''}</div>
+            <div class="product-technique">${p.technique || ''} ${p.material || ''}</div>
+            <div class="product-name">${p.name}</div>
+            <div class="product-dims">${p.width && p.height ? p.width+' × '+p.height+' cm' : ''}</div>
+            <div class="product-price ${p.soldOut ? 'sold-out' : ''}">${p.price ? p.price+' €' : ''}</div>
             ${!p.soldOut ? `
               <select class="shipping-select" id="shipping_${i}">
-                <option value="canarias">🇮🇨 Canarias - ${zones.canarias} €</option>
-                <option value="peninsula">🇪🇸 Península - ${zones.peninsula} €</option>
-                <option value="europa">🇪🇺 Europa - ${zones.europa} €</option>
-                <option value="mundo">🌍 Resto mundo - ${zones.mundo} €</option>
+                <option value="canarias">🇮🇨 Canarias - ${shippingZones.canarias} €</option>
+                <option value="peninsula">🇪🇸 Península - ${shippingZones.peninsula} €</option>
+                <option value="europa">🇪🇺 Europa - ${shippingZones.europa} €</option>
+                <option value="mundo">🌍 Resto del mundo - ${shippingZones.mundo} €</option>
               </select>
             ` : ''}
-            <button class="add-btn" onclick="addToCart(${i})" ${p.soldOut ? 'disabled' : ''}>${p.soldOut ? 'Vendido' : 'Añadir al carrito'}</button>
+            <div class="product-footer">
+              <button class="add-btn" onclick="addToCart(${i})" ${p.soldOut ? 'disabled' : ''}>${p.soldOut ? 'Vendido' : 'Añadir al carrito 🛒'}</button>
+            </div>
             <button class="copy-link-btn" onclick="copyToClipboard('${obraUrl}')">🔗 Copiar enlace de esta obra</button>
           </div>
         </div>
@@ -290,7 +488,10 @@
     grid.innerHTML = exposicionesList.map(expo => `
       <div class="expo-card" onclick="openLightboxExpo('${expo.src}', '${expo.title}')">
         <img src="${expo.src}" alt="${expo.title}" onerror="this.style.display='none'">
-        <div class="expo-card-body"><div class="expo-card-title">${expo.title}</div>${expo.year ? `<div class="expo-card-year">${expo.year}</div>` : ''}</div>
+        <div class="expo-card-body">
+          <div class="expo-card-title">${expo.title}</div>
+          ${expo.year ? `<div class="expo-card-year" style="font-size:0.75rem;color:var(--mist);">${expo.year}</div>` : ''}
+        </div>
       </div>
     `).join('');
   }
@@ -299,7 +500,7 @@
     const modal = document.createElement('div');
     modal.style.position = 'fixed'; modal.style.inset = '0'; modal.style.background = 'rgba(0,0,0,0.95)'; modal.style.zIndex = '2000';
     modal.style.display = 'flex'; modal.style.alignItems = 'center'; modal.style.justifyContent = 'center'; modal.style.cursor = 'pointer';
-    modal.innerHTML = `<div style="position:relative;max-width:90%;"><img src="${src}" style="max-width:100%;max-height:80vh;border-radius:0.5rem;"><div style="color:white;text-align:center;margin-top:0.5rem;">${title}</div><button style="position:absolute;top:-2rem;right:0;background:none;border:none;color:white;font-size:1.5rem;">✕</button></div>`;
+    modal.innerHTML = `<div style="position:relative;max-width:90%;"><img src="${src}" style="max-width:100%;max-height:80vh;border-radius:0.5rem;"><div style="color:white;text-align:center;margin-top:0.5rem;">${title}</div><button style="position:absolute;top:-2rem;right:0;background:none;border:none;color:white;font-size:1.5rem;cursor:pointer;">✕</button></div>`;
     modal.onclick = (e) => { if(e.target === modal) modal.remove(); };
     modal.querySelector('button').onclick = () => modal.remove();
     document.body.appendChild(modal);
@@ -317,29 +518,30 @@
     const zones = p.shippingZones || { canarias:10, peninsula:15, europa:25, mundo:45 };
     const cost = zones[zone];
     const existing = cart.find(i => i.id === idx && i.zone === zone);
-    if (existing) existing.qty++;
-    else cart.push({ id: idx, name: p.name, price: parseFloat(p.price), zone, shipping: cost, qty: 1 });
+    if (existing) existing.quantity++;
+    else cart.push({ id: idx, name: p.name, price: parseFloat(p.price), zone, shipping: cost, quantity: 1 });
     saveCart();
     renderCart();
-    showToast(`✨ "${p.name}" añadida`);
+    showToast(`✨ "${p.name}" añadida al carrito`);
   }
   function removeFromCart(i) { cart.splice(i,1); saveCart(); renderCart(); }
   function renderCart() {
     const container = document.getElementById('cartItems');
-    if (!cart.length) { container.innerHTML = '<p>Carrito vacío</p>'; document.getElementById('cartTotal').innerHTML = 'Total: 0 €'; document.getElementById('paypal-button-container').innerHTML = ''; return; }
+    if (!cart.length) { container.innerHTML = '<p style="text-align:center;padding:1rem;">Carrito vacío</p>'; document.getElementById('cartTotal').innerHTML = 'Total: 0 €'; document.getElementById('paypal-button-container').innerHTML = ''; return; }
     let total = 0;
     container.innerHTML = cart.map((item, i) => {
-      const itemTotal = (item.price + item.shipping) * item.qty;
+      const itemTotal = (item.price + item.shipping) * item.quantity;
       total += itemTotal;
-      return `<div class="cart-item"><div><strong>${item.name}</strong><br><span style="font-size:0.7rem;">${item.zone} (envío ${item.shipping}€) x${item.qty}</span></div><div>${itemTotal.toFixed(2)} € <button onclick="removeFromCart(${i})" style="background:none;border:none;color:var(--coral);">🗑️</button></div></div>`;
+      return `<div class="cart-item"><div><strong>${item.name}</strong><br><span style="font-size:0.75rem;color:var(--mist);">${item.zone} (envío ${item.shipping}€) x${item.quantity}</span></div><div>${itemTotal.toFixed(2)} € <button onclick="removeFromCart(${i})" style="background:none;border:none;color:var(--coral);cursor:pointer;">🗑️</button></div></div>`;
     }).join('');
     document.getElementById('cartTotal').innerHTML = `Total: ${total.toFixed(2)} €`;
     const paypalContainer = document.getElementById('paypal-button-container');
     paypalContainer.innerHTML = '';
     if (window.paypal) {
       window.paypal.Buttons({
+        style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'pay' },
         createOrder: (data, actions) => actions.order.create({ purchase_units: [{ amount: { value: total.toFixed(2), currency_code: 'EUR' }, payee: { email_address: 'pachiberta@gmail.com' } }] }),
-        onApprove: (data, actions) => actions.order.capture().then(() => { showToast('🎉 ¡Pago completado!'); cart = []; saveCart(); renderCart(); }),
+        onApprove: (data, actions) => actions.order.capture().then(() => { showToast('🎉 ¡Pago completado! Gracias por tu compra'); cart = []; saveCart(); renderCart(); }),
         onError: () => showToast('❌ Error con PayPal')
       }).render('#paypal-button-container');
     }
@@ -351,20 +553,22 @@
   function sendEmail() {
     const name = document.getElementById('contactName')?.value;
     const email = document.getElementById('contactEmail')?.value;
+    const phone = document.getElementById('contactPhone')?.value;
+    const subject = document.getElementById('contactSubject')?.value;
     const message = document.getElementById('contactMessage')?.value;
     if (!name || !email || !message) { showToast('⚠️ Completa nombre, email y mensaje'); return; }
-    emailjs.send(EMAIL_SERVICE_ID, EMAIL_TEMPLATE_ID, { from_name: name, from_email: email, message: message, phone: '', subject: 'Consulta desde web' })
-      .then(() => { showToast('📧 ¡Mensaje enviado!'); document.getElementById('contactName').value = ''; document.getElementById('contactEmail').value = ''; document.getElementById('contactMessage').value = ''; })
+    emailjs.send(EMAIL_SERVICE_ID, EMAIL_TEMPLATE_ID, { from_name: name, from_email: email, phone: phone || '', subject: subject || 'Consulta', message: message })
+      .then(() => { showToast('📧 ¡Mensaje enviado! Te responderé pronto'); document.getElementById('contactName').value = ''; document.getElementById('contactEmail').value = ''; document.getElementById('contactPhone').value = ''; document.getElementById('contactSubject').value = ''; document.getElementById('contactMessage').value = ''; })
       .catch(() => showToast('❌ Error al enviar'));
   }
 
   function showToast(msg) { const t = document.getElementById('toast'); document.getElementById('toastMsg').innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); }
 
-  // Admin
+  // ADMIN
   let adminLoggedIn = false, editingIndex = -1, activeTab = 'productos';
   function openAdmin() { document.getElementById('adminOverlay').classList.add('open'); if (!adminLoggedIn) renderLogin(); else renderAdminContent(); }
   function closeAdmin() { document.getElementById('adminOverlay').classList.remove('open'); }
-  function renderLogin() { document.getElementById('adminBody').innerHTML = `<div style="text-align:center;"><p>Contraseña</p><input type="password" id="loginPass" style="width:100%;padding:0.5rem;margin:1rem 0;"><button class="btn-main" onclick="doLogin()">Entrar</button></div>`; }
+  function renderLogin() { document.getElementById('adminBody').innerHTML = `<div style="text-align:center;padding:1rem;"><p>Contraseña para editar</p><input type="password" id="loginPass" style="width:100%;padding:0.75rem;margin:1rem 0;border:1px solid var(--light-border);border-radius:0.3rem;"><button class="btn-main" onclick="doLogin()">Entrar</button></div>`; }
   function doLogin() { if (document.getElementById('loginPass').value === getPassword()) { adminLoggedIn = true; renderAdminContent(); } else showToast('Contraseña incorrecta'); }
   function renderAdminContent() { document.getElementById('adminBody').innerHTML = `<div class="admin-tabs"><button class="admin-tab ${activeTab==='productos'?'active':''}" onclick="switchTab('productos')">Mis Obras</button><button class="admin-tab ${activeTab==='agregar'?'active':''}" onclick="switchTab('agregar')">Añadir Obra</button><button class="admin-tab ${activeTab==='ajustes'?'active':''}" onclick="switchTab('ajustes')">Ajustes</button></div><div id="tabContent"></div>`; renderTab(); }
   function switchTab(tab) { activeTab = tab; editingIndex = -1; renderAdminContent(); }
@@ -372,21 +576,21 @@
   function renderProductList(el) {
     const products = getProducts();
     if (editingIndex >= 0) { renderProductForm(el, editingIndex); return; }
-    if (!products.length) { el.innerHTML = '<p>No hay obras. Ve a "Añadir Obra".</p>'; return; }
-    el.innerHTML = `<div class="export-import"><button class="btn-ghost-small" onclick="exportProducts()">📤 Exportar productos</button><input type="file" id="importFile" accept=".json" style="display:none;"><button class="btn-ghost-small" onclick="document.getElementById('importFile').click()">📥 Importar productos</button></div>${products.map((p,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem;border-bottom:1px solid var(--light-border);"><div><strong>${p.name}</strong><br><span style="font-size:0.7rem;">${p.price || 'Sin precio'} €</span></div><div><button class="admin-tab" onclick="startEdit(${i})">Editar</button><button class="admin-tab" style="background:#fee;color:#c0392b;" onclick="deleteProduct(${i})">X</button></div></div>`).join('')}`;
+    if (!products.length) { el.innerHTML = '<p style="text-align:center;padding:2rem;">No hay obras. Ve a "Añadir Obra"</p>'; return; }
+    el.innerHTML = `<div class="export-import"><button class="btn-ghost" style="padding:0.4rem 1rem;" onclick="exportProducts()">📤 Exportar productos</button><input type="file" id="importFile" accept=".json" style="display:none;"><button class="btn-ghost" style="padding:0.4rem 1rem;" onclick="document.getElementById('importFile').click()">📥 Importar productos</button></div><div class="admin-product-list">${products.map((p,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:0.8rem;border:1px solid var(--light-border);border-radius:0.5rem;margin-bottom:0.5rem;"><div><strong>${p.name}</strong><br><span style="font-size:0.75rem;color:var(--mist);">${p.price || 'Sin precio'} €</span></div><div><button class="admin-tab" onclick="startEdit(${i})">Editar</button><button class="admin-tab" style="background:#fee;color:#c0392b;" onclick="deleteProduct(${i})">Eliminar</button></div></div>`).join('')}</div>`;
     document.getElementById('importFile').onchange = (e) => importProducts(e.target);
   }
   function startEdit(i) { editingIndex = i; renderAdminContent(); }
-  function deleteProduct(i) { if (confirm('¿Eliminar?')) { const p = getProducts(); p.splice(i,1); saveProducts(p); renderShop(); renderAdminContent(); showToast('Eliminado'); } }
+  function deleteProduct(i) { if (confirm('¿Eliminar esta obra?')) { const p = getProducts(); p.splice(i,1); saveProducts(p); renderShop(); renderAdminContent(); showToast('Obra eliminada'); } }
   function renderProductForm(el, index) {
     const products = getProducts();
     const p = index >=0 ? products[index] : {};
     const zones = p.shippingZones || { canarias:10, peninsula:15, europa:25, mundo:45 };
-    el.innerHTML = `<div><h3>${index>=0?'Editar':'Nueva'} obra</h3><div class="form-group"><input type="text" id="pName" placeholder="Nombre *" value="${p.name||''}"></div><div class="form-row"><div class="form-group"><input type="text" id="pTechnique" placeholder="Técnica" value="${p.technique||''}"></div><div class="form-group"><input type="text" id="pMaterial" placeholder="Material" value="${p.material||''}"></div></div><div class="form-row"><div class="form-group"><input type="number" id="pWidth" placeholder="Ancho cm" value="${p.width||''}"></div><div class="form-group"><input type="number" id="pHeight" placeholder="Alto cm" value="${p.height||''}"></div></div><div class="form-row"><div class="form-group"><input type="number" id="pPrice" placeholder="Precio €" value="${p.price||''}"></div><div class="form-group"><select id="pSold"><option value="0" ${!p.soldOut?'selected':''}>Disponible</option><option value="1" ${p.soldOut?'selected':''}>Vendido</option></select></div></div><div class="form-group"><input type="text" id="pImages" placeholder="Fotos (separadas por comas)" value="${(p.images||[]).join(', ')}"></div><div class="form-group"><input type="checkbox" id="pNew" ${p.isNew?'checked':''}> <label>Nuevo</label></div><h4>Envíos por zona</h4><div class="form-row-3"><div class="form-group"><label>🇮🇨 Canarias</label><input type="number" id="shipCanarias" value="${zones.canarias}"></div><div class="form-group"><label>🇪🇸 Península</label><input type="number" id="shipPeninsula" value="${zones.peninsula}"></div><div class="form-group"><label>🇪🇺 Europa</label><input type="number" id="shipEuropa" value="${zones.europa}"></div><div class="form-group"><label>🌍 Resto mundo</label><input type="number" id="shipMundo" value="${zones.mundo}"></div></div><div style="display:flex;gap:1rem;margin-top:1rem;"><button class="btn-save" onclick="saveProduct(${index})">${index>=0?'Guardar':'Añadir'}</button><button class="btn-ghost-small" onclick="switchTab('productos')">Cancelar</button></div></div>`;
+    el.innerHTML = `<div class="product-form"><h3>${index>=0?'Editar obra':'Nueva obra'}</h3><div class="form-group"><input type="text" id="pName" placeholder="Nombre de la obra *" value="${p.name||''}"></div><div class="form-row"><div class="form-group"><input type="text" id="pTechnique" placeholder="Técnica" value="${p.technique||''}"></div><div class="form-group"><input type="text" id="pMaterial" placeholder="Material" value="${p.material||''}"></div></div><div class="form-row"><div class="form-group"><input type="number" id="pWidth" placeholder="Ancho cm" value="${p.width||''}"></div><div class="form-group"><input type="number" id="pHeight" placeholder="Alto cm" value="${p.height||''}"></div></div><div class="form-row"><div class="form-group"><input type="number" id="pPrice" placeholder="Precio €" value="${p.price||''}"></div><div class="form-group"><select id="pSold"><option value="0" ${!p.soldOut?'selected':''}>Disponible</option><option value="1" ${p.soldOut?'selected':''}>Vendido</option></select></div></div><div class="form-group"><input type="text" id="pImages" placeholder="Nombres de fotos (separados por comas)" value="${(p.images||[]).join(', ')}"></div><div class="form-group"><input type="checkbox" id="pNew" ${p.isNew?'checked':''}> <label>Marcar como Nuevo</label></div><h4>Costes de envío por zona</h4><div class="form-row-3"><div class="form-group"><label>🇮🇨 Canarias</label><input type="number" id="shipCanarias" value="${zones.canarias}"></div><div class="form-group"><label>🇪🇸 Península</label><input type="number" id="shipPeninsula" value="${zones.peninsula}"></div><div class="form-group"><label>🇪🇺 Europa</label><input type="number" id="shipEuropa" value="${zones.europa}"></div><div class="form-group"><label>🌍 Resto mundo</label><input type="number" id="shipMundo" value="${zones.mundo}"></div></div><div style="display:flex;gap:1rem;margin-top:1rem;"><button class="btn-save" onclick="saveProduct(${index})">${index>=0?'Guardar cambios':'Añadir obra'}</button><button class="btn-ghost" onclick="switchTab('productos')">Cancelar</button></div></div>`;
   }
   function saveProduct(index) {
     const name = document.getElementById('pName').value.trim();
-    if (!name) { showToast('Nombre obligatorio'); return; }
+    if (!name) { showToast('El nombre es obligatorio'); return; }
     const product = {
       name, technique: document.getElementById('pTechnique').value, material: document.getElementById('pMaterial').value,
       width: document.getElementById('pWidth').value, height: document.getElementById('pHeight').value,
@@ -404,16 +608,16 @@
     else products.push(product);
     saveProducts(products);
     renderShop();
-    showToast(index>=0?'Actualizada':'Añadida');
+    showToast(index>=0?'Obra actualizada':'Obra añadida');
     switchTab('productos');
   }
   function renderSettings(el) {
-    el.innerHTML = `<div><h3>Cambiar contraseña</h3><div class="form-group"><input type="password" id="newPass1" placeholder="Nueva contraseña"></div><div class="form-group"><input type="password" id="newPass2" placeholder="Repetir"></div><button class="btn-save" onclick="changePassword()">Guardar</button></div><div style="margin-top:1rem;"><button class="btn-ghost-small" onclick="logout()">Cerrar sesión</button></div>`;
+    el.innerHTML = `<div class="settings-section"><h3>Cambiar contraseña</h3><div class="form-group"><input type="password" id="newPass1" placeholder="Nueva contraseña"></div><div class="form-group"><input type="password" id="newPass2" placeholder="Repetir contraseña"></div><button class="btn-save" onclick="changePassword()">Guardar</button></div><div style="margin-top:2rem;"><button class="btn-ghost" onclick="logout()">Cerrar sesión</button></div>`;
   }
-  function changePassword() { const p1=document.getElementById('newPass1').value; const p2=document.getElementById('newPass2').value; if(!p1||p1!==p2){showToast('No coinciden');return;} if(p1.length<4){showToast('Mínimo 4 caracteres');return;} savePassword(p1); showToast('Contraseña actualizada'); }
+  function changePassword() { const p1=document.getElementById('newPass1').value; const p2=document.getElementById('newPass2').value; if(!p1||p1!==p2){showToast('Las contraseñas no coinciden');return;} if(p1.length<4){showToast('Mínimo 4 caracteres');return;} savePassword(p1); showToast('Contraseña actualizada'); }
   function logout() { adminLoggedIn=false; closeAdmin(); }
 
-  // Inicio
+  // Inicializar
   renderExposiciones();
   renderShop();
   updateCartCount();

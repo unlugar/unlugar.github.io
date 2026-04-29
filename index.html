@@ -1,11 +1,11 @@
+<!DOCTYPE html>
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Elberta Wood & Pencil Shop</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <!-- EmailJS -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <!-- PayPal SDK -->
   <script src="https://www.paypal.com/sdk/js?client-id=test&currency=EUR"></script>
   <style>
     :root {
@@ -30,7 +30,7 @@
       backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--light-border);
     }
-    .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; color: var(--ink); }
+    .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; color: var(--ink); letter-spacing: 0.04em; }
     .nav-logo span { color: var(--coral); font-style: italic; }
     nav ul { display: flex; gap: 2rem; list-style: none; align-items: center; }
     nav a { text-decoration: none; color: var(--ink); font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; transition: color 0.2s; }
@@ -76,7 +76,8 @@
     }
     .hero-decor-fade {
       position: absolute; inset: 0; z-index: 1;
-      background: linear-gradient(to right, rgba(42,61,43,0.85) 0%, rgba(26,42,27,0.3) 60%, transparent 100%);
+      background: linear-gradient(to right, rgba(42,61,43,0.85) 0%, rgba(26,42,27,0.3) 60%, transparent 100%),
+                  linear-gradient(to top, rgba(26,42,27,0.7) 0%, transparent 40%);
     }
     .hero-content { position: relative; z-index: 1; max-width: 560px; }
     .hero-eyebrow {
@@ -103,10 +104,17 @@
       transition: all 0.3s; text-decoration: none; display: inline-block;
     }
     .btn-ghost:hover { background: var(--ink); color: var(--warm); }
+    .hero-float {
+      position: absolute; right: 5%; top: 50%; transform: translateY(-50%);
+      z-index: 2; text-align: center; color: white;
+    }
+    .hero-float-num { font-family: 'Cormorant Garamond', serif; font-size: 5rem; font-weight: 600; line-height: 1; color: rgba(255,255,255,0.15); }
+    .hero-float-label { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.5; }
 
     .marquee { background: var(--ink); padding: 0.8rem 0; overflow: hidden; white-space: nowrap; }
     .marquee-track { display: inline-flex; animation: marquee 25s linear infinite; }
     .marquee-item { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.6); padding: 0 2rem; }
+    .marquee-sep { color: var(--coral); }
     @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
     .shop { padding: 6rem 3rem; position: relative; background: none; }
@@ -123,7 +131,7 @@
     .section-title em { font-style: italic; color: var(--coral); }
 
     #products-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem;
     }
     .product-card {
       background: white; border-radius: 0.5rem; overflow: hidden;
@@ -141,6 +149,7 @@
     .badge { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.25rem 0.7rem; border-radius: 2rem; }
     .badge-new { background: var(--coral); color: white; }
     .badge-sold { background: var(--mist); color: white; }
+    .badge-original { background: var(--forest); color: white; }
     .product-body { padding: 1.3rem 1.4rem 1.5rem; }
     .product-technique { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.4rem; }
     .product-name { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; margin-bottom: 0.3rem; }
@@ -245,10 +254,6 @@
       .contact { padding: 4rem 1.5rem; }
       .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
       .expo-grid { grid-template-columns: 1fr; }
-      .expo-card img { height: 220px; }
-      .documentos { padding: 3rem 1.5rem; }
-      .instagram-banner { padding: 2rem; }
-      footer { padding: 1.5rem; }
     }
   </style>
 </head>
@@ -282,9 +287,22 @@
       <a href="#sobre-mi" class="btn-ghost">Conocerme</a>
     </div>
   </div>
+  <div class="hero-float">
+    <div class="hero-float-num">100%</div>
+    <div class="hero-float-label">Piezas originales</div>
+  </div>
 </section>
 
-<div class="marquee"><div class="marquee-track"><span class="marquee-item">Arte Original ✦</span><span class="marquee-item">Wood & Pencil ✦</span><span class="marquee-item">Fuerteventura ✦</span><span class="marquee-item">Piezas Únicas ✦</span><span class="marquee-item">Hecho a mano ✦</span></div></div>
+<div class="marquee">
+  <div class="marquee-track">
+    <span class="marquee-item">Arte Original <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Wood & Pencil <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Puerto del Rosario <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Fuerteventura <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Piezas Únicas <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Encargos Personalizados <span class="marquee-sep">✦</span></span>
+  </div>
+</div>
 
 <section class="shop" id="tienda">
   <div class="shop-header"><div><p class="section-label">✦ Galería</p><h2 class="section-title">Obras <em>disponibles</em></h2></div></div>
@@ -317,7 +335,12 @@
     <p class="about-eyebrow">✦ El artista</p>
     <h2>Madera, lienzos,<br>lápices y mucho <em>color!</em></h2>
     <p>Soy Luis Berta, bajo mi nombre artístico <em style="color:var(--gold)">Elberta.woodandpencil</em>, artista plástico con estudio en Puerto del Rosario, Fuerteventura. Trabajo principalmente con madera y lienzo, creando piezas que fusionan la textura natural con el color.</p>
-    <div style="font-family:'Cormorant Garamond',serif; font-size:2rem; color:var(--gold); margin-top:2rem;">— Elberta</div>
+    <div class="about-details" style="display:flex;gap:2rem;margin-top:1rem;">
+      <div><div class="about-detail-num" style="font-size:2rem;color:var(--gold);">100%</div><div class="about-detail-label" style="font-size:0.7rem;">Original</div></div>
+      <div><div class="about-detail-num" style="font-size:2rem;color:var(--gold);">✦</div><div class="about-detail-label" style="font-size:0.7rem;">Hecho a mano</div></div>
+      <div><div class="about-detail-num" style="font-size:2rem;color:var(--gold);">🌊</div><div class="about-detail-label" style="font-size:0.7rem;">Fuerteventura</div></div>
+    </div>
+    <div class="signature" style="font-family:'Cormorant Garamond',serif; font-size:2rem; color:var(--gold); margin-top:2rem;">— Elberta</div>
   </div>
 </section>
 
@@ -331,15 +354,16 @@
       <div>
         <div style="display:flex;gap:1rem;margin-bottom:1.5rem;"><div style="background:white;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;">📧</div><div><strong>Email</strong><br>patagoniaberta@gmail.com</div></div>
         <div style="display:flex;gap:1rem;margin-bottom:1.5rem;"><div style="background:white;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;">📱</div><div><strong>WhatsApp / Teléfono</strong><br>+34 637 196 259</div></div>
+        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;"><div style="background:white;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;">📍</div><div><strong>Estudio</strong><br>Puerto del Rosario, Fuerteventura</div></div>
         <a href="https://instagram.com/elberta.woodandpencil" target="_blank" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;background:white;border-radius:2rem;text-decoration:none;color:var(--ink);">📸 @elberta.woodandpencil</a>
       </div>
       <div>
         <div class="form-group"><input type="text" id="contactName" placeholder="Tu nombre"></div>
         <div class="form-group"><input type="email" id="contactEmail" placeholder="Tu email"></div>
         <div class="form-group"><input type="tel" id="contactPhone" placeholder="Teléfono (opcional)"></div>
-        <div class="form-group"><input type="text" id="contactSubject" placeholder="Asunto"></div>
-        <div class="form-group"><textarea id="contactMessage" placeholder="Tu mensaje..." rows="4"></textarea></div>
-        <button class="btn-main" style="width:100%" onclick="sendEmail()">Enviar mensaje ✉️</button>
+        <div class="form-group"><input type="text" id="contactSubject" placeholder="Asunto (ej: encargo personalizado)"></div>
+        <div class="form-group"><textarea id="contactMessage" placeholder="¿En qué puedo ayudarte?" rows="4"></textarea></div>
+        <button class="btn-main" style="width:100%" onclick="sendEmail()">Enviar mensaje</button>
       </div>
     </div>
   </div>
@@ -352,8 +376,9 @@
 </section>
 
 <footer>
-  <div>Elberta Wood & Pencil</div>
-  <div style="font-size:0.7rem;margin-top:0.5rem;">© 2026 · Puerto del Rosario · Fuerteventura</div>
+  <div class="footer-logo">Elberta <span>Wood & Pencil</span></div>
+  <div class="footer-links" style="display:flex;gap:1.5rem;margin-top:0.5rem;"><a href="#tienda" style="color:rgba(255,255,255,0.4);text-decoration:none;">Tienda</a><a href="#sobre-mi" style="color:rgba(255,255,255,0.4);text-decoration:none;">Sobre mí</a><a href="#contacto" style="color:rgba(255,255,255,0.4);text-decoration:none;">Contacto</a></div>
+  <div class="footer-copy" style="font-size:0.75rem;color:rgba(255,255,255,0.3);margin-top:0.5rem;">© 2026 Elberta Wood & Pencil Shop · Puerto del Rosario</div>
 </footer>
 
 <div class="cart-modal" id="cartModal">
@@ -393,7 +418,6 @@
   function imgUrl(filename) { return 'imagenes/' + encodeURIComponent(filename); }
   function copyToClipboard(text) { navigator.clipboard.writeText(text).then(() => showToast('🔗 Enlace copiado')); }
 
-  // EXPORTAR / IMPORTAR productos (para pasar del ordenador al móvil)
   function exportProducts() {
     const products = getProducts();
     const dataStr = JSON.stringify(products, null, 2);
@@ -431,7 +455,7 @@
     const products = getProducts();
     const grid = document.getElementById('products-grid');
     if (!products.length) {
-      grid.innerHTML = '<div style="text-align:center;padding:3rem;grid-column:1/-1;">🎨 No hay obras aún. Usa el panel Edición para añadir tus primeras obras.</div>';
+      grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;text-align:center;padding:3rem;"><div class="empty-state-icon" style="font-size:3rem;">🎨</div><h3>Próximamente</h3><p>Entra al panel de <strong>Edición</strong> para añadir tus primeras obras.</p></div>';
       return;
     }
     grid.innerHTML = products.map((p, i) => {
@@ -441,17 +465,23 @@
       return `
         <div class="product-card" id="obra-${i}">
           <div class="product-img">
-            ${mainImg ? `<img class="product-img-bg" src="${mainImg}" alt="${p.name}" onerror="this.style.display='none'">` : '<div class="product-img-bg" style="background:var(--coral)"></div>'}
+            ${mainImg ? `<img class="product-img-bg" src="${mainImg}" alt="${p.name}" onerror="this.style.display='none'">` : '<div class="product-img-bg" style="background:linear-gradient(135deg,#D4603A,#C8942A)"></div>'}
             <div class="product-badge-wrap">
               ${p.isNew ? '<span class="badge badge-new">Nuevo</span>' : ''}
               ${p.soldOut ? '<span class="badge badge-sold">Vendido</span>' : '<span class="badge badge-original">Original</span>'}
             </div>
           </div>
           <div class="product-body">
-            <div class="product-technique">${p.technique || ''} ${p.material || ''}</div>
+            <div class="product-technique">${p.technique || ''} ${p.material ? '· '+p.material : ''}</div>
             <div class="product-name">${p.name}</div>
             <div class="product-dims">${p.width && p.height ? p.width+' × '+p.height+' cm' : ''}</div>
-            <div class="product-price ${p.soldOut ? 'sold-out' : ''}">${p.price ? p.price+' €' : ''}</div>
+            <div class="product-footer">
+              <div>
+                <div class="product-price ${p.soldOut?'sold-out':''}">${p.price ? p.price+' €' : ''}</div>
+                <div style="font-size:0.72rem;color:var(--mist);margin-top:0.2rem">${p.shippingType==='free' ? '🚚 Envío gratis' : p.shippingType==='consult' ? '📦 Consultar envío' : p.shipping ? '📦 Envío: '+p.shipping+' €' : ''}</div>
+              </div>
+              <button class="add-btn" onclick="addToCart(${i})" ${p.soldOut?'disabled':''}>${p.soldOut?'Vendido':'Comprar'}</button>
+            </div>
             ${!p.soldOut ? `
               <select class="shipping-select" id="shipping_${i}">
                 <option value="canarias">🇮🇨 Canarias - ${shippingZones.canarias} €</option>
@@ -460,17 +490,13 @@
                 <option value="mundo">🌍 Resto del mundo - ${shippingZones.mundo} €</option>
               </select>
             ` : ''}
-            <div class="product-footer">
-              <button class="add-btn" onclick="addToCart(${i})" ${p.soldOut ? 'disabled' : ''}>${p.soldOut ? 'Vendido' : 'Añadir al carrito 🛒'}</button>
-            </div>
-            <button class="copy-link-btn" onclick="copyToClipboard('${obraUrl}')">🔗 Copiar enlace de esta obra</button>
+            <button class="copy-link-btn" onclick="copyToClipboard('${obraUrl}')">🔗 Copiar enlace para compartir</button>
           </div>
         </div>
       `;
     }).join('');
   }
 
-  // Exposiciones
   const exposicionesList = [
     { src: 'exposiciones/April 30, 2022.png', title: 'Exposición Abril 2022', year: '2022' },
     { src: 'exposiciones/Black White Minimalist 3D Art Expo Poster.png', title: 'Art Expo Minimalista 3D', year: '' },
@@ -506,7 +532,6 @@
     document.body.appendChild(modal);
   }
 
-  // Carrito
   let cart = JSON.parse(localStorage.getItem('cart') || '[]');
   function saveCart() { localStorage.setItem('cart', JSON.stringify(cart)); updateCartCount(); }
   function updateCartCount() { document.getElementById('cartCount').innerText = cart.reduce((s,i)=>s+i.quantity,0); }
@@ -549,22 +574,20 @@
   function openCart() { renderCart(); document.getElementById('cartModal').classList.add('open'); }
   function closeCart() { document.getElementById('cartModal').classList.remove('open'); }
 
-  // Email
   function sendEmail() {
     const name = document.getElementById('contactName')?.value;
     const email = document.getElementById('contactEmail')?.value;
     const phone = document.getElementById('contactPhone')?.value;
     const subject = document.getElementById('contactSubject')?.value;
     const message = document.getElementById('contactMessage')?.value;
-    if (!name || !email || !message) { showToast('⚠️ Completa nombre, email y mensaje'); return; }
+    if (!name || !email || !message) { showToast('⚠️ Por favor, completa los campos obligatorios'); return; }
     emailjs.send(EMAIL_SERVICE_ID, EMAIL_TEMPLATE_ID, { from_name: name, from_email: email, phone: phone || '', subject: subject || 'Consulta', message: message })
       .then(() => { showToast('📧 ¡Mensaje enviado! Te responderé pronto'); document.getElementById('contactName').value = ''; document.getElementById('contactEmail').value = ''; document.getElementById('contactPhone').value = ''; document.getElementById('contactSubject').value = ''; document.getElementById('contactMessage').value = ''; })
-      .catch(() => showToast('❌ Error al enviar'));
+      .catch(() => showToast('❌ Error al enviar. Intenta de nuevo'));
   }
 
   function showToast(msg) { const t = document.getElementById('toast'); document.getElementById('toastMsg').innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); }
 
-  // ADMIN
   let adminLoggedIn = false, editingIndex = -1, activeTab = 'productos';
   function openAdmin() { document.getElementById('adminOverlay').classList.add('open'); if (!adminLoggedIn) renderLogin(); else renderAdminContent(); }
   function closeAdmin() { document.getElementById('adminOverlay').classList.remove('open'); }
@@ -596,12 +619,7 @@
       width: document.getElementById('pWidth').value, height: document.getElementById('pHeight').value,
       price: document.getElementById('pPrice').value, soldOut: document.getElementById('pSold').value === '1',
       isNew: document.getElementById('pNew').checked, images: document.getElementById('pImages').value.split(',').map(s=>s.trim()).filter(Boolean),
-      shippingZones: {
-        canarias: parseFloat(document.getElementById('shipCanarias').value)||10,
-        peninsula: parseFloat(document.getElementById('shipPeninsula').value)||15,
-        europa: parseFloat(document.getElementById('shipEuropa').value)||25,
-        mundo: parseFloat(document.getElementById('shipMundo').value)||45
-      }
+      shippingZones: { canarias: parseFloat(document.getElementById('shipCanarias').value)||10, peninsula: parseFloat(document.getElementById('shipPeninsula').value)||15, europa: parseFloat(document.getElementById('shipEuropa').value)||25, mundo: parseFloat(document.getElementById('shipMundo').value)||45 }
     };
     const products = getProducts();
     if (index >= 0) products[index] = product;
@@ -617,7 +635,6 @@
   function changePassword() { const p1=document.getElementById('newPass1').value; const p2=document.getElementById('newPass2').value; if(!p1||p1!==p2){showToast('Las contraseñas no coinciden');return;} if(p1.length<4){showToast('Mínimo 4 caracteres');return;} savePassword(p1); showToast('Contraseña actualizada'); }
   function logout() { adminLoggedIn=false; closeAdmin(); }
 
-  // Inicializar
   renderExposiciones();
   renderShop();
   updateCartCount();

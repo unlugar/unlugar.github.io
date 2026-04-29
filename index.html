@@ -125,7 +125,7 @@
     .section-title em { font-style: italic; color: var(--coral); }
 
     #products-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem;
     }
     .product-card {
       background: white; border-radius: 0.5rem; overflow: hidden;
@@ -162,6 +162,40 @@
     }
     .add-btn:hover { background: var(--coral); }
     .add-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+    /* Botones de compartir */
+    .share-buttons {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding-top: 0.8rem;
+      border-top: 1px solid var(--light-border);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .share-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 2rem;
+      font-size: 0.7rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      background: var(--sand);
+      color: var(--ink);
+      cursor: pointer;
+      border: none;
+      font-family: 'Jost', sans-serif;
+    }
+    .share-btn:hover { transform: translateY(-2px); }
+    .share-btn.whatsapp:hover { background: #25D366; color: white; }
+    .share-btn.instagram:hover { background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); color: white; }
+    .share-btn.threads:hover { background: #000000; color: white; }
+    .share-btn.facebook:hover { background: #1877F2; color: white; }
+    .share-btn.twitter:hover { background: #000000; color: white; }
+    .share-btn.copy:hover { background: var(--forest); color: white; }
 
     .cart-modal {
       display: none; position: fixed; inset: 0; z-index: 1000;
@@ -238,6 +272,8 @@
       .contact { padding: 4rem 1.5rem; }
       .contact-grid { grid-template-columns: 1fr; }
       .expo-grid { grid-template-columns: 1fr; }
+      .share-buttons { gap: 0.3rem; }
+      .share-btn { padding: 0.25rem 0.6rem; font-size: 0.65rem; }
     }
   </style>
 </head>
@@ -256,6 +292,7 @@
   </ul>
 </nav>
 
+<!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-decor">
@@ -275,87 +312,64 @@
 
 <div class="marquee"><div class="marquee-track"><span class="marquee-item">Arte Original ✦</span><span class="marquee-item">Wood & Pencil ✦</span><span class="marquee-item">Fuerteventura ✦</span><span class="marquee-item">Piezas Únicas ✦</span><span class="marquee-item">Hecho a mano ✦</span></div></div>
 
+<!-- TIENDA -->
 <section class="shop" id="tienda">
   <div class="shop-header"><div><p class="section-label">✦ Galería</p><h2 class="section-title">Obras <em>disponibles</em></h2></div></div>
   <div id="products-grid"></div>
 </section>
 
+<!-- EXPOSICIONES -->
 <section class="exposiciones" id="exposiciones">
   <p class="section-label">✦ Trayectoria</p>
   <h2 class="section-title">Exposiciones <em>realizadas</em></h2>
   <div class="expo-grid">
     <div class="expo-card" onclick="openLightboxExpo('exposiciones/April 30, 2022.png', 'Exposición Abril 2022')">
       <img src="exposiciones/April 30, 2022.png" alt="Exposición Abril 2022" onerror="this.style.display='none'">
-      <div class="expo-card-body">
-        <div class="expo-card-title">Exposición Abril 2022</div>
-        <div class="expo-card-year">2022</div>
-      </div>
+      <div class="expo-card-body"><div class="expo-card-title">Exposición Abril 2022</div><div class="expo-card-year">2022</div></div>
     </div>
     <div class="expo-card" onclick="openLightboxExpo('exposiciones/Black White Minimalist 3D Art Expo Poster.png', 'Art Expo Minimalista 3D')">
       <img src="exposiciones/Black White Minimalist 3D Art Expo Poster.png" alt="Art Expo Minimalista 3D" onerror="this.style.display='none'">
-      <div class="expo-card-body">
-        <div class="expo-card-title">Art Expo Minimalista 3D</div>
-      </div>
+      <div class="expo-card-body"><div class="expo-card-title">Art Expo Minimalista 3D</div></div>
     </div>
     <div class="expo-card" onclick="openLightboxExpo('exposiciones/Blue Minimal Professional Software Engineer Cover Letter.png', 'Exposición Profesional')">
       <img src="exposiciones/Blue Minimal Professional Software Engineer Cover Letter.png" alt="Exposición Profesional" onerror="this.style.display='none'">
-      <div class="expo-card-body">
-        <div class="expo-card-title">Exposición Profesional</div>
-      </div>
+      <div class="expo-card-body"><div class="expo-card-title">Exposición Profesional</div></div>
     </div>
     <div class="expo-card" onclick="openLightboxExpo('exposiciones/Brown White Minimalist Art Exhibition Poster.png', 'Art Exhibition Brown & White')">
       <img src="exposiciones/Brown White Minimalist Art Exhibition Poster.png" alt="Art Exhibition Brown & White" onerror="this.style.display='none'">
-      <div class="expo-card-body">
-        <div class="expo-card-title">Art Exhibition Brown & White</div>
-      </div>
+      <div class="expo-card-body"><div class="expo-card-title">Art Exhibition Brown & White</div></div>
     </div>
     <div class="expo-card" onclick="openLightboxExpo('exposiciones/Documento A4 Bloc Notas Campo de Frutas Plátanos Escritura Documento hoja To Do Sencillas Carta Apuntes Amarillo....png', 'Notas de Campo')">
       <img src="exposiciones/Documento A4 Bloc Notas Campo de Frutas Plátanos Escritura Documento hoja To Do Sencillas Carta Apuntes Amarillo....png" alt="Notas de Campo" onerror="this.style.display='none'">
-      <div class="expo-card-body">
-        <div class="expo-card-title">Notas de Campo</div>
-      </div>
+      <div class="expo-card-body"><div class="expo-card-title">Notas de Campo</div></div>
     </div>
     <div class="expo-card" onclick="openLightboxExpo('exposiciones/Imagen de WhatsApp 2024-10-02 a las 13.32.28_c5362a8b.jpg', 'Exposición Octubre 2024')">
       <img src="exposiciones/Imagen de WhatsApp 2024-10-02 a las 13.32.28_c5362a8b.jpg" alt="Exposición Octubre 2024" onerror="this.style.display='none'">
-      <div class="expo-card-body">
-        <div class="expo-card-title">Exposición Octubre 2024</div>
-        <div class="expo-card-year">2024</div>
-      </div>
+      <div class="expo-card-body"><div class="expo-card-title">Exposición Octubre 2024</div><div class="expo-card-year">2024</div></div>
     </div>
     <div class="expo-card" onclick="openLightboxExpo('exposiciones/Llamativo póster exposición de arte minimalista colorido.png', 'Arte Minimalista Colorido')">
       <img src="exposiciones/Llamativo póster exposición de arte minimalista colorido.png" alt="Arte Minimalista Colorido" onerror="this.style.display='none'">
-      <div class="expo-card-body">
-        <div class="expo-card-title">Arte Minimalista Colorido</div>
-      </div>
+      <div class="expo-card-body"><div class="expo-card-title">Arte Minimalista Colorido</div></div>
     </div>
     <div class="expo-card" onclick="openLightboxExpo('exposiciones/elberta woodandpencil.jpg', 'Elberta Wood & Pencil')">
       <img src="exposiciones/elberta woodandpencil.jpg" alt="Elberta Wood & Pencil" onerror="this.style.display='none'">
-      <div class="expo-card-body">
-        <div class="expo-card-title">Elberta Wood & Pencil</div>
-      </div>
+      <div class="expo-card-body"><div class="expo-card-title">Elberta Wood & Pencil</div></div>
     </div>
   </div>
 </section>
 
+<!-- DOCUMENTOS -->
 <section class="documentos" id="documentos">
   <p class="section-label" style="color:var(--gold)">✦ Documentación</p>
   <h2 class="section-title" style="color:white">Perfil <em>artístico</em></h2>
   <div class="doc-grid">
-    <a class="doc-card" href="documentos/Presentaci%C3%B3n%20dossier%20art%C3%ADstico%20luis%20berta.pdf" target="_blank">
-      <div class="doc-title">📁 Dossier Artístico</div>
-      <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);margin-top:0.5rem;">Presentación completa</div>
-    </a>
-    <a class="doc-card" href="documentos/portafolioelbertawoodandpencil%20(2).pdf" target="_blank">
-      <div class="doc-title">🎨 Portafolio</div>
-      <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);margin-top:0.5rem;">Selección de obras</div>
-    </a>
-    <div class="doc-card" style="opacity:0.5;cursor:default;">
-      <div class="doc-title">📄 Currículum</div>
-      <div style="font-size:0.7rem;color:rgba(255,255,255,0.3);margin-top:0.5rem;">Próximamente</div>
-    </div>
+    <a class="doc-card" href="documentos/Presentaci%C3%B3n%20dossier%20art%C3%ADstico%20luis%20berta.pdf" target="_blank"><div class="doc-title">📁 Dossier Artístico</div><div style="font-size:0.7rem;color:rgba(255,255,255,0.4);">Presentación completa</div></a>
+    <a class="doc-card" href="documentos/portafolioelbertawoodandpencil%20(2).pdf" target="_blank"><div class="doc-title">🎨 Portafolio</div><div style="font-size:0.7rem;color:rgba(255,255,255,0.4);">Selección de obras</div></a>
+    <div class="doc-card" style="opacity:0.5;cursor:default;"><div class="doc-title">📄 Currículum</div><div style="font-size:0.7rem;color:rgba(255,255,255,0.3);">Próximamente</div></div>
   </div>
 </section>
 
+<!-- ABOUT -->
 <section class="about" id="sobre-mi">
   <div class="about-art">
     <div class="art-block"><img src="sobre-mi/WhatsApp%20Image%202026-04-23%20at%2009.48.17.jpeg" style="width:100%;height:100%;object-fit:cover;"></div>
@@ -370,6 +384,7 @@
   </div>
 </section>
 
+<!-- CONTACTO -->
 <section class="contact" id="contacto">
   <div class="contact-inner">
     <div class="contact-top" style="text-align:center;margin-bottom:2rem;">
@@ -378,19 +393,9 @@
     </div>
     <div class="contact-grid">
       <div>
-        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;">
-          <div style="background:white;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">📧</div>
-          <div><strong>Email</strong><br>patagoniaberta@gmail.com</div>
-        </div>
-        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;">
-          <div style="background:white;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">📱</div>
-          <div><strong>WhatsApp / Teléfono</strong><br>+34 637 196 259</div>
-        </div>
-        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;">
-          <div style="background:white;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">📍</div>
-          <div><strong>Estudio</strong><br>Puerto del Rosario, Fuerteventura</div>
-        </div>
-        <a href="https://instagram.com/elberta.woodandpencil" target="_blank" style="display:inline-flex;align-items:center;gap:0.5rem;margin-top:0.5rem;padding:0.5rem 1rem;background:white;border-radius:2rem;text-decoration:none;color:var(--ink);">📸 @elberta.woodandpencil</a>
+        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;"><div style="background:white;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;">📧</div><div><strong>Email</strong><br>patagoniaberta@gmail.com</div></div>
+        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;"><div style="background:white;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;">📱</div><div><strong>WhatsApp / Teléfono</strong><br>+34 637 196 259</div></div>
+        <a href="https://instagram.com/elberta.woodandpencil" target="_blank" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;background:white;border-radius:2rem;text-decoration:none;color:var(--ink);">📸 @elberta.woodandpencil</a>
       </div>
       <div>
         <div class="form-group"><input type="text" id="contactName" placeholder="Tu nombre"></div>
@@ -404,6 +409,7 @@
   </div>
 </section>
 
+<!-- INSTAGRAM BANNER -->
 <section class="instagram-banner">
   <h3>📸 Sígueme en Instagram</h3>
   <p>Proceso creativo, obras nuevas y todo lo que pasa en el estudio</p>
@@ -428,7 +434,6 @@
 
 <div class="toast" id="toast"><span id="toastMsg"></span></div>
 
-<!-- ADMIN OVERLAY -->
 <div class="admin-overlay" id="adminOverlay">
   <div class="admin-panel">
     <div class="admin-header">
@@ -444,7 +449,6 @@
   const STORAGE_KEY = 'elberta_products';
   const PASS_KEY = 'elberta_password';
   
-  // EMAILJS - Tus códigos
   emailjs.init('o8Lh4WH5Bbfj_Jpa_');
   const EMAIL_SERVICE_ID = 'service_elberta';
   const EMAIL_TEMPLATE_ID = 'template_3j1pwuj';
@@ -463,6 +467,39 @@
   function savePassword(p) { localStorage.setItem(PASS_KEY, p); }
   function imgUrl(filename) { return 'imagenes/' + encodeURIComponent(filename); }
 
+  // ==================== COMPARTIR EN REDES ====================
+  function shareProduct(productName, productPrice, productIndex) {
+    const url = window.location.href.split('#')[0] + '#obra-' + productIndex;
+    const text = `✨ ¡Mira esta obra de Elberta Wood & Pencil! "${productName}" - ${productPrice} € ✨`;
+    
+    return {
+      whatsapp: `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`,
+      instagram: `https://www.instagram.com/elberta.woodandpencil/`, // Abre tu perfil de Instagram
+      threads: `https://www.threads.net/@elberta.woodandpencil`, // Abre tu perfil de Threads
+      facebookPersonal: `https://www.facebook.com/pachiberta`, // Tu perfil personal
+      twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+      copy: url
+    };
+  }
+  
+  function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('🔗 Enlace copiado al portapapeles');
+    }).catch(() => {
+      showToast('❌ No se pudo copiar');
+    });
+  }
+  
+  function shareInstagram(text) {
+    // Instagram no permite compartir enlaces directamente
+    // Abrimos la app con un texto para que el usuario copie
+    const instagramUrl = `instagram://library?AssetPath=`;
+    const message = `📸 ¡Comparte esta obra en Instagram!\n\n${text}\n\n@elberta.woodandpencil`;
+    showToast('📸 Copia este mensaje para Instagram: ' + message);
+    navigator.clipboard.writeText(message);
+    window.open('https://www.instagram.com/elberta.woodandpencil/', '_blank');
+  }
+
   // Renderizar tienda
   function renderShop() {
     const products = getProducts();
@@ -474,8 +511,10 @@
     grid.innerHTML = products.map((p, i) => {
       const mainImg = p.images && p.images[0] ? imgUrl(p.images[0]) : (p.image ? imgUrl(p.image) : null);
       const shippingZones = p.shippingZones || { canarias: 10, peninsula: 15, europa: 25, mundo: 45 };
+      const shareLinks = shareProduct(p.name, p.price || 'Consultar', i);
+      
       return `
-        <div class="product-card">
+        <div class="product-card" id="obra-${i}">
           <div class="product-img">
             ${mainImg ? `<img class="product-img-bg" src="${mainImg}" alt="${p.name}" onerror="this.style.display='none'">` : '<div class="product-img-bg" style="background:var(--coral)"></div>'}
             <div class="product-badge-wrap">
@@ -498,6 +537,15 @@
             ` : ''}
             <div class="product-footer">
               <button class="add-btn" onclick="addToCart(${i})" ${p.soldOut ? 'disabled' : ''}>${p.soldOut ? 'Vendido' : 'Añadir al carrito 🛒'}</button>
+            </div>
+            <!-- BOTONES DE COMPARTIR -->
+            <div class="share-buttons">
+              <button class="share-btn whatsapp" onclick="window.open('${shareLinks.whatsapp}', '_blank')">💬 WhatsApp</button>
+              <button class="share-btn instagram" onclick="shareInstagram('✨ ${p.name} - ${p.price}€ ✨\\n\\n${window.location.href.split('#')[0]}#obra-${i}\\n\\n@elberta.woodandpencil')">📸 Instagram</button>
+              <button class="share-btn threads" onclick="window.open('https://www.threads.net/intent/post?text=${encodeURIComponent('✨ ¡Mira esta obra de Elberta Wood & Pencil! "' + p.name + '" - ' + (p.price || 'Consultar') + ' € ✨\\n\\n' + window.location.href.split('#')[0] + '#obra-' + i)}', '_blank')">🧵 Threads</button>
+              <button class="share-btn facebook" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href.split('#')[0] + '#obra-' + i)}&quote=${encodeURIComponent('✨ ¡Mira esta obra de Elberta Wood & Pencil! "' + p.name + '" - ' + (p.price || 'Consultar') + ' € ✨')}', '_blank')">📘 Facebook</button>
+              <button class="share-btn twitter" onclick="window.open('${shareLinks.twitter}', '_blank')">🐦 X</button>
+              <button class="share-btn copy" onclick="copyToClipboard('${shareLinks.copy}')">🔗 Copiar</button>
             </div>
           </div>
         </div>
@@ -566,7 +614,6 @@
     }).join('');
     document.getElementById('cartTotal').innerHTML = `Total: ${total.toFixed(2)} €`;
     
-    // Renderizar PayPal
     const paypalContainer = document.getElementById('paypal-button-container');
     paypalContainer.innerHTML = '';
     if (window.paypal) {
@@ -672,7 +719,7 @@
     setTimeout(() => toast.classList.remove('show'), 3500);
   }
 
-  // ==================== ADMIN (simplificado) ====================
+  // ==================== ADMIN ====================
   let adminLoggedIn = false;
   let editingIndex = -1;
   let activeTab = 'productos';
@@ -865,7 +912,6 @@
   renderShop();
   updateCartCount();
   
-  // Cerrar modal con ESC
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       closeCart();

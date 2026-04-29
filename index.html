@@ -1005,7 +1005,10 @@
           <div class="product-name">${p.name}</div>
           <div class="product-dims">${p.width && p.height ? p.width+' × '+p.height+' cm' : ''}</div>
           <div class="product-footer">
-            <div class="product-price ${p.soldOut?'sold-out':''}">${p.price ? p.price+' €' : ''}</div>
+            <div>
+              <div class="product-price ${p.soldOut?'sold-out':''}">${p.price ? p.price+' €' : ''}</div>
+              <div style="font-size:0.72rem;color:var(--mist);margin-top:0.2rem">${p.shippingType==='free' ? '🚚 Envío gratis' : p.shippingType==='consult' ? '📦 Consultar envío' : p.shipping ? '📦 Envío: '+p.shipping+' €' : ''}</div>
+            </div>
             <button class="add-btn" onclick="addToCart('${p.name}')" ${p.soldOut?'disabled':''}>${p.soldOut?'Vendido':'Comprar'}</button>
           </div>
         </div>
@@ -1185,6 +1188,20 @@
             </select>
           </div>
         </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Tipo de envío</label>
+            <select id="pShippingType">
+              <option value="paid" ${p.shippingType!=='free'&&p.shippingType!=='consult'?'selected':''}>Con coste</option>
+              <option value="free" ${p.shippingType==='free'?'selected':''}>Envío gratis</option>
+              <option value="consult" ${p.shippingType==='consult'?'selected':''}>Consultar envío</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Gastos de envío (€)</label>
+            <input type="number" id="pShipping" value="${p.shipping||''}" placeholder="Ej: 15">
+          </div>
+        </div>
 
         <div class="form-group">
           <label>📷 Fotos (hasta 6) — escribe los nombres separados por comas</label>
@@ -1261,6 +1278,8 @@
       image: imagesArr[0] || '',
       images: imagesArr,
       video: document.getElementById('pVideo').value.trim(),
+      shipping: document.getElementById('pShipping') ? document.getElementById('pShipping').value : '',
+      shippingType: document.getElementById('pShippingType') ? document.getElementById('pShippingType').value : 'paid',
     };
     const products = getProducts();
     if (index >= 0) products[index] = product;

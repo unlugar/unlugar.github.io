@@ -1,4 +1,12 @@
-n.js"></script>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elberta Wood & Pencil Shop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <!-- EmailJS -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <!-- PayPal SDK -->
   <script src="https://www.paypal.com/sdk/js?client-id=test&currency=EUR"></script>
   <style>
@@ -187,16 +195,22 @@ n.js"></script>
 
     .exposiciones { padding: 6rem 3rem; background: var(--sand); }
     .expo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
-    .expo-card { border-radius: 0.5rem; overflow: hidden; cursor: pointer; background: white; }
+    .expo-card { border-radius: 0.5rem; overflow: hidden; cursor: pointer; background: white; transition: transform 0.3s; }
+    .expo-card:hover { transform: translateY(-5px); }
     .expo-card img { width: 100%; height: 320px; object-fit: cover; }
+    .expo-card-body { padding: 1rem; }
+    .expo-card-title { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; }
+    .expo-card-year { font-size: 0.75rem; color: var(--mist); margin-top: 0.2rem; }
 
     .documentos { padding: 5rem 3rem; background: var(--ink); }
     .doc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
-    .doc-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; padding: 1.8rem; text-align: center; text-decoration: none; display: block; }
+    .doc-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; padding: 1.8rem; text-align: center; text-decoration: none; display: block; transition: transform 0.3s; }
+    .doc-card:hover { transform: translateY(-3px); background: rgba(255,255,255,0.1); }
     .doc-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: white; }
 
     .instagram-banner { background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); padding: 3rem; text-align: center; color: white; }
-    .instagram-link { display: inline-flex; background: white; color: #833ab4; padding: 0.8rem 2rem; border-radius: 2rem; text-decoration: none; font-weight: 600; }
+    .instagram-link { display: inline-flex; background: white; color: #833ab4; padding: 0.8rem 2rem; border-radius: 2rem; text-decoration: none; font-weight: 600; transition: transform 0.3s; }
+    .instagram-link:hover { transform: translateY(-2px); }
 
     footer { background: #0F0C07; padding: 2rem 3rem; text-align: center; color: rgba(255,255,255,0.5); }
     .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--ink); color: white; padding: 1rem 1.5rem; border-radius: 0.5rem; z-index: 9999; transition: all 0.3s; transform: translateY(100px); opacity: 0; }
@@ -211,6 +225,7 @@ n.js"></script>
     .admin-tab { padding: 0.5rem 1rem; background: var(--sand); border: none; cursor: pointer; border-radius: 0.3rem; }
     .admin-tab.active { background: var(--coral); color: white; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
     .btn-save { background: var(--coral); color: white; padding: 0.5rem 1.5rem; border: none; border-radius: 0.3rem; cursor: pointer; }
 
     @media (max-width: 768px) {
@@ -222,6 +237,7 @@ n.js"></script>
       .about { grid-template-columns: 1fr; padding: 4rem 1.5rem; }
       .contact { padding: 4rem 1.5rem; }
       .contact-grid { grid-template-columns: 1fr; }
+      .expo-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -257,7 +273,7 @@ n.js"></script>
   </div>
 </section>
 
-<div class="marquee"><div class="marquee-track"><span class="marquee-item">Arte Original ✦</span><span class="marquee-item">Wood & Pencil ✦</span><span class="marquee-item">Fuerteventura ✦</span><span class="marquee-item">Piezas Únicas ✦</span></div></div>
+<div class="marquee"><div class="marquee-track"><span class="marquee-item">Arte Original ✦</span><span class="marquee-item">Wood & Pencil ✦</span><span class="marquee-item">Fuerteventura ✦</span><span class="marquee-item">Piezas Únicas ✦</span><span class="marquee-item">Hecho a mano ✦</span></div></div>
 
 <section class="shop" id="tienda">
   <div class="shop-header"><div><p class="section-label">✦ Galería</p><h2 class="section-title">Obras <em>disponibles</em></h2></div></div>
@@ -267,13 +283,77 @@ n.js"></script>
 <section class="exposiciones" id="exposiciones">
   <p class="section-label">✦ Trayectoria</p>
   <h2 class="section-title">Exposiciones <em>realizadas</em></h2>
-  <div class="expo-grid" id="expoGrid"></div>
+  <div class="expo-grid">
+    <div class="expo-card" onclick="openLightboxExpo('exposiciones/April 30, 2022.png', 'Exposición Abril 2022')">
+      <img src="exposiciones/April 30, 2022.png" alt="Exposición Abril 2022" onerror="this.style.display='none'">
+      <div class="expo-card-body">
+        <div class="expo-card-title">Exposición Abril 2022</div>
+        <div class="expo-card-year">2022</div>
+      </div>
+    </div>
+    <div class="expo-card" onclick="openLightboxExpo('exposiciones/Black White Minimalist 3D Art Expo Poster.png', 'Art Expo Minimalista 3D')">
+      <img src="exposiciones/Black White Minimalist 3D Art Expo Poster.png" alt="Art Expo Minimalista 3D" onerror="this.style.display='none'">
+      <div class="expo-card-body">
+        <div class="expo-card-title">Art Expo Minimalista 3D</div>
+      </div>
+    </div>
+    <div class="expo-card" onclick="openLightboxExpo('exposiciones/Blue Minimal Professional Software Engineer Cover Letter.png', 'Exposición Profesional')">
+      <img src="exposiciones/Blue Minimal Professional Software Engineer Cover Letter.png" alt="Exposición Profesional" onerror="this.style.display='none'">
+      <div class="expo-card-body">
+        <div class="expo-card-title">Exposición Profesional</div>
+      </div>
+    </div>
+    <div class="expo-card" onclick="openLightboxExpo('exposiciones/Brown White Minimalist Art Exhibition Poster.png', 'Art Exhibition Brown & White')">
+      <img src="exposiciones/Brown White Minimalist Art Exhibition Poster.png" alt="Art Exhibition Brown & White" onerror="this.style.display='none'">
+      <div class="expo-card-body">
+        <div class="expo-card-title">Art Exhibition Brown & White</div>
+      </div>
+    </div>
+    <div class="expo-card" onclick="openLightboxExpo('exposiciones/Documento A4 Bloc Notas Campo de Frutas Plátanos Escritura Documento hoja To Do Sencillas Carta Apuntes Amarillo....png', 'Notas de Campo')">
+      <img src="exposiciones/Documento A4 Bloc Notas Campo de Frutas Plátanos Escritura Documento hoja To Do Sencillas Carta Apuntes Amarillo....png" alt="Notas de Campo" onerror="this.style.display='none'">
+      <div class="expo-card-body">
+        <div class="expo-card-title">Notas de Campo</div>
+      </div>
+    </div>
+    <div class="expo-card" onclick="openLightboxExpo('exposiciones/Imagen de WhatsApp 2024-10-02 a las 13.32.28_c5362a8b.jpg', 'Exposición Octubre 2024')">
+      <img src="exposiciones/Imagen de WhatsApp 2024-10-02 a las 13.32.28_c5362a8b.jpg" alt="Exposición Octubre 2024" onerror="this.style.display='none'">
+      <div class="expo-card-body">
+        <div class="expo-card-title">Exposición Octubre 2024</div>
+        <div class="expo-card-year">2024</div>
+      </div>
+    </div>
+    <div class="expo-card" onclick="openLightboxExpo('exposiciones/Llamativo póster exposición de arte minimalista colorido.png', 'Arte Minimalista Colorido')">
+      <img src="exposiciones/Llamativo póster exposición de arte minimalista colorido.png" alt="Arte Minimalista Colorido" onerror="this.style.display='none'">
+      <div class="expo-card-body">
+        <div class="expo-card-title">Arte Minimalista Colorido</div>
+      </div>
+    </div>
+    <div class="expo-card" onclick="openLightboxExpo('exposiciones/elberta woodandpencil.jpg', 'Elberta Wood & Pencil')">
+      <img src="exposiciones/elberta woodandpencil.jpg" alt="Elberta Wood & Pencil" onerror="this.style.display='none'">
+      <div class="expo-card-body">
+        <div class="expo-card-title">Elberta Wood & Pencil</div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <section class="documentos" id="documentos">
   <p class="section-label" style="color:var(--gold)">✦ Documentación</p>
   <h2 class="section-title" style="color:white">Perfil <em>artístico</em></h2>
-  <div class="doc-grid" id="docGrid"></div>
+  <div class="doc-grid">
+    <a class="doc-card" href="documentos/Presentaci%C3%B3n%20dossier%20art%C3%ADstico%20luis%20berta.pdf" target="_blank">
+      <div class="doc-title">📁 Dossier Artístico</div>
+      <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);margin-top:0.5rem;">Presentación completa</div>
+    </a>
+    <a class="doc-card" href="documentos/portafolioelbertawoodandpencil%20(2).pdf" target="_blank">
+      <div class="doc-title">🎨 Portafolio</div>
+      <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);margin-top:0.5rem;">Selección de obras</div>
+    </a>
+    <div class="doc-card" style="opacity:0.5;cursor:default;">
+      <div class="doc-title">📄 Currículum</div>
+      <div style="font-size:0.7rem;color:rgba(255,255,255,0.3);margin-top:0.5rem;">Próximamente</div>
+    </div>
+  </div>
 </section>
 
 <section class="about" id="sobre-mi">
@@ -285,7 +365,7 @@ n.js"></script>
   <div>
     <p class="about-eyebrow">✦ El artista</p>
     <h2>Madera, lienzos,<br>lápices y mucho <em>color!</em></h2>
-    <p>Soy Luis Berta, bajo mi nombre artístico <em style="color:var(--gold)">Elberta.woodandpencil</em>, artista plástico con estudio en Puerto del Rosario, Fuerteventura.</p>
+    <p>Soy Luis Berta, bajo mi nombre artístico <em style="color:var(--gold)">Elberta.woodandpencil</em>, artista plástico con estudio en Puerto del Rosario, Fuerteventura. Trabajo principalmente con madera y lienzo, creando piezas que fusionan la textura natural con el color.</p>
     <div style="font-family:'Cormorant Garamond',serif; font-size:2rem; color:var(--gold); margin-top:2rem;">— Elberta</div>
   </div>
 </section>
@@ -298,9 +378,19 @@ n.js"></script>
     </div>
     <div class="contact-grid">
       <div>
-        <div style="display:flex;gap:1rem;margin-bottom:1rem;"><div style="background:white;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;">📧</div><div><strong>Email</strong><br>patagoniaberta@gmail.com</div></div>
-        <div style="display:flex;gap:1rem;margin-bottom:1rem;"><div style="background:white;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;">📱</div><div><strong>WhatsApp</strong><br>+34 637 196 259</div></div>
-        <a href="https://instagram.com/elberta.woodandpencil" target="_blank" style="display:inline-block;margin-top:1rem;padding:0.5rem 1rem;background:white;border-radius:2rem;text-decoration:none;color:var(--ink);">📸 @elberta.woodandpencil</a>
+        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;">
+          <div style="background:white;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">📧</div>
+          <div><strong>Email</strong><br>patagoniaberta@gmail.com</div>
+        </div>
+        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;">
+          <div style="background:white;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">📱</div>
+          <div><strong>WhatsApp / Teléfono</strong><br>+34 637 196 259</div>
+        </div>
+        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;">
+          <div style="background:white;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">📍</div>
+          <div><strong>Estudio</strong><br>Puerto del Rosario, Fuerteventura</div>
+        </div>
+        <a href="https://instagram.com/elberta.woodandpencil" target="_blank" style="display:inline-flex;align-items:center;gap:0.5rem;margin-top:0.5rem;padding:0.5rem 1rem;background:white;border-radius:2rem;text-decoration:none;color:var(--ink);">📸 @elberta.woodandpencil</a>
       </div>
       <div>
         <div class="form-group"><input type="text" id="contactName" placeholder="Tu nombre"></div>
@@ -308,7 +398,7 @@ n.js"></script>
         <div class="form-group"><input type="tel" id="contactPhone" placeholder="Teléfono (opcional)"></div>
         <div class="form-group"><input type="text" id="contactSubject" placeholder="Asunto"></div>
         <div class="form-group"><textarea id="contactMessage" placeholder="Tu mensaje..." rows="4"></textarea></div>
-        <button class="btn-main" style="width:100%" onclick="sendEmail()">Enviar mensaje</button>
+        <button class="btn-main" style="width:100%" onclick="sendEmail()">Enviar mensaje ✉️</button>
       </div>
     </div>
   </div>
@@ -320,25 +410,44 @@ n.js"></script>
   <a href="https://instagram.com/elberta.woodandpencil" target="_blank" class="instagram-link">📷 @elberta.woodandpencil</a>
 </section>
 
-<footer><div>Elberta Wood & Pencil</div><div style="font-size:0.7rem;margin-top:0.5rem;">© 2026 · Puerto del Rosario</div></footer>
+<footer>
+  <div>Elberta Wood & Pencil</div>
+  <div style="font-size:0.7rem;margin-top:0.5rem;">© 2026 · Puerto del Rosario · Fuerteventura</div>
+</footer>
 
-<div class="cart-modal" id="cartModal"><div class="cart-panel"><h3>🛒 Tu carrito</h3><div id="cartItems"></div><div class="cart-total" id="cartTotal">Total: 0 €</div><div id="paypal-button-container"></div><button class="btn-ghost" style="margin-top:1rem;width:100%" onclick="closeCart()">Cerrar</button></div></div>
+<!-- CARRITO MODAL -->
+<div class="cart-modal" id="cartModal">
+  <div class="cart-panel">
+    <h3>🛒 Tu carrito</h3>
+    <div id="cartItems"></div>
+    <div class="cart-total" id="cartTotal">Total: 0 €</div>
+    <div id="paypal-button-container"></div>
+    <button class="btn-ghost" style="margin-top:1rem;width:100%" onclick="closeCart()">Cerrar</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"><span id="toastMsg"></span></div>
-<div class="admin-overlay" id="adminOverlay"><div class="admin-panel"><div class="admin-header"><div class="admin-title">Panel de <span>Edición</span></div><button class="admin-close" onclick="closeAdmin()">✕</button></div><div class="admin-body" id="adminBody"></div></div></div>
+
+<!-- ADMIN OVERLAY -->
+<div class="admin-overlay" id="adminOverlay">
+  <div class="admin-panel">
+    <div class="admin-header">
+      <div class="admin-title">Panel de <span>Edición</span></div>
+      <button class="admin-close" onclick="closeAdmin()">✕</button>
+    </div>
+    <div class="admin-body" id="adminBody"></div>
+  </div>
+</div>
 
 <script>
   // ==================== CONFIGURACIÓN ====================
   const STORAGE_KEY = 'elberta_products';
   const PASS_KEY = 'elberta_password';
   
-  // EMAILJS - TUS CÓDIGOS
-  emailjs.init('o8Lh4WH5Bbfj_Jpa_'); // Public Key
+  // EMAILJS - Tus códigos
+  emailjs.init('o8Lh4WH5Bbfj_Jpa_');
   const EMAIL_SERVICE_ID = 'service_elberta';
   const EMAIL_TEMPLATE_ID = 'template_3j1pwuj';
-
-  // PayPal (cuenta pachiberta@gmail.com - modo producción real)
-  // Cuando subas la web a un servidor, cambia 'test' por tu Client ID real
-  // Por ahora modo prueba, pero la cuenta es pachiberta@gmail.com
 
   // ==================== PRODUCTOS ====================
   function getProducts() {
@@ -359,12 +468,12 @@ n.js"></script>
     const products = getProducts();
     const grid = document.getElementById('products-grid');
     if (!products.length) {
-      grid.innerHTML = '<div style="text-align:center;padding:3rem;">🎨 No hay obras aún. Usa el panel Edición para añadir tus primeras obras.</div>';
+      grid.innerHTML = '<div style="text-align:center;padding:3rem;grid-column:1/-1;">🎨 No hay obras aún. Usa el panel Edición para añadir tus primeras obras.</div>';
       return;
     }
     grid.innerHTML = products.map((p, i) => {
       const mainImg = p.images && p.images[0] ? imgUrl(p.images[0]) : (p.image ? imgUrl(p.image) : null);
-      const shippingOptions = p.shippingZones ? p.shippingZones : { canarias: 10, peninsula: 15, europa: 25, mundo: 45 };
+      const shippingZones = p.shippingZones || { canarias: 10, peninsula: 15, europa: 25, mundo: 45 };
       return `
         <div class="product-card">
           <div class="product-img">
@@ -381,14 +490,14 @@ n.js"></script>
             <div class="product-price ${p.soldOut ? 'sold-out' : ''}">${p.price ? p.price+' €' : ''}</div>
             ${!p.soldOut ? `
               <select class="shipping-select" id="shipping_${i}">
-                <option value="canarias">🇮🇨 Canarias - ${shippingOptions.canarias} €</option>
-                <option value="peninsula">🇪🇸 Península - ${shippingOptions.peninsula} €</option>
-                <option value="europa">🇪🇺 Europa - ${shippingOptions.europa} €</option>
-                <option value="mundo">🌍 Resto del mundo - ${shippingOptions.mundo} €</option>
+                <option value="canarias">🇮🇨 Canarias - ${shippingZones.canarias} €</option>
+                <option value="peninsula">🇪🇸 Península - ${shippingZones.peninsula} €</option>
+                <option value="europa">🇪🇺 Europa - ${shippingZones.europa} €</option>
+                <option value="mundo">🌍 Resto del mundo - ${shippingZones.mundo} €</option>
               </select>
             ` : ''}
             <div class="product-footer">
-              <button class="add-btn" onclick="addToCart(${i})" ${p.soldOut ? 'disabled' : ''}>${p.soldOut ? 'Vendido' : 'Añadir al carrito'}</button>
+              <button class="add-btn" onclick="addToCart(${i})" ${p.soldOut ? 'disabled' : ''}>${p.soldOut ? 'Vendido' : 'Añadir al carrito 🛒'}</button>
             </div>
           </div>
         </div>
@@ -401,18 +510,19 @@ n.js"></script>
   function saveCart() { localStorage.setItem('cart', JSON.stringify(cart)); updateCartCount(); }
   function updateCartCount() {
     const count = cart.reduce((s, i) => s + i.quantity, 0);
-    document.getElementById('cartCount').innerText = count;
+    const cartCountSpan = document.getElementById('cartCount');
+    if (cartCountSpan) cartCountSpan.innerText = count;
   }
+  
   function addToCart(productIndex) {
     const products = getProducts();
     const product = products[productIndex];
     if (product.soldOut) return;
     const shippingSelect = document.getElementById(`shipping_${productIndex}`);
-    const zone = shippingSelect ? shippingSelect.value : 'peninsula';
+    if (!shippingSelect) return;
+    const zone = shippingSelect.value;
     const zones = product.shippingZones || { canarias: 10, peninsula: 15, europa: 25, mundo: 45 };
     let shippingCost = zones[zone] || 15;
-    if (product.shippingType === 'free') shippingCost = 0;
-    if (product.shippingType === 'consult') shippingCost = 0;
     
     const existing = cart.find(i => i.id === productIndex && i.shippingZone === zone);
     if (existing) existing.quantity++;
@@ -421,11 +531,347 @@ n.js"></script>
     showToast(`✨ "${product.name}" añadida al carrito`);
     renderCart();
   }
+  
+  function removeFromCart(index) {
+    cart.splice(index, 1);
+    saveCart();
+    renderCart();
+    showToast('🗑️ Producto eliminado');
+  }
+  
   function renderCart() {
     const container = document.getElementById('cartItems');
-    if (!cart.length) { container.innerHTML = '<p>Carrito vacío</p>'; document.getElementById('cartTotal').innerHTML = 'Total: 0 €'; document.getElementById('paypal-button-container').innerHTML = ''; return; }
+    if (!cart.length) { 
+      container.innerHTML = '<p style="text-align:center;padding:1rem;">Carrito vacío</p>'; 
+      document.getElementById('cartTotal').innerHTML = 'Total: 0 €'; 
+      document.getElementById('paypal-button-container').innerHTML = '';
+      return; 
+    }
     let total = 0;
     container.innerHTML = cart.map((item, idx) => {
       const itemTotal = (item.price + item.shippingCost) * item.quantity;
       total += itemTotal;
-      return `<div class="cart-item"><div><strong>${item.name}</strong><br>${item.shippingZone} (envío ${item.shippingCost}€) x${item.quantity}</div><div>${itemTotal.toFixed(2)} € <button onclick="remove
+      return `
+        <div class="cart-item">
+          <div>
+            <strong>${item.name}</strong><br>
+            <span style="font-size:0.75rem;color:var(--mist);">${item.shippingZone} (envío ${item.shippingCost}€) x${item.quantity}</span>
+          </div>
+          <div style="text-align:right;">
+            ${itemTotal.toFixed(2)} €<br>
+            <button onclick="removeFromCart(${idx})" style="background:none;border:none;color:var(--coral);cursor:pointer;font-size:0.7rem;">Eliminar</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+    document.getElementById('cartTotal').innerHTML = `Total: ${total.toFixed(2)} €`;
+    
+    // Renderizar PayPal
+    const paypalContainer = document.getElementById('paypal-button-container');
+    paypalContainer.innerHTML = '';
+    if (window.paypal) {
+      window.paypal.Buttons({
+        style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'pay' },
+        createOrder: function(data, actions) {
+          return actions.order.create({
+            purchase_units: [{
+              amount: { value: total.toFixed(2), currency_code: 'EUR' },
+              description: 'Compra en Elberta Wood & Pencil',
+              payee: { email_address: 'pachiberta@gmail.com' }
+            }]
+          });
+        },
+        onApprove: function(data, actions) {
+          return actions.order.capture().then(function(details) {
+            showToast('🎉 ¡Pago completado! Gracias por tu compra');
+            cart = [];
+            saveCart();
+            renderCart();
+          });
+        },
+        onError: function(err) {
+          showToast('❌ Error con PayPal. Intenta de nuevo');
+        }
+      }).render('#paypal-button-container');
+    }
+  }
+  
+  function openCart() {
+    renderCart();
+    document.getElementById('cartModal').classList.add('open');
+  }
+  function closeCart() {
+    document.getElementById('cartModal').classList.remove('open');
+  }
+
+  // ==================== EMAIL ====================
+  function sendEmail() {
+    const name = document.getElementById('contactName').value;
+    const email = document.getElementById('contactEmail').value;
+    const phone = document.getElementById('contactPhone').value;
+    const subject = document.getElementById('contactSubject').value;
+    const message = document.getElementById('contactMessage').value;
+    
+    if (!name || !email || !subject || !message) {
+      showToast('⚠️ Por favor, completa todos los campos obligatorios');
+      return;
+    }
+    
+    const templateParams = {
+      from_name: name,
+      from_email: email,
+      phone: phone || 'No indicado',
+      subject: subject,
+      message: message
+    };
+    
+    emailjs.send(EMAIL_SERVICE_ID, EMAIL_TEMPLATE_ID, templateParams)
+      .then(() => {
+        showToast('📧 ¡Mensaje enviado! Te responderé pronto');
+        document.getElementById('contactName').value = '';
+        document.getElementById('contactEmail').value = '';
+        document.getElementById('contactPhone').value = '';
+        document.getElementById('contactSubject').value = '';
+        document.getElementById('contactMessage').value = '';
+      })
+      .catch(() => showToast('❌ Error al enviar. Intenta de nuevo'));
+  }
+
+  // ==================== LIGHTBOX EXPOSICIONES ====================
+  function openLightboxExpo(src, title) {
+    const modal = document.createElement('div');
+    modal.style.position = 'fixed';
+    modal.style.top = '0';
+    modal.style.left = '0';
+    modal.style.width = '100%';
+    modal.style.height = '100%';
+    modal.style.backgroundColor = 'rgba(0,0,0,0.95)';
+    modal.style.zIndex = '2000';
+    modal.style.display = 'flex';
+    modal.style.alignItems = 'center';
+    modal.style.justifyContent = 'center';
+    modal.style.cursor = 'pointer';
+    modal.innerHTML = `
+      <div style="position:relative; max-width:90%; max-height:90%;">
+        <img src="${src}" style="max-width:100%; max-height:85vh; object-fit:contain; border-radius:0.5rem;">
+        <div style="color:white; text-align:center; margin-top:1rem;">${title}</div>
+        <button style="position:absolute; top:-2rem; right:0; background:none; border:none; color:white; font-size:2rem; cursor:pointer;">✕</button>
+      </div>
+    `;
+    modal.onclick = (e) => { if(e.target === modal) modal.remove(); };
+    modal.querySelector('button').onclick = () => modal.remove();
+    document.body.appendChild(modal);
+  }
+
+  // ==================== TOAST ====================
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toastMsg');
+    toastMsg.innerText = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3500);
+  }
+
+  // ==================== ADMIN (simplificado) ====================
+  let adminLoggedIn = false;
+  let editingIndex = -1;
+  let activeTab = 'productos';
+
+  function openAdmin() {
+    document.getElementById('adminOverlay').classList.add('open');
+    if (!adminLoggedIn) renderLogin();
+    else renderAdminContent();
+  }
+  function closeAdmin() {
+    document.getElementById('adminOverlay').classList.remove('open');
+  }
+  
+  function renderLogin() {
+    document.getElementById('adminBody').innerHTML = `
+      <div style="text-align:center;padding:1rem;">
+        <p>Contraseña para editar</p>
+        <input type="password" id="loginPass" style="width:100%;padding:0.75rem;margin:1rem 0;border:1px solid var(--light-border);border-radius:0.3rem;">
+        <button class="btn-main" onclick="doLogin()">Entrar</button>
+      </div>
+    `;
+  }
+  
+  function doLogin() {
+    const pass = document.getElementById('loginPass').value;
+    if (pass === getPassword()) {
+      adminLoggedIn = true;
+      renderAdminContent();
+    } else {
+      showToast('Contraseña incorrecta');
+    }
+  }
+  
+  function renderAdminContent() {
+    document.getElementById('adminBody').innerHTML = `
+      <div class="admin-tabs">
+        <button class="admin-tab ${activeTab==='productos'?'active':''}" onclick="switchTab('productos')">Mis Obras</button>
+        <button class="admin-tab ${activeTab==='agregar'?'active':''}" onclick="switchTab('agregar')">Añadir Obra</button>
+        <button class="admin-tab ${activeTab==='ajustes'?'active':''}" onclick="switchTab('ajustes')">Ajustes</button>
+      </div>
+      <div id="tabContent"></div>
+    `;
+    renderTab();
+  }
+  
+  function switchTab(tab) {
+    activeTab = tab;
+    editingIndex = -1;
+    renderAdminContent();
+  }
+  
+  function renderTab() {
+    const el = document.getElementById('tabContent');
+    if (activeTab === 'productos') renderProductList(el);
+    else if (activeTab === 'agregar') renderProductForm(el, -1);
+    else if (activeTab === 'ajustes') renderSettings(el);
+  }
+  
+  function renderProductList(el) {
+    const products = getProducts();
+    if (editingIndex >= 0) { renderProductForm(el, editingIndex); return; }
+    if (!products.length) {
+      el.innerHTML = '<p style="text-align:center;padding:2rem;">No hay obras. Ve a "Añadir Obra"</p>';
+      return;
+    }
+    el.innerHTML = `
+      ${products.map((p, i) => `
+        <div style="display:flex;align-items:center;gap:1rem;padding:0.8rem;border:1px solid var(--light-border);border-radius:0.5rem;margin-bottom:0.5rem;">
+          <div style="flex:1;"><strong>${p.name}</strong><br><span style="font-size:0.75rem;color:var(--mist);">${p.price || 'Sin precio'} €</span></div>
+          <button class="admin-tab" onclick="startEdit(${i})">Editar</button>
+          <button class="admin-tab" style="background:#fee;color:#c0392b;" onclick="deleteProduct(${i})">Eliminar</button>
+        </div>
+      `).join('')}
+    `;
+  }
+  
+  function startEdit(i) {
+    editingIndex = i;
+    renderAdminContent();
+  }
+  
+  function renderProductForm(el, index) {
+    const products = getProducts();
+    const p = index >= 0 ? products[index] : {};
+    const isEdit = index >= 0;
+    const zones = p.shippingZones || { canarias: 10, peninsula: 15, europa: 25, mundo: 45 };
+    el.innerHTML = `
+      <div class="product-form">
+        <h3>${isEdit ? 'Editar obra' : 'Nueva obra'}</h3>
+        <div class="form-group"><input type="text" id="pName" placeholder="Nombre de la obra *" value="${p.name || ''}"></div>
+        <div class="form-row">
+          <div class="form-group"><input type="text" id="pTechnique" placeholder="Técnica" value="${p.technique || ''}"></div>
+          <div class="form-group"><input type="text" id="pMaterial" placeholder="Material" value="${p.material || ''}"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><input type="number" id="pWidth" placeholder="Ancho cm" value="${p.width || ''}"></div>
+          <div class="form-group"><input type="number" id="pHeight" placeholder="Alto cm" value="${p.height || ''}"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><input type="number" id="pPrice" placeholder="Precio €" value="${p.price || ''}"></div>
+          <div class="form-group">
+            <select id="pSold"><option value="0" ${!p.soldOut ? 'selected' : ''}>Disponible</option><option value="1" ${p.soldOut ? 'selected' : ''}>Vendido</option></select>
+          </div>
+        </div>
+        <div class="form-group"><input type="text" id="pImages" placeholder="Nombres de fotos (separados por comas)" value="${(p.images || []).join(', ')}"></div>
+        <div class="form-group"><input type="checkbox" id="pNew" ${p.isNew ? 'checked' : ''}> <label>Marcar como Nuevo</label></div>
+        <h4 style="margin:1rem 0 0.5rem;">Costes de envío por zona</h4>
+        <div class="form-row-3">
+          <div class="form-group"><label>🇮🇨 Canarias</label><input type="number" id="shipCanarias" value="${zones.canarias}"></div>
+          <div class="form-group"><label>🇪🇸 Península</label><input type="number" id="shipPeninsula" value="${zones.peninsula}"></div>
+          <div class="form-group"><label>🇪🇺 Europa</label><input type="number" id="shipEuropa" value="${zones.europa}"></div>
+          <div class="form-group"><label>🌍 Resto mundo</label><input type="number" id="shipMundo" value="${zones.mundo}"></div>
+        </div>
+        <div class="form-actions" style="display:flex;gap:1rem;margin-top:1rem;">
+          <button class="btn-save" onclick="saveProduct(${index})">${isEdit ? 'Guardar' : 'Añadir'}</button>
+          <button class="btn-ghost" onclick="switchTab('productos')">Cancelar</button>
+        </div>
+      </div>
+    `;
+  }
+  
+  function saveProduct(index) {
+    const name = document.getElementById('pName').value.trim();
+    if (!name) { showToast('El nombre es obligatorio'); return; }
+    const product = {
+      name: name,
+      technique: document.getElementById('pTechnique').value,
+      material: document.getElementById('pMaterial').value,
+      width: document.getElementById('pWidth').value,
+      height: document.getElementById('pHeight').value,
+      price: document.getElementById('pPrice').value,
+      soldOut: document.getElementById('pSold').value === '1',
+      isNew: document.getElementById('pNew').checked,
+      images: document.getElementById('pImages').value.split(',').map(s=>s.trim()).filter(Boolean),
+      shippingZones: {
+        canarias: parseFloat(document.getElementById('shipCanarias').value) || 10,
+        peninsula: parseFloat(document.getElementById('shipPeninsula').value) || 15,
+        europa: parseFloat(document.getElementById('shipEuropa').value) || 25,
+        mundo: parseFloat(document.getElementById('shipMundo').value) || 45
+      }
+    };
+    const products = getProducts();
+    if (index >= 0) products[index] = product;
+    else products.push(product);
+    saveProducts(products);
+    renderShop();
+    showToast(index >= 0 ? 'Obra actualizada' : 'Obra añadida');
+    switchTab('productos');
+  }
+  
+  function deleteProduct(i) {
+    if (!confirm('¿Eliminar esta obra?')) return;
+    const products = getProducts();
+    products.splice(i, 1);
+    saveProducts(products);
+    renderShop();
+    showToast('Obra eliminada');
+    renderAdminContent();
+  }
+  
+  function renderSettings(el) {
+    el.innerHTML = `
+      <div class="settings-section">
+        <h3>Cambiar contraseña</h3>
+        <div class="form-group"><input type="password" id="newPass1" placeholder="Nueva contraseña"></div>
+        <div class="form-group"><input type="password" id="newPass2" placeholder="Repetir contraseña"></div>
+        <button class="btn-save" onclick="changePassword()">Guardar</button>
+      </div>
+      <div class="settings-section" style="margin-top:2rem;">
+        <button class="btn-ghost" onclick="logout()">Cerrar sesión</button>
+      </div>
+    `;
+  }
+  
+  function changePassword() {
+    const p1 = document.getElementById('newPass1').value;
+    const p2 = document.getElementById('newPass2').value;
+    if (!p1 || p1 !== p2) { showToast('Las contraseñas no coinciden'); return; }
+    if (p1.length < 4) { showToast('Mínimo 4 caracteres'); return; }
+    savePassword(p1);
+    showToast('Contraseña actualizada');
+  }
+  
+  function logout() {
+    adminLoggedIn = false;
+    closeAdmin();
+  }
+
+  // ==================== INICIALIZAR ====================
+  renderShop();
+  updateCartCount();
+  
+  // Cerrar modal con ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeCart();
+      closeAdmin();
+    }
+  });
+</script>
+</body>
+</html>

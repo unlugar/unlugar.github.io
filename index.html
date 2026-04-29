@@ -423,6 +423,104 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 
+  // ==================== TUS PRODUCTOS (guardados en el JSON) ====================
+  const misProductos = [
+    {
+      "name": "Il Doc",
+      "technique": "mixta",
+      "material": "acrilico, papel, rotuladores, colores, madera",
+      "width": "30",
+      "height": "52",
+      "price": "160",
+      "soldOut": false,
+      "isNew": true,
+      "color": "linear-gradient(135deg, #d4603a, #c8942a)",
+      "image": "Imagen de WhatsApp 2025-07-14 a las 18.45.39_4fe62dbb.jpg",
+      "images": [
+        "Imagen de WhatsApp 2025-07-14 a las 18.45.39_4fe62dbb.jpg",
+        "Imagen de WhatsApp 2025-07-14 a las 18.45.40_317822f9.jpg",
+        "Imagen de WhatsApp 2025-07-14 a las 18.45.40_4c290dee.jpg",
+        "Imagen de WhatsApp 2025-07-14 a las 18.45.40_64721a1e.jpg",
+        "Imagen de WhatsApp 2025-07-14 a las 18.45.39_747111fb.jpg"
+      ],
+      "video": "https://youtube.com/shorts/tGiN3Ay8Bq4",
+      "shippingZones": { "canarias": 10, "peninsula": 15, "europa": 25, "mundo": 45 }
+    },
+    {
+      "name": "Desespero",
+      "technique": "micta",
+      "material": "acriilco, madera, lapiz, rotulador",
+      "width": "36",
+      "height": "51",
+      "price": "160",
+      "soldOut": false,
+      "isNew": true,
+      "images": [
+        "Imagen de WhatsApp 2025-07-15 a las 09.21.39_b3192821.jpg",
+        "Imagen de WhatsApp 2025-07-15 a las 09.21.39_ea499753.jpg",
+        "Imagen de WhatsApp 2025-07-15 a las 09.21.40_152fd24e.jpg",
+        "Imagen de WhatsApp 2025-07-15 a las 09.21.40_715c7993.jpg",
+        "Imagen de WhatsApp 2025-07-15 a las 09.21.40_ff532eb3.jpg"
+      ],
+      "shippingZones": { "canarias": 10, "peninsula": 15, "europa": 25, "mundo": 45 }
+    },
+    {
+      "name": "Trompa",
+      "technique": "mixta",
+      "material": "acrilico, papel, rotuladores, colores, madera",
+      "width": "40",
+      "height": "62",
+      "price": "180",
+      "soldOut": false,
+      "isNew": true,
+      "images": [
+        "Imagen de WhatsApp 2025-07-17 a las 16.38.00_19eddc9a.jpg",
+        "Imagen de WhatsApp 2025-07-17 a las 16.38.00_53ffacdf.jpg",
+        "Imagen de WhatsApp 2025-07-17 a las 16.38.00_a787ca2d.jpg",
+        "Imagen de WhatsApp 2025-07-17 a las 16.38.00_b11bea1d.jpg",
+        "Imagen de WhatsApp 2025-07-17 a las 16.38.01_0c17a7bc.jpg",
+        "Imagen de WhatsApp 2025-07-17 a las 16.38.01_1f1ab8f5.jpg"
+      ],
+      "shippingZones": { "canarias": 12, "peninsula": 18, "europa": 30, "mundo": 50 }
+    },
+    {
+      "name": "Side",
+      "technique": "mixta",
+      "material": "acrilico, papel, rotuladores, colores, madera",
+      "width": "17",
+      "height": "24",
+      "price": "100",
+      "soldOut": false,
+      "isNew": true,
+      "images": [
+        "Imagen de WhatsApp 2025-07-17 a las 16.38.02_1cf14d06.jpg",
+        "Imagen de WhatsApp 2025-07-17 a las 16.38.02_2286aad4.jpg",
+        "Imagen de WhatsApp 2025-07-17 a las 16.38.02_89c46f92.jpg",
+        "Imagen de WhatsApp 2025-07-17 a las 16.38.02_99c5047f.jpg",
+        "Imagen de WhatsApp 2025-07-17 a las 16.38.03_134bf4c2.jpg",
+        "Imagen de WhatsApp 2025-07-17 a las 16.38.01_973f0b1c.jpg"
+      ],
+      "shippingZones": { "canarias": 10, "peninsula": 13, "europa": 20, "mundo": 35 }
+    },
+    {
+      "name": "Soberbia",
+      "technique": "mixta",
+      "material": "acrilico, rotuladores, colores, madera",
+      "width": "17",
+      "height": "28",
+      "price": "100",
+      "soldOut": false,
+      "isNew": true,
+      "images": [
+        "Imagen de WhatsApp 2025-07-24 a las 19.14.11_49c470bf.jpg",
+        "Imagen de WhatsApp 2025-07-24 a las 19.14.11_02ae7c28.jpg",
+        "Imagen de WhatsApp 2025-07-24 a las 19.14.01_6638e590.jpg",
+        "Imagen de WhatsApp 2025-07-24 a las 19.14.11_af7c25cc.jpg"
+      ],
+      "shippingZones": { "canarias": 10, "peninsula": 13, "europa": 18, "mundo": 25 }
+    }
+  ];
+
   // ==================== CONFIGURACIÓN ====================
   emailjs.init('o8Lh4WH5Bbfj_Jpa_');
   const EMAIL_SERVICE_ID = 'service_elberta';
@@ -433,20 +531,32 @@
 
   // ==================== PRODUCTOS (Firebase) ====================
   let products = [];
+  let dataSubida = false;
   
   async function loadProducts() {
     const grid = document.getElementById('products-grid');
     grid.innerHTML = '<div class="loading">Cargando obras...</div>';
     try {
-      const snapshot = await db.collection('productos').orderBy('createdAt', 'desc').get();
-      products = [];
-      snapshot.forEach(doc => {
-        products.push({ id: doc.id, ...doc.data() });
-      });
+      const snapshot = await db.collection('productos').get();
+      
+      if (snapshot.empty && !dataSubida) {
+        // Subir tus productos a Firebase automáticamente
+        dataSubida = true;
+        for (const producto of misProductos) {
+          await db.collection('productos').add({ ...producto, createdAt: new Date() });
+        }
+        // Volver a cargar después de subir
+        const newSnapshot = await db.collection('productos').orderBy('createdAt', 'desc').get();
+        products = [];
+        newSnapshot.forEach(doc => { products.push({ id: doc.id, ...doc.data() }); });
+      } else {
+        products = [];
+        snapshot.forEach(doc => { products.push({ id: doc.id, ...doc.data() }); });
+      }
       renderShop();
     } catch (error) {
-      console.error('Error cargando productos:', error);
-      grid.innerHTML = '<div class="loading" style="color:var(--coral);">❌ Error al cargar. Verifica Firebase</div>';
+      console.error('Error:', error);
+      grid.innerHTML = '<div class="loading" style="color:var(--coral);">❌ Error al cargar Firebase. ¿Configurado correctamente?</div>';
     }
   }
 
@@ -460,8 +570,7 @@
       await loadProducts();
       return true;
     } catch (error) {
-      console.error('Error guardando:', error);
-      showToast('❌ Error al guardar en Firebase');
+      showToast('❌ Error al guardar');
       return false;
     }
   }
@@ -473,7 +582,6 @@
       showToast('🗑️ Obra eliminada');
       return true;
     } catch (error) {
-      console.error('Error eliminando:', error);
       showToast('❌ Error al eliminar');
       return false;
     }
@@ -482,7 +590,7 @@
   function renderShop() {
     const grid = document.getElementById('products-grid');
     if (!products.length) {
-      grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;text-align:center;padding:3rem;"><div class="empty-state-icon" style="font-size:3rem;">🎨</div><h3>Próximamente</h3><p>Entra al panel de <strong>Edición</strong> para añadir tus primeras obras.</p></div>';
+      grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;text-align:center;padding:3rem;"><div class="empty-state-icon" style="font-size:3rem;">🎨</div><h3>Cargando obras...</h3><p>Espera un momento</p></div>';
       return;
     }
     grid.innerHTML = products.map((p, i) => {
@@ -505,7 +613,6 @@
             <div class="product-footer">
               <div>
                 <div class="product-price ${p.soldOut?'sold-out':''}">${p.price ? p.price+' €' : ''}</div>
-                <div style="font-size:0.72rem;color:var(--mist);margin-top:0.2rem">${p.shippingType==='free' ? '🚚 Envío gratis' : p.shippingType==='consult' ? '📦 Consultar envío' : p.shipping ? '📦 Envío: '+p.shipping+' €' : ''}</div>
               </div>
               <button class="add-btn" onclick="addToCart(${i})" ${p.soldOut?'disabled':''}>${p.soldOut?'Vendido':'Comprar'}</button>
             </div>

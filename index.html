@@ -5,7 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Elberta Wood & Pencil Shop</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <!-- EmailJS -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <!-- PayPal SDK -->
   <script src="https://www.paypal.com/sdk/js?client-id=test&currency=EUR"></script>
   <style>
     :root {
@@ -241,7 +246,7 @@
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
     .btn-save { background: var(--coral); color: white; padding: 0.5rem 1.5rem; border: none; border-radius: 0.3rem; cursor: pointer; }
-    .export-import { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .loading { text-align: center; padding: 3rem; grid-column: 1/-1; }
 
     @media (max-width: 768px) {
       nav { padding: 0.9rem 1.2rem; }
@@ -306,7 +311,7 @@
 
 <section class="shop" id="tienda">
   <div class="shop-header"><div><p class="section-label">✦ Galería</p><h2 class="section-title">Obras <em>disponibles</em></h2></div></div>
-  <div id="products-grid"></div>
+  <div id="products-grid"><div class="loading">Cargando obras...</div></div>
 </section>
 
 <section class="exposiciones" id="exposiciones">
@@ -404,55 +409,77 @@
 </div>
 
 <script>
-  const STORAGE_KEY = 'elberta_products';
-  const PASS_KEY = 'elberta_password';
-  
+  // ==================== FIREBASE CONFIGURACIÓN ====================
+  const firebaseConfig = {
+    apiKey: "AIzaSyA4q-NJusufkt1TztulJJI-GY9lhIqRjwM",
+    authDomain: "elbertashop.firebaseapp.com",
+    projectId: "elbertashop",
+    storageBucket: "elbertashop.firebasestorage.app",
+    messagingSenderId: "429103198839",
+    appId: "1:429103198839:web:e98dfde3ddd01e89814c72"
+  };
+
+  // Inicializar Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // ==================== CONFIGURACIÓN ====================
   emailjs.init('o8Lh4WH5Bbfj_Jpa_');
   const EMAIL_SERVICE_ID = 'service_elberta';
   const EMAIL_TEMPLATE_ID = 'template_3j1pwuj';
 
-  function getProducts() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch { return []; } }
-  function saveProducts(products) { localStorage.setItem(STORAGE_KEY, JSON.stringify(products)); }
-  function getPassword() { return localStorage.getItem(PASS_KEY) || 'elberta2024'; }
-  function savePassword(p) { localStorage.setItem(PASS_KEY, p); }
   function imgUrl(filename) { return 'imagenes/' + encodeURIComponent(filename); }
   function copyToClipboard(text) { navigator.clipboard.writeText(text).then(() => showToast('🔗 Enlace copiado')); }
 
-  function exportProducts() {
-    const products = getProducts();
-    const dataStr = JSON.stringify(products, null, 2);
-    const blob = new Blob([dataStr], {type: 'application/json'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'elberta_productos.json';
-    a.click();
-    URL.revokeObjectURL(url);
-    showToast('📦 Productos exportados');
-  }
+  // ==================== PRODUCTOS (Firebase) ====================
+  let products = [];
   
-  function importProducts(fileInput) {
-    const file = fileInput.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      try {
-        const products = JSON.parse(e.target.result);
-        if (Array.isArray(products)) {
-          saveProducts(products);
-          renderShop();
-          showToast('✅ Productos importados correctamente');
-          if (typeof renderAdminContent === 'function') renderAdminContent();
-        } else throw new Error();
-      } catch(err) {
-        showToast('❌ Archivo inválido');
+  async function loadProducts() {
+    const grid = document.getElementById('products-grid');
+    grid.innerHTML = '<div class="loading">Cargando obras...</div>';
+    try {
+      const snapshot = await db.collection('productos').orderBy('createdAt', 'desc').get();
+      products = [];
+      snapshot.forEach(doc => {
+        products.push({ id: doc.id, ...doc.data() });
+      });
+      renderShop();
+    } catch (error) {
+      console.error('Error cargando productos:', error);
+      grid.innerHTML = '<div class="loading" style="color:var(--coral);">❌ Error al cargar. Verifica Firebase</div>';
+    }
+  }
+
+  async function saveProductToFirebase(product, productId = null) {
+    try {
+      if (productId) {
+        await db.collection('productos').doc(productId).update(product);
+      } else {
+        await db.collection('productos').add({ ...product, createdAt: new Date() });
       }
-    };
-    reader.readAsText(file);
+      await loadProducts();
+      return true;
+    } catch (error) {
+      console.error('Error guardando:', error);
+      showToast('❌ Error al guardar en Firebase');
+      return false;
+    }
+  }
+
+  async function deleteProductFromFirebase(productId) {
+    try {
+      await db.collection('productos').doc(productId).delete();
+      await loadProducts();
+      showToast('🗑️ Obra eliminada');
+      return true;
+    } catch (error) {
+      console.error('Error eliminando:', error);
+      showToast('❌ Error al eliminar');
+      return false;
+    }
   }
 
   function renderShop() {
-    const products = getProducts();
     const grid = document.getElementById('products-grid');
     if (!products.length) {
       grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;text-align:center;padding:3rem;"><div class="empty-state-icon" style="font-size:3rem;">🎨</div><h3>Próximamente</h3><p>Entra al panel de <strong>Edición</strong> para añadir tus primeras obras.</p></div>';
@@ -483,7 +510,7 @@
               <button class="add-btn" onclick="addToCart(${i})" ${p.soldOut?'disabled':''}>${p.soldOut?'Vendido':'Comprar'}</button>
             </div>
             ${!p.soldOut ? `
-              <select class="shipping-select" id="shipping_${i}">
+              <select class="shipping-select" id="shipping_${p.id}">
                 <option value="canarias">🇮🇨 Canarias - ${shippingZones.canarias} €</option>
                 <option value="peninsula">🇪🇸 Península - ${shippingZones.peninsula} €</option>
                 <option value="europa">🇪🇺 Europa - ${shippingZones.europa} €</option>
@@ -497,6 +524,7 @@
     }).join('');
   }
 
+  // Exposiciones
   const exposicionesList = [
     { src: 'exposiciones/April 30, 2022.png', title: 'Exposición Abril 2022', year: '2022' },
     { src: 'exposiciones/Black White Minimalist 3D Art Expo Poster.png', title: 'Art Expo Minimalista 3D', year: '' },
@@ -532,19 +560,19 @@
     document.body.appendChild(modal);
   }
 
+  // Carrito
   let cart = JSON.parse(localStorage.getItem('cart') || '[]');
   function saveCart() { localStorage.setItem('cart', JSON.stringify(cart)); updateCartCount(); }
   function updateCartCount() { document.getElementById('cartCount').innerText = cart.reduce((s,i)=>s+i.quantity,0); }
   function addToCart(idx) {
-    const products = getProducts();
     const p = products[idx];
     if (p.soldOut) return;
-    const zone = document.getElementById(`shipping_${idx}`).value;
+    const zone = document.getElementById(`shipping_${p.id}`).value;
     const zones = p.shippingZones || { canarias:10, peninsula:15, europa:25, mundo:45 };
     const cost = zones[zone];
-    const existing = cart.find(i => i.id === idx && i.zone === zone);
+    const existing = cart.find(i => i.id === p.id && i.zone === zone);
     if (existing) existing.quantity++;
-    else cart.push({ id: idx, name: p.name, price: parseFloat(p.price), zone, shipping: cost, quantity: 1 });
+    else cart.push({ id: p.id, name: p.name, price: parseFloat(p.price), zone, shipping: cost, quantity: 1 });
     saveCart();
     renderCart();
     showToast(`✨ "${p.name}" añadida al carrito`);
@@ -574,44 +602,52 @@
   function openCart() { renderCart(); document.getElementById('cartModal').classList.add('open'); }
   function closeCart() { document.getElementById('cartModal').classList.remove('open'); }
 
-  function sendEmail() {
+  // Email
+  async function sendEmail() {
     const name = document.getElementById('contactName')?.value;
     const email = document.getElementById('contactEmail')?.value;
     const phone = document.getElementById('contactPhone')?.value;
     const subject = document.getElementById('contactSubject')?.value;
     const message = document.getElementById('contactMessage')?.value;
     if (!name || !email || !message) { showToast('⚠️ Por favor, completa los campos obligatorios'); return; }
-    emailjs.send(EMAIL_SERVICE_ID, EMAIL_TEMPLATE_ID, { from_name: name, from_email: email, phone: phone || '', subject: subject || 'Consulta', message: message })
-      .then(() => { showToast('📧 ¡Mensaje enviado! Te responderé pronto'); document.getElementById('contactName').value = ''; document.getElementById('contactEmail').value = ''; document.getElementById('contactPhone').value = ''; document.getElementById('contactSubject').value = ''; document.getElementById('contactMessage').value = ''; })
-      .catch(() => showToast('❌ Error al enviar. Intenta de nuevo'));
+    try {
+      await emailjs.send(EMAIL_SERVICE_ID, EMAIL_TEMPLATE_ID, { from_name: name, from_email: email, phone: phone || '', subject: subject || 'Consulta', message: message });
+      showToast('📧 ¡Mensaje enviado! Te responderé pronto');
+      document.getElementById('contactName').value = '';
+      document.getElementById('contactEmail').value = '';
+      document.getElementById('contactPhone').value = '';
+      document.getElementById('contactSubject').value = '';
+      document.getElementById('contactMessage').value = '';
+    } catch(err) {
+      showToast('❌ Error al enviar. Intenta de nuevo');
+    }
   }
 
   function showToast(msg) { const t = document.getElementById('toast'); document.getElementById('toastMsg').innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); }
 
+  // ADMIN
   let adminLoggedIn = false, editingIndex = -1, activeTab = 'productos';
+  
   function openAdmin() { document.getElementById('adminOverlay').classList.add('open'); if (!adminLoggedIn) renderLogin(); else renderAdminContent(); }
   function closeAdmin() { document.getElementById('adminOverlay').classList.remove('open'); }
   function renderLogin() { document.getElementById('adminBody').innerHTML = `<div style="text-align:center;padding:1rem;"><p>Contraseña para editar</p><input type="password" id="loginPass" style="width:100%;padding:0.75rem;margin:1rem 0;border:1px solid var(--light-border);border-radius:0.3rem;"><button class="btn-main" onclick="doLogin()">Entrar</button></div>`; }
-  function doLogin() { if (document.getElementById('loginPass').value === getPassword()) { adminLoggedIn = true; renderAdminContent(); } else showToast('Contraseña incorrecta'); }
+  function doLogin() { if (document.getElementById('loginPass').value === 'elberta2024') { adminLoggedIn = true; renderAdminContent(); } else showToast('Contraseña incorrecta'); }
   function renderAdminContent() { document.getElementById('adminBody').innerHTML = `<div class="admin-tabs"><button class="admin-tab ${activeTab==='productos'?'active':''}" onclick="switchTab('productos')">Mis Obras</button><button class="admin-tab ${activeTab==='agregar'?'active':''}" onclick="switchTab('agregar')">Añadir Obra</button><button class="admin-tab ${activeTab==='ajustes'?'active':''}" onclick="switchTab('ajustes')">Ajustes</button></div><div id="tabContent"></div>`; renderTab(); }
   function switchTab(tab) { activeTab = tab; editingIndex = -1; renderAdminContent(); }
-  function renderTab() { const el = document.getElementById('tabContent'); if (activeTab === 'productos') renderProductList(el); else if (activeTab === 'agregar') renderProductForm(el, -1); else if (activeTab === 'ajustes') renderSettings(el); }
+  function renderTab() { const el = document.getElementById('tabContent'); if (activeTab === 'productos') renderProductList(el); else if (activeTab === 'agregar') renderProductForm(el, null); else if (activeTab === 'ajustes') renderSettings(el); }
   function renderProductList(el) {
-    const products = getProducts();
-    if (editingIndex >= 0) { renderProductForm(el, editingIndex); return; }
+    if (editingIndex !== -1) { renderProductForm(el, products[editingIndex]); return; }
     if (!products.length) { el.innerHTML = '<p style="text-align:center;padding:2rem;">No hay obras. Ve a "Añadir Obra"</p>'; return; }
-    el.innerHTML = `<div class="export-import"><button class="btn-ghost" style="padding:0.4rem 1rem;" onclick="exportProducts()">📤 Exportar productos</button><input type="file" id="importFile" accept=".json" style="display:none;"><button class="btn-ghost" style="padding:0.4rem 1rem;" onclick="document.getElementById('importFile').click()">📥 Importar productos</button></div><div class="admin-product-list">${products.map((p,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:0.8rem;border:1px solid var(--light-border);border-radius:0.5rem;margin-bottom:0.5rem;"><div><strong>${p.name}</strong><br><span style="font-size:0.75rem;color:var(--mist);">${p.price || 'Sin precio'} €</span></div><div><button class="admin-tab" onclick="startEdit(${i})">Editar</button><button class="admin-tab" style="background:#fee;color:#c0392b;" onclick="deleteProduct(${i})">Eliminar</button></div></div>`).join('')}</div>`;
-    document.getElementById('importFile').onchange = (e) => importProducts(e.target);
+    el.innerHTML = `<div class="admin-product-list">${products.map((p,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:0.8rem;border:1px solid var(--light-border);border-radius:0.5rem;margin-bottom:0.5rem;"><div><strong>${p.name}</strong><br><span style="font-size:0.75rem;color:var(--mist);">${p.price || 'Sin precio'} €</span></div><div><button class="admin-tab" onclick="startEdit('${p.id}', ${i})">Editar</button><button class="admin-tab" style="background:#fee;color:#c0392b;" onclick="deleteProduct('${p.id}')">Eliminar</button></div></div>`).join('')}</div>`;
   }
-  function startEdit(i) { editingIndex = i; renderAdminContent(); }
-  function deleteProduct(i) { if (confirm('¿Eliminar esta obra?')) { const p = getProducts(); p.splice(i,1); saveProducts(p); renderShop(); renderAdminContent(); showToast('Obra eliminada'); } }
-  function renderProductForm(el, index) {
-    const products = getProducts();
-    const p = index >=0 ? products[index] : {};
+  function startEdit(id, idx) { editingIndex = idx; renderAdminContent(); }
+  async function deleteProduct(id) { if (confirm('¿Eliminar esta obra?')) { await deleteProductFromFirebase(id); renderAdminContent(); } }
+  function renderProductForm(el, product) {
+    const p = product || {};
     const zones = p.shippingZones || { canarias:10, peninsula:15, europa:25, mundo:45 };
-    el.innerHTML = `<div class="product-form"><h3>${index>=0?'Editar obra':'Nueva obra'}</h3><div class="form-group"><input type="text" id="pName" placeholder="Nombre de la obra *" value="${p.name||''}"></div><div class="form-row"><div class="form-group"><input type="text" id="pTechnique" placeholder="Técnica" value="${p.technique||''}"></div><div class="form-group"><input type="text" id="pMaterial" placeholder="Material" value="${p.material||''}"></div></div><div class="form-row"><div class="form-group"><input type="number" id="pWidth" placeholder="Ancho cm" value="${p.width||''}"></div><div class="form-group"><input type="number" id="pHeight" placeholder="Alto cm" value="${p.height||''}"></div></div><div class="form-row"><div class="form-group"><input type="number" id="pPrice" placeholder="Precio €" value="${p.price||''}"></div><div class="form-group"><select id="pSold"><option value="0" ${!p.soldOut?'selected':''}>Disponible</option><option value="1" ${p.soldOut?'selected':''}>Vendido</option></select></div></div><div class="form-group"><input type="text" id="pImages" placeholder="Nombres de fotos (separados por comas)" value="${(p.images||[]).join(', ')}"></div><div class="form-group"><input type="checkbox" id="pNew" ${p.isNew?'checked':''}> <label>Marcar como Nuevo</label></div><h4>Costes de envío por zona</h4><div class="form-row-3"><div class="form-group"><label>🇮🇨 Canarias</label><input type="number" id="shipCanarias" value="${zones.canarias}"></div><div class="form-group"><label>🇪🇸 Península</label><input type="number" id="shipPeninsula" value="${zones.peninsula}"></div><div class="form-group"><label>🇪🇺 Europa</label><input type="number" id="shipEuropa" value="${zones.europa}"></div><div class="form-group"><label>🌍 Resto mundo</label><input type="number" id="shipMundo" value="${zones.mundo}"></div></div><div style="display:flex;gap:1rem;margin-top:1rem;"><button class="btn-save" onclick="saveProduct(${index})">${index>=0?'Guardar cambios':'Añadir obra'}</button><button class="btn-ghost" onclick="switchTab('productos')">Cancelar</button></div></div>`;
+    el.innerHTML = `<div class="product-form"><h3>${product ? 'Editar obra' : 'Nueva obra'}</h3><div class="form-group"><input type="text" id="pName" placeholder="Nombre de la obra *" value="${p.name||''}"></div><div class="form-row"><div class="form-group"><input type="text" id="pTechnique" placeholder="Técnica" value="${p.technique||''}"></div><div class="form-group"><input type="text" id="pMaterial" placeholder="Material" value="${p.material||''}"></div></div><div class="form-row"><div class="form-group"><input type="number" id="pWidth" placeholder="Ancho cm" value="${p.width||''}"></div><div class="form-group"><input type="number" id="pHeight" placeholder="Alto cm" value="${p.height||''}"></div></div><div class="form-row"><div class="form-group"><input type="number" id="pPrice" placeholder="Precio €" value="${p.price||''}"></div><div class="form-group"><select id="pSold"><option value="0" ${!p.soldOut?'selected':''}>Disponible</option><option value="1" ${p.soldOut?'selected':''}>Vendido</option></select></div></div><div class="form-group"><input type="text" id="pImages" placeholder="Nombres de fotos (separados por comas)" value="${(p.images||[]).join(', ')}"></div><div class="form-group"><input type="checkbox" id="pNew" ${p.isNew?'checked':''}> <label>Marcar como Nuevo</label></div><h4>Costes de envío por zona</h4><div class="form-row-3"><div class="form-group"><label>🇮🇨 Canarias</label><input type="number" id="shipCanarias" value="${zones.canarias}"></div><div class="form-group"><label>🇪🇸 Península</label><input type="number" id="shipPeninsula" value="${zones.peninsula}"></div><div class="form-group"><label>🇪🇺 Europa</label><input type="number" id="shipEuropa" value="${zones.europa}"></div><div class="form-group"><label>🌍 Resto mundo</label><input type="number" id="shipMundo" value="${zones.mundo}"></div></div><div style="display:flex;gap:1rem;margin-top:1rem;"><button class="btn-save" onclick="saveProductAdmin('${product ? p.id : ''}')">${product ? 'Guardar cambios' : 'Añadir obra'}</button><button class="btn-ghost" onclick="switchTab('productos')">Cancelar</button></div></div>`;
   }
-  function saveProduct(index) {
+  async function saveProductAdmin(productId) {
     const name = document.getElementById('pName').value.trim();
     if (!name) { showToast('El nombre es obligatorio'); return; }
     const product = {
@@ -621,22 +657,19 @@
       isNew: document.getElementById('pNew').checked, images: document.getElementById('pImages').value.split(',').map(s=>s.trim()).filter(Boolean),
       shippingZones: { canarias: parseFloat(document.getElementById('shipCanarias').value)||10, peninsula: parseFloat(document.getElementById('shipPeninsula').value)||15, europa: parseFloat(document.getElementById('shipEuropa').value)||25, mundo: parseFloat(document.getElementById('shipMundo').value)||45 }
     };
-    const products = getProducts();
-    if (index >= 0) products[index] = product;
-    else products.push(product);
-    saveProducts(products);
-    renderShop();
-    showToast(index>=0?'Obra actualizada':'Obra añadida');
+    await saveProductToFirebase(product, productId || null);
+    showToast(productId ? 'Obra actualizada' : 'Obra añadida');
     switchTab('productos');
   }
   function renderSettings(el) {
     el.innerHTML = `<div class="settings-section"><h3>Cambiar contraseña</h3><div class="form-group"><input type="password" id="newPass1" placeholder="Nueva contraseña"></div><div class="form-group"><input type="password" id="newPass2" placeholder="Repetir contraseña"></div><button class="btn-save" onclick="changePassword()">Guardar</button></div><div style="margin-top:2rem;"><button class="btn-ghost" onclick="logout()">Cerrar sesión</button></div>`;
   }
-  function changePassword() { const p1=document.getElementById('newPass1').value; const p2=document.getElementById('newPass2').value; if(!p1||p1!==p2){showToast('Las contraseñas no coinciden');return;} if(p1.length<4){showToast('Mínimo 4 caracteres');return;} savePassword(p1); showToast('Contraseña actualizada'); }
+  function changePassword() { showToast('La contraseña de Firebase se gestiona desde la consola de Google'); }
   function logout() { adminLoggedIn=false; closeAdmin(); }
 
+  // Inicializar
   renderExposiciones();
-  renderShop();
+  loadProducts();
   updateCartCount();
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeCart(); closeAdmin(); } });
 </script>

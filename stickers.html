@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stickers — Elberta Wood & Pencil</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #f0ebe0;
+    font-family: 'Jost', sans-serif;
+    padding: 3rem 2rem;
+    min-height: 100vh;
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #1E1810;
+    margin-bottom: 0.3rem;
+  }
+  h1 em { font-style: italic; color: #D4603A; }
+  .subtitle {
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #8B7D6B;
+    margin-bottom: 3rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem 4rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .sticker-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .sticker-name {
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #8B7D6B;
+    text-align: center;
+  }
+  .print-note {
+    margin-top: 3rem;
+    text-align: center;
+    font-size: 0.78rem;
+    color: #8B7D6B;
+    letter-spacing: 0.05em;
+  }
+  @media print {
+    body { background: white; padding: 1cm; }
+    .print-note { display: none; }
+    .grid { gap: 1cm; }
+  }
+</style>
+</head>
+<body>
+
+<div style="text-align:center;margin-bottom:3rem">
+  <h1>Stickers <em>Elberta</em></h1>
+  <p class="subtitle">Wood & Pencil · Fuerteventura · 6×6 cm</p>
+</div>
+
+<div class="grid">
+
+  <!-- STICKER 1: Círculo negro -->
+  <div class="sticker-wrap">
+    <svg width="227" height="227" viewBox="0 0 227 227" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <clipPath id="clip1"><circle cx="113.5" cy="113.5" r="110"/></clipPath>
+      </defs>
+      <circle cx="113.5" cy="113.5" r="113.5" fill="#1E1810"/>
+      <circle cx="113.5" cy="113.5" r="108" fill="none" stroke="#D4603A" stroke-width="1.5"/>
+      <circle cx="113.5" cy="113.5" r="102" fill="none" stroke="#D4603A" stroke-width="0.5" stroke-dasharray="3,5"/>
+      <!-- Logo -->
+      <image href="https://raw.githubusercontent.com/unlugar/unlugar.github.io/main/imagenes/logotipo.jpg"
+        x="22" y="18" width="183" height="100"
+        preserveAspectRatio="xMidYMid meet"
+        clip-path="url(#clip1)" opacity="0.9"/>
+      <!-- QR -->
+      <image href="https://raw.githubusercontent.com/unlugar/unlugar.github.io/main/imagenes/qr.png"
+        x="79" y="120" width="70" height="70"
+        preserveAspectRatio="xMidYMid meet"/>
+      <!-- texto inferior -->
+      <text x="113.5" y="205" text-anchor="middle"
+        font-family="'Jost',sans-serif" font-size="8.5"
+        fill="#C8942A" letter-spacing="3">FUERTEVENTURA · ARTE</text>
+    </svg>
+    <div class="sticker-name">① Círculo negro</div>
+  </div>
+
+  <!-- STICKER 2: Blanco clásico -->
+  <div class="sticker-wrap">
+    <svg width="227" height="227" viewBox="0 0 227 227" xmlns="http://www.w3.org/2000/svg">
+      <rect width="227" height="227" rx="18" fill="#FFF8F0"/>
+      <rect x="3" y="3" width="221" height="221" rx="15" fill="none" stroke="#D4603A" stroke-width="3"/>
+      <rect x="9" y="9" width="209" height="209" rx="11" fill="none" stroke="#1E1810" stroke-width="0.5"/>
+      <!-- Logo -->
+      <image href="https://raw.githubusercontent.com/unlugar/unlugar.github.io/main/imagenes/logotipo.jpg"
+        x="14" y="14" width="199" height="108"
+        preserveAspectRatio="xMidYMid meet"/>
+      <!-- divisor -->
+      <line x1="18" y1="128" x2="209" y2="128" stroke="#D4603A" stroke-width="0.8"/>
+      <!-- QR -->
+      <image href="https://raw.githubusercontent.com/unlugar/unlugar.github.io/main/imagenes/qr.png"
+        x="148" y="133" width="66" height="66"
+        preserveAspectRatio="xMidYMid meet"/>
+      <!-- textos -->
+      <text x="18" y="147" font-family="'Jost',sans-serif" font-size="7" fill="#8B7D6B" letter-spacing="2.5">ARTE ORIGINAL</text>
+      <text x="18" y="163" font-family="'Cormorant Garamond',serif" font-size="14" fill="#1E1810" font-style="italic">Puerto del Rosario</text>
+      <text x="18" y="178" font-family="'Jost',sans-serif" font-size="7" fill="#8B7D6B" letter-spacing="1">Fuerteventura · España</text>
+      <text x="18" y="196" font-family="'Jost',sans-serif" font-size="7.5" fill="#D4603A" letter-spacing="1">@elberta.woodandpencil</text>
+      <text x="18" y="210" font-family="'Jost',sans-serif" font-size="7" fill="#8B7D6B" letter-spacing="0.5">unlugar.github.io</text>
+    </svg>
+    <div class="sticker-name">② Tarjeta blanca</div>
+  </div>
+
+  <!-- STICKER 3: Verde bosque -->
+  <div class="sticker-wrap">
+    <svg width="227" height="227" viewBox="0 0 227 227" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <clipPath id="clip3"><circle cx="113.5" cy="113.5" r="110"/></clipPath>
+      </defs>
+      <circle cx="113.5" cy="113.5" r="113.5" fill="#3D5A3E"/>
+      <circle cx="113.5" cy="113.5" r="107" fill="none" stroke="#C8942A" stroke-width="1.5"/>
+      <!-- Logo -->
+      <image href="https://raw.githubusercontent.com/unlugar/unlugar.github.io/main/imagenes/logotipo.jpg"
+        x="22" y="15" width="183" height="100"
+        preserveAspectRatio="xMidYMid meet"
+        clip-path="url(#clip3)" opacity="0.88"/>
+      <!-- línea dorada -->
+      <line x1="40" y1="120" x2="187" y2="120" stroke="#C8942A" stroke-width="0.8"/>
+      <!-- QR -->
+      <image href="https://raw.githubusercontent.com/unlugar/unlugar.github.io/main/imagenes/qr.png"
+        x="78" y="126" width="72" height="72"
+        preserveAspectRatio="xMidYMid meet" opacity="0.95"/>
+      <!-- texto -->
+      <text x="113.5" y="210" text-anchor="middle"
+        font-family="'Jost',sans-serif" font-size="8"
+        fill="#C8942A" letter-spacing="3">WOOD · AND · PENCIL</text>
+    </svg>
+    <div class="sticker-name">③ Verde bosque</div>
+  </div>
+
+  <!-- STICKER 4: Horizontal oscuro -->
+  <div class="sticker-wrap">
+    <svg width="227" height="227" viewBox="0 0 227 227" xmlns="http://www.w3.org/2000/svg">
+      <rect width="227" height="227" rx="22" fill="#F5EFE0"/>
+      <!-- banda coral superior -->
+      <rect x="0" y="0" width="227" height="10" rx="5" fill="#D4603A"/>
+      <!-- banda inferior oscura -->
+      <rect x="0" y="130" width="227" height="97" rx="0" fill="#1E1810"/>
+      <rect x="0" y="217" width="227" height="10" rx="5" fill="#D4603A"/>
+      <!-- esquinas bottom rounded -->
+      <rect x="0" y="205" width="22" height="22" fill="#1E1810"/>
+      <rect x="205" y="205" width="22" height="22" fill="#1E1810"/>
+      <circle cx="22" cy="227" r="22" fill="#F5EFE0"/>
+      <circle cx="205" cy="227" r="22" fill="#F5EFE0"/>
+      <!-- Logo -->
+      <image href="https://raw.githubusercontent.com/unlugar/unlugar.github.io/main/imagenes/logotipo.jpg"
+        x="10" y="12" width="207" height="114"
+        preserveAspectRatio="xMidYMid meet"/>
+      <!-- QR -->
+      <image href="https://raw.githubusercontent.com/unlugar/unlugar.github.io/main/imagenes/qr.png"
+        x="148" y="135" width="68" height="68"
+        preserveAspectRatio="xMidYMid meet"/>
+      <!-- textos zona oscura -->
+      <text x="16" y="152" font-family="'Cormorant Garamond',serif" font-size="12" fill="#C8942A" font-style="italic" letter-spacing="0.5">Arte original</text>
+      <text x="16" y="168" font-family="'Jost',sans-serif" font-size="6.5" fill="rgba(255,255,255,0.45)" letter-spacing="2.5">FUERTEVENTURA</text>
+      <text x="16" y="185" font-family="'Jost',sans-serif" font-size="8" fill="white" letter-spacing="0.8">unlugar.github.io</text>
+      <text x="16" y="200" font-family="'Jost',sans-serif" font-size="7.5" fill="#D4603A" letter-spacing="0.5">@elberta.woodandpencil</text>
+    </svg>
+    <div class="sticker-name">④ Marco coral</div>
+  </div>
+
+</div>
+
+<p class="print-note">
+  Imprime a 6×6 cm · 300 dpi recomendado · Ctrl+P para imprimir
+</p>
+
+</body>
+</html>

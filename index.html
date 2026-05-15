@@ -511,11 +511,10 @@
     let html = '';
 
     // LIENZOS
- html += `<div>
+html += `<div>
   <div class="category-header">
-    <div class="category-title">Sobre <em>Lienzo</em></div>
-    <img class="category-logo" src="imagenes/logolienzomadera1.png" alt="Lienzos" onerror="this.style.display='none'" style="margin-left:auto; width:60px; height:60px;">
-    <span class="category-count">${lienzos.length} obra${lienzos.length!==1?'s':''}</span>
+    <div class="category-title">Sobre <em>Lienzo</em> <img class="category-logo" src="imagenes/logolienzomadera1.png" alt="Lienzos" onerror="this.style.display='none'" style="width:60px; height:60px; margin-left:0.5rem; vertical-align:middle;"></div>
+    <span class="category-count" style="margin-left:auto;">${lienzos.length} obra${lienzos.length!==1?'s':''}</span>
   </div>
       <div class="category-grid">
         ${lienzos.length ? lienzos.map(p => productCardHtml(p, products.indexOf(p))).join('') : '<div class="category-empty">Aún no hay obras en esta categoría — edítalas desde el panel para asignarlas</div>'}
@@ -523,11 +522,10 @@
     </div>`;
 
     // MADERAS
- html += `<div>
+html += `<div>
   <div class="category-header">
-    <div class="category-title">Sobre <em>Madera</em></div>
-    <img class="category-logo" src="imagenes/logolienzomadera2.png" alt="Maderas" onerror="this.style.display='none'" style="margin-left:auto; width:80px; height:80px;">
-    <span class="category-count">${maderas.length} obra${maderas.length!==1?'s':''}</span>
+    <div class="category-title">Sobre <em>Madera</em> <img class="category-logo" src="imagenes/logolienzomadera2.png" alt="Maderas" onerror="this.style.display='none'" style="width:60px; height:60px; margin-left:0.5rem; vertical-align:middle;"></div>
+    <span class="category-count" style="margin-left:auto;">${maderas.length} obra${maderas.length!==1?'s':''}</span>
   </div>
       <div class="category-grid">
         ${maderas.length ? maderas.map(p => productCardHtml(p, products.indexOf(p))).join('') : '<div class="category-empty">Aún no hay obras en esta categoría — edítalas desde el panel para asignarlas</div>'}

@@ -5,116 +5,50 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>Elberta Wood & Pencil Shop</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-  <!-- EmailJS -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <!-- PayPal SDK -->
   <script src="https://www.paypal.com/sdk/js?client-id=test&currency=EUR"></script>
-  <!-- Pinch Zoom (hammer.js para zoom táctil) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
   <style>
     :root {
-      --sand: #F5EFE0;
-      --warm: #FFF8F0;
-      --coral: #D4603A;
-      --gold: #C8942A;
-      --forest: #3D5A3E;
-      --ink: #1E1810;
-      --mist: #8B7D6B;
+      --sand: #F5EFE0; --warm: #FFF8F0; --coral: #D4603A; --gold: #C8942A;
+      --forest: #3D5A3E; --ink: #1E1810; --mist: #8B7D6B;
       --light-border: rgba(100,80,50,0.12);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body { font-family: 'Jost', sans-serif; background: var(--warm); color: var(--ink); overflow-x: hidden; }
 
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1rem 3rem;
-      background: rgba(255,248,240,0.92);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--light-border);
-    }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 1rem 3rem; background: rgba(255,248,240,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--light-border); }
     .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; color: var(--ink); letter-spacing: 0.04em; }
     .nav-logo span { color: var(--coral); font-style: italic; }
     nav ul { display: flex; gap: 2rem; list-style: none; align-items: center; }
     nav a { text-decoration: none; color: var(--ink); font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; transition: color 0.2s; }
     nav a:hover { color: var(--coral); }
-    .nav-cart-btn, .nav-admin-btn {
-      background: none; border: 1.5px solid var(--coral);
-      padding: 0.4rem 1rem; border-radius: 2rem;
-      font-size: 0.75rem; cursor: pointer; font-family: 'Jost', sans-serif;
-      transition: all 0.2s; position: relative;
-    }
+    .nav-cart-btn, .nav-admin-btn { background: none; border: 1.5px solid var(--coral); padding: 0.4rem 1rem; border-radius: 2rem; font-size: 0.75rem; cursor: pointer; font-family: 'Jost', sans-serif; transition: all 0.2s; position: relative; }
     .nav-admin-btn { border-color: var(--mist); color: var(--mist); }
     .nav-admin-btn:hover { border-color: var(--coral); color: var(--coral); }
     .nav-cart-btn:hover { background: var(--coral); color: white; }
-    .cart-count {
-      position: absolute; top: -8px; right: -8px;
-      background: var(--coral); color: white; border-radius: 50%;
-      width: 18px; height: 18px; font-size: 0.7rem;
-      display: flex; align-items: center; justify-content: center;
-    }
+    .cart-count { position: absolute; top: -8px; right: -8px; background: var(--coral); color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; }
 
-    .hero {
-      min-height: 100vh;
-      display: flex; align-items: center;
-      padding: 8rem 3rem 5rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-bg {
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, #F5EFE0 0%, #FFF8F0 40%, #EEF5EE 100%);
-      z-index: 0;
-    }
-    .hero-decor {
-      position: absolute; right: 0; top: 0; bottom: 0;
-      width: 45%;
-      background: linear-gradient(160deg, var(--forest) 0%, #2A3D2B 50%, #1A2A1B 100%);
-      clip-path: polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%);
-      z-index: 0;
-    }
-    .hero-decor-img {
-      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-      opacity: 0.28; mix-blend-mode: luminosity;
-    }
-    .hero-decor-fade {
-      position: absolute; inset: 0; z-index: 1;
-      background: linear-gradient(to right, rgba(42,61,43,0.85) 0%, rgba(26,42,27,0.3) 60%, transparent 100%),
-                  linear-gradient(to top, rgba(26,42,27,0.7) 0%, transparent 40%);
-    }
+    .hero { min-height: 100vh; display: flex; align-items: center; padding: 8rem 3rem 5rem; position: relative; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #F5EFE0 0%, #FFF8F0 40%, #EEF5EE 100%); z-index: 0; }
+    .hero-decor { position: absolute; right: 0; top: 0; bottom: 0; width: 45%; background: linear-gradient(160deg, var(--forest) 0%, #2A3D2B 50%, #1A2A1B 100%); clip-path: polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%); z-index: 0; }
+    .hero-decor-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.28; mix-blend-mode: luminosity; }
+    .hero-decor-fade { position: absolute; inset: 0; z-index: 1; background: linear-gradient(to right, rgba(42,61,43,0.85) 0%, rgba(26,42,27,0.3) 60%, transparent 100%), linear-gradient(to top, rgba(26,42,27,0.7) 0%, transparent 40%); }
     .hero-content { position: relative; z-index: 1; max-width: 560px; }
-    .hero-eyebrow {
-      font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase;
-      color: var(--forest); font-weight: 600; margin-bottom: 1.5rem;
-      display: flex; align-items: center; gap: 0.8rem;
-    }
+    .hero-eyebrow { font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--forest); font-weight: 600; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem; }
     .hero-eyebrow::before { content: ''; display: block; width: 30px; height: 1.5px; background: var(--forest); }
     .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(3rem, 6vw, 6rem); line-height: 1.0; font-weight: 600; color: var(--ink); margin-bottom: 1.5rem; }
     .hero h1 em { font-style: italic; color: var(--coral); }
     .hero-sub { font-size: 1rem; color: var(--mist); line-height: 1.8; font-weight: 300; max-width: 400px; margin-bottom: 3rem; }
     .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
-    .btn-main {
-      background: var(--coral); color: white; padding: 0.9rem 2.2rem; border-radius: 0.3rem;
-      border: none; font-family: 'Jost', sans-serif; font-size: 0.85rem; font-weight: 500;
-      letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: all 0.3s;
-      text-decoration: none; display: inline-block;
-    }
+    .btn-main { background: var(--coral); color: white; padding: 0.9rem 2.2rem; border-radius: 0.3rem; border: none; font-family: 'Jost', sans-serif; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block; }
     .btn-main:hover { background: var(--ink); transform: translateY(-2px); }
-    .btn-ghost {
-      background: transparent; color: var(--ink); padding: 0.9rem 2.2rem; border-radius: 0.3rem;
-      border: 1.5px solid var(--ink); font-family: 'Jost', sans-serif; font-size: 0.85rem;
-      font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;
-      transition: all 0.3s; text-decoration: none; display: inline-block;
-    }
+    .btn-ghost { background: transparent; color: var(--ink); padding: 0.9rem 2.2rem; border-radius: 0.3rem; border: 1.5px solid var(--ink); font-family: 'Jost', sans-serif; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block; }
     .btn-ghost:hover { background: var(--ink); color: var(--warm); }
-    .hero-float {
-      position: absolute; right: 5%; top: 50%; transform: translateY(-50%);
-      z-index: 2; text-align: center; color: white;
-    }
+    .hero-float { position: absolute; right: 5%; top: 50%; transform: translateY(-50%); z-index: 2; text-align: center; color: white; }
     .hero-float-num { font-family: 'Cormorant Garamond', serif; font-size: 5rem; font-weight: 600; line-height: 1; color: rgba(255,255,255,0.15); }
     .hero-float-label { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.5; }
 
@@ -125,32 +59,28 @@
     @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
     .shop { padding: 6rem 3rem; position: relative; background: none; }
-    .shop::before {
-      content: ''; position: absolute; inset: 0;
-      background: url("imagenes/fondo.jpg") center center / cover no-repeat;
-      opacity: 0.30; z-index: 0;
-    }
-    .shop::after { content: ''; position: absolute; inset: 0; background: rgba(255, 248, 240, 0.55); z-index: 0; }
+    .shop::before { content: ''; position: absolute; inset: 0; background: url("imagenes/fondo.jpg") center center / cover no-repeat; opacity: 0.30; z-index: 0; }
+    .shop::after { content: ''; position: absolute; inset: 0; background: rgba(255,248,240,0.55); z-index: 0; }
     .shop > * { position: relative; z-index: 1; }
     .shop-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 3rem; }
     .section-label { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--coral); font-weight: 600; margin-bottom: 0.8rem; }
     .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 3vw, 3rem); line-height: 1.1; }
     .section-title em { font-style: italic; color: var(--coral); }
 
-    #products-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem;
-    }
-    .product-card {
-      background: white; border-radius: 0.5rem; overflow: hidden;
-      border: 1px solid var(--light-border);
-      transition: all 0.4s cubic-bezier(0.23,1,0.32,1);
-    }
+    #products-grid { display: flex; flex-direction: column; gap: 3.5rem; }
+
+    /* ===== CATEGORIAS ===== */
+    .category-header { display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--light-border); }
+    .category-logo { width: 50px; height: 50px; object-fit: contain; }
+    .category-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.5rem, 2.5vw, 2rem); font-weight: 600; color: var(--ink); }
+    .category-title em { font-style: italic; color: var(--coral); }
+    .category-count { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mist); margin-left: auto; }
+    .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
+    .category-empty { grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--mist); font-size: 0.9rem; font-style: italic; }
+
+    .product-card { background: white; border-radius: 0.5rem; overflow: hidden; border: 1px solid var(--light-border); transition: all 0.4s cubic-bezier(0.23,1,0.32,1); }
     .product-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
-    .product-img {
-      height: 280px; position: relative; overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-    }
+    .product-img { height: 280px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; }
     .product-img-bg { width: 100%; height: 100%; transition: transform 0.5s ease; object-fit: cover; }
     .product-card:hover .product-img-bg { transform: scale(1.04); }
     .product-badge-wrap { position: absolute; top: 1rem; left: 1rem; display: flex; gap: 0.4rem; flex-wrap: wrap; }
@@ -164,142 +94,32 @@
     .product-dims { font-size: 0.78rem; color: var(--mist); margin-bottom: 1rem; }
     .product-footer { margin-top: 1rem; display: flex; align-items: center; justify-content: space-between; }
     .product-price { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; color: var(--coral); }
-    .shipping-select {
-      width: 100%; padding: 0.4rem; margin: 0.5rem 0; border-radius: 0.3rem;
-      border: 1px solid var(--light-border); font-family: 'Jost', sans-serif;
-    }
-    .add-btn {
-      background: var(--ink); color: white; border: none;
-      padding: 0.5rem 1rem; border-radius: 0.25rem;
-      font-family: 'Jost', sans-serif; font-size: 0.75rem;
-      font-weight: 500; cursor: pointer; transition: all 0.2s;
-    }
+    .shipping-select { width: 100%; padding: 0.4rem; margin: 0.5rem 0; border-radius: 0.3rem; border: 1px solid var(--light-border); font-family: 'Jost', sans-serif; }
+    .add-btn { background: var(--ink); color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; font-family: 'Jost', sans-serif; font-size: 0.75rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
     .add-btn:hover { background: var(--coral); }
     .add-btn:disabled { background: #ccc; cursor: not-allowed; }
-    .copy-link-btn {
-      width: 100%; padding: 0.4rem; margin-top: 0.5rem;
-      background: var(--sand); border: 1px solid var(--light-border);
-      border-radius: 0.3rem; font-size: 0.7rem; cursor: pointer;
-      font-family: 'Jost', sans-serif;
-    }
+    .copy-link-btn { width: 100%; padding: 0.4rem; margin-top: 0.5rem; background: var(--sand); border: 1px solid var(--light-border); border-radius: 0.3rem; font-size: 0.7rem; cursor: pointer; font-family: 'Jost', sans-serif; }
     .copy-link-btn:hover { background: var(--gold); color: white; }
 
-    /* Lightbox mejorado - Pantalla completa */
-    .lightbox {
-      display: none; position: fixed; inset: 0; z-index: 2000;
-      background: rgba(0,0,0,0.95);
-      align-items: center;
-      justify-content: center;
-    }
+    .lightbox { display: none; position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; }
     .lightbox.open { display: flex; flex-direction: column; }
-    .lightbox-inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    .lightbox-media-container {
-      width: 100%;
-      height: 85vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-    .lightbox-media {
-      max-width: 100%;
-      max-height: 85vh;
-      object-fit: contain;
-      transition: transform 0.1s ease;
-      cursor: zoom-in;
-    }
-    .lightbox-media.zoomed {
-      cursor: zoom-out;
-    }
-    .lightbox-controls {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      display: flex;
-      gap: 0.8rem;
-      z-index: 10;
-    }
-    .lightbox-controls button {
-      background: rgba(0,0,0,0.6);
-      border: none;
-      color: white;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 1.2rem;
-      transition: background 0.2s;
-    }
+    .lightbox-inner { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .lightbox-media-container { width: 100%; height: 85vh; display: flex; align-items: center; justify-content: center; overflow: auto; -webkit-overflow-scrolling: touch; }
+    .lightbox-media { max-width: 100%; max-height: 85vh; object-fit: contain; transition: transform 0.1s ease; cursor: zoom-in; }
+    .lightbox-controls { position: absolute; top: 1rem; right: 1rem; display: flex; gap: 0.8rem; z-index: 10; }
+    .lightbox-controls button { background: rgba(0,0,0,0.6); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; transition: background 0.2s; }
     .lightbox-controls button:hover { background: var(--coral); }
-    .lightbox-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0,0,0,0.5);
-      border: none;
-      color: white;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 1.5rem;
-      transition: background 0.2s;
-      z-index: 10;
-    }
+    .lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); border: none; color: white; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 1.5rem; transition: background 0.2s; z-index: 10; }
     .lightbox-nav:hover { background: var(--coral); }
-    .lightbox-prev { left: 1rem; }
-    .lightbox-next { right: 1rem; }
-    .lightbox-dots {
-      position: absolute;
-      bottom: 1rem;
-      left: 0;
-      right: 0;
-      display: flex;
-      gap: 0.5rem;
-      justify-content: center;
-      z-index: 10;
-    }
-    .lightbox-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.4);
-      cursor: pointer;
-      border: none;
-      padding: 0;
-    }
+    .lightbox-prev { left: 1rem; } .lightbox-next { right: 1rem; }
+    .lightbox-dots { position: absolute; bottom: 1rem; left: 0; right: 0; display: flex; gap: 0.5rem; justify-content: center; z-index: 10; }
+    .lightbox-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; border: none; padding: 0; }
     .lightbox-dot.active { background: var(--coral); }
-    .lightbox-caption {
-      position: absolute;
-      bottom: 3rem;
-      left: 0;
-      right: 0;
-      text-align: center;
-      color: rgba(255,255,255,0.8);
-      font-size: 0.85rem;
-      padding: 0.5rem;
-      background: rgba(0,0,0,0.5);
-    }
+    .lightbox-caption { position: absolute; bottom: 3rem; left: 0; right: 0; text-align: center; color: rgba(255,255,255,0.8); font-size: 0.85rem; padding: 0.5rem; background: rgba(0,0,0,0.5); }
 
-    .cart-modal {
-      display: none; position: fixed; inset: 0; z-index: 1000;
-      background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
-      align-items: center; justify-content: center;
-    }
+    .cart-modal { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); align-items: center; justify-content: center; }
     .cart-modal.open { display: flex; }
-    .cart-panel {
-      background: white; border-radius: 1rem; max-width: 500px; width: 90%;
-      max-height: 80vh; overflow-y: auto; padding: 2rem;
-    }
+    .cart-panel { background: white; border-radius: 1rem; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; padding: 2rem; }
     .cart-item { display: flex; justify-content: space-between; padding: 1rem 0; border-bottom: 1px solid var(--light-border); }
     .cart-total { margin-top: 1rem; text-align: right; font-size: 1.2rem; font-weight: bold; }
 
@@ -314,11 +134,7 @@
     .contact-inner { max-width: 900px; margin: 0 auto; }
     .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
     .form-group { margin-bottom: 1rem; }
-    .form-group input, .form-group textarea {
-      width: 100%; padding: 0.9rem 1.1rem;
-      border: 1.5px solid rgba(100,80,50,0.2); border-radius: 0.35rem;
-      font-family: 'Jost', sans-serif; background: white;
-    }
+    .form-group input, .form-group textarea { width: 100%; padding: 0.9rem 1.1rem; border: 1.5px solid rgba(100,80,50,0.2); border-radius: 0.35rem; font-family: 'Jost', sans-serif; background: white; }
     .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--coral); }
 
     .exposiciones { padding: 6rem 3rem; background: var(--sand); }
@@ -346,15 +162,24 @@
     .admin-overlay { display: none; position: fixed; inset: 0; z-index: 500; background: rgba(15,12,7,0.7); backdrop-filter: blur(4px); align-items: center; justify-content: center; }
     .admin-overlay.open { display: flex; }
     .admin-panel { background: white; border-radius: 1rem; width: 100%; max-width: 700px; max-height: 90vh; overflow-y: auto; }
-    .admin-header { padding: 1.5rem; border-bottom: 1px solid var(--light-border); display: flex; justify-content: space-between; }
+    .admin-header { padding: 1.5rem; border-bottom: 1px solid var(--light-border); display: flex; justify-content: space-between; align-items: center; }
     .admin-body { padding: 1.5rem; }
-    .admin-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
-    .admin-tab { padding: 0.5rem 1rem; background: var(--sand); border: none; cursor: pointer; border-radius: 0.3rem; }
+    .admin-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .admin-tab { padding: 0.5rem 1rem; background: var(--sand); border: none; cursor: pointer; border-radius: 0.3rem; font-family: 'Jost', sans-serif; font-size: 0.82rem; }
     .admin-tab.active { background: var(--coral); color: white; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
-    .btn-save { background: var(--coral); color: white; padding: 0.5rem 1.5rem; border: none; border-radius: 0.3rem; cursor: pointer; }
-    .loading { text-align: center; padding: 3rem; grid-column: 1/-1; }
+    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.8rem; }
+    .btn-save { background: var(--coral); color: white; padding: 0.6rem 1.5rem; border: none; border-radius: 0.3rem; cursor: pointer; font-family: 'Jost', sans-serif; font-size: 0.85rem; }
+    .btn-save:hover { background: var(--ink); }
+    .loading { text-align: center; padding: 3rem; }
+
+    /* Category selector in admin */
+    .cat-selector { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .cat-option { display: flex; align-items: center; gap: 0.6rem; cursor: pointer; font-size: 0.9rem; padding: 0.6rem 1.2rem; border: 1.5px solid var(--light-border); border-radius: 0.4rem; transition: all 0.2s; background: white; }
+    .cat-option:hover { border-color: var(--coral); }
+    .cat-option input[type="radio"] { accent-color: var(--coral); width: auto; }
+    .cat-option img { width: 28px; height: 28px; object-fit: contain; }
+    .cat-option.selected { border-color: var(--coral); background: rgba(212,96,58,0.06); }
 
     @media (max-width: 768px) {
       nav { padding: 0.9rem 1.2rem; }
@@ -367,9 +192,10 @@
       .contact { padding: 4rem 1.5rem; }
       .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
       .expo-grid { grid-template-columns: 1fr; }
+      .category-grid { grid-template-columns: 1fr; }
+      .form-row-3 { grid-template-columns: 1fr 1fr; }
       .lightbox-nav { width: 40px; height: 40px; font-size: 1rem; }
-      .lightbox-prev { left: 0.5rem; }
-      .lightbox-next { right: 0.5rem; }
+      .lightbox-prev { left: 0.5rem; } .lightbox-next { right: 0.5rem; }
       .lightbox-controls button { width: 35px; height: 35px; font-size: 1rem; }
     }
   </style>
@@ -418,6 +244,12 @@
     <span class="marquee-item">Fuerteventura <span class="marquee-sep">✦</span></span>
     <span class="marquee-item">Piezas Únicas <span class="marquee-sep">✦</span></span>
     <span class="marquee-item">Encargos Personalizados <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Arte Original <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Wood & Pencil <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Puerto del Rosario <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Fuerteventura <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Piezas Únicas <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Encargos Personalizados <span class="marquee-sep">✦</span></span>
   </div>
 </div>
 
@@ -446,32 +278,32 @@
   <div class="about-art">
     <div class="art-block"><img src="sobre-mi/WhatsApp%20Image%202026-04-23%20at%2009.48.17.jpeg" alt="Luis Berta"></div>
     <div class="art-block"><img src="sobre-mi/photo_5911203471791603367_y.jpg" alt="Luis Berta estudio"></div>
-    <div class="art-block" style="background: linear-gradient(135deg, #8B6914, var(--gold));"></div>
+    <div class="art-block" style="background:linear-gradient(135deg,#8B6914,var(--gold));"></div>
   </div>
   <div>
-    <p class="about-eyebrow">✦ El artista</p>
+    <p style="font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;">✦ El artista</p>
     <h2>Madera, lienzos,<br>lápices y mucho <em>color!</em></h2>
-    <p>Soy Luis Berta, bajo mi nombre artístico <em style="color:var(--gold)">Elberta.woodandpencil</em>, artista plástico con estudio en Puerto del Rosario, Fuerteventura. Trabajo principalmente con madera y lienzo, creando piezas que fusionan la textura natural con el color.</p>
-    <div class="about-details" style="display:flex;gap:2rem;margin-top:1rem;">
-      <div><div class="about-detail-num" style="font-size:2rem;color:var(--gold);">100%</div><div class="about-detail-label" style="font-size:0.7rem;">Original</div></div>
-      <div><div class="about-detail-num" style="font-size:2rem;color:var(--gold);">✦</div><div class="about-detail-label" style="font-size:0.7rem;">Hecho a mano</div></div>
-      <div><div class="about-detail-num" style="font-size:2rem;color:var(--gold);">🌊</div><div class="about-detail-label" style="font-size:0.7rem;">Fuerteventura</div></div>
+    <p style="margin-top:1rem;">Soy Luis Berta, bajo mi nombre artístico <em style="color:var(--gold)">Elberta.woodandpencil</em>, artista plástico con estudio en Puerto del Rosario, Fuerteventura. Trabajo principalmente con madera y lienzo, creando piezas que fusionan la textura natural con el color.</p>
+    <div style="display:flex;gap:2rem;margin-top:1.5rem;">
+      <div><div style="font-size:2rem;color:var(--gold);">100%</div><div style="font-size:0.7rem;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.1em;">Original</div></div>
+      <div><div style="font-size:2rem;color:var(--gold);">✦</div><div style="font-size:0.7rem;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.1em;">Hecho a mano</div></div>
+      <div><div style="font-size:2rem;color:var(--gold);">🌊</div><div style="font-size:0.7rem;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.1em;">Fuerteventura</div></div>
     </div>
-    <div class="signature" style="font-family:'Cormorant Garamond',serif; font-size:2rem; color:var(--gold); margin-top:2rem;">— Elberta</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--gold);margin-top:2rem;">— Elberta</div>
   </div>
 </section>
 
 <section class="contact" id="contacto">
   <div class="contact-inner">
-    <div class="contact-top" style="text-align:center;margin-bottom:2rem;">
+    <div style="text-align:center;margin-bottom:2rem;">
       <p class="section-label">✦ Hablemos</p>
       <h2 class="section-title">¿Tienes alguna <em>pregunta</em>?</h2>
     </div>
     <div class="contact-grid">
       <div>
-        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;"><div style="background:white;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;">📧</div><div><strong>Email</strong><br>patagoniaberta@gmail.com</div></div>
-        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;"><div style="background:white;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;">📱</div><div><strong>WhatsApp / Teléfono</strong><br>+34 637 196 259</div></div>
-        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;"><div style="background:white;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;">📍</div><div><strong>Estudio</strong><br>Puerto del Rosario, Fuerteventura</div></div>
+        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;"><div style="background:white;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">📧</div><div><strong>Email</strong><br>patagoniaberta@gmail.com</div></div>
+        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;"><div style="background:white;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">📱</div><div><strong>WhatsApp / Teléfono</strong><br>+34 637 196 259</div></div>
+        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;"><div style="background:white;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">📍</div><div><strong>Estudio</strong><br>Puerto del Rosario, Fuerteventura</div></div>
         <a href="https://www.instagram.com/elberta.woodandpencil/" target="_blank" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;background:white;border-radius:2rem;text-decoration:none;color:var(--ink);">📸 @elberta.woodandpencil</a>
       </div>
       <div>
@@ -493,16 +325,15 @@
 </section>
 
 <footer>
-  <div class="footer-logo">Elberta <span>Wood & Pencil</span></div>
-  <div class="footer-links" style="display:flex;gap:1.5rem;margin-top:0.5rem;"><a href="#tienda" style="color:rgba(255,255,255,0.4);text-decoration:none;">Tienda</a><a href="#sobre-mi" style="color:rgba(255,255,255,0.4);text-decoration:none;">Sobre mí</a><a href="#contacto" style="color:rgba(255,255,255,0.4);text-decoration:none;">Contacto</a></div>
-  <div class="footer-copy" style="font-size:0.75rem;color:rgba(255,255,255,0.3);margin-top:0.5rem;">© 2026 Elberta Wood & Pencil Shop · Puerto del Rosario</div>
+  <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:rgba(255,255,255,0.7);">Elberta <span style="color:var(--coral);font-style:italic;">Wood & Pencil</span></div>
+  <div style="display:flex;gap:1.5rem;margin-top:0.5rem;justify-content:center;"><a href="#tienda" style="color:rgba(255,255,255,0.4);text-decoration:none;">Tienda</a><a href="#sobre-mi" style="color:rgba(255,255,255,0.4);text-decoration:none;">Sobre mí</a><a href="#contacto" style="color:rgba(255,255,255,0.4);text-decoration:none;">Contacto</a></div>
+  <div style="font-size:0.75rem;color:rgba(255,255,255,0.3);margin-top:0.5rem;">© 2026 Elberta Wood & Pencil Shop · Puerto del Rosario</div>
 </footer>
 
-<!-- LIGHTBOX MEJORADO -->
 <div class="lightbox" id="lightbox" onclick="closeLightboxOnBg(event)">
   <div class="lightbox-inner">
     <div class="lightbox-controls">
-      <button onclick="downloadCurrentImage()" title="Descargar imagen">⬇️</button>
+      <button onclick="downloadCurrentImage()" title="Descargar">⬇️</button>
       <button onclick="closeLightbox()" title="Cerrar">✕</button>
     </div>
     <button class="lightbox-nav lightbox-prev" onclick="lightboxNav(-1)">‹</button>
@@ -530,15 +361,14 @@
 <div class="admin-overlay" id="adminOverlay">
   <div class="admin-panel">
     <div class="admin-header">
-      <div class="admin-title">Panel de <span>Edición</span></div>
-      <button class="admin-close" onclick="closeAdmin()" style="background:none;border:none;font-size:1.2rem;cursor:pointer;">✕</button>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;">Panel de <span style="font-style:italic;color:var(--coral);">Edición</span></div>
+      <button onclick="closeAdmin()" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--mist);">✕</button>
     </div>
     <div class="admin-body" id="adminBody"></div>
   </div>
 </div>
 
 <script>
-  // ==================== FIREBASE CONFIGURACIÓN ====================
   const firebaseConfig = {
     apiKey: "AIzaSyA4q-NJusufkt1TztulJJI-GY9lhIqRjwM",
     authDomain: "elbertashop.firebaseapp.com",
@@ -547,131 +377,58 @@
     messagingSenderId: "429103198839",
     appId: "1:429103198839:web:e98dfde3ddd01e89814c72"
   };
-
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 
-  // ==================== CONFIGURACIÓN ====================
   emailjs.init('o8Lh4WH5Bbfj_Jpa_');
   const EMAIL_SERVICE_ID = 'service_elberta';
   const EMAIL_TEMPLATE_ID = 'template_3j1pwuj';
 
-  function imgUrl(filename) { return 'imagenes/' + encodeURIComponent(filename); }
-  function copyToClipboard(text) { navigator.clipboard.writeText(text).then(() => showToast('🔗 Enlace copiado')); }
+  function imgUrl(f) { return 'imagenes/' + encodeURIComponent(f); }
+  function copyToClipboard(t) { navigator.clipboard.writeText(t).then(() => showToast('🔗 Enlace copiado')); }
 
-  // ==================== LIGHTBOX MEJORADO ====================
-  let lbItems = [];
-  let lbIndex = 0;
-  let currentZoom = 1;
-  let currentPan = { x: 0, y: 0 };
-  let isZoomed = false;
+  // ==================== LIGHTBOX ====================
+  let lbItems = [], lbIndex = 0, currentZoom = 1, isZoomed = false;
 
-  function openLightbox(items, startIndex) {
-    lbItems = items;
-    lbIndex = startIndex;
-    currentZoom = 1;
-    isZoomed = false;
-    document.getElementById('lightbox').classList.add('open');
-    renderLightbox();
-  }
-
-  function closeLightbox() {
-    document.getElementById('lightbox').classList.remove('open');
-    document.getElementById('lightbox-media-wrap').innerHTML = '';
-    currentZoom = 1;
-    isZoomed = false;
-  }
-
-  function closeLightboxOnBg(e) {
-    if (e.target === document.getElementById('lightbox') || e.target === document.getElementById('lightbox-media-container')) {
-      closeLightbox();
-    }
-  }
-
-  function lightboxNav(dir) {
-    lbIndex = (lbIndex + dir + lbItems.length) % lbItems.length;
-    currentZoom = 1;
-    isZoomed = false;
-    renderLightbox();
-  }
-
+  function openLightbox(items, i) { lbItems = items; lbIndex = i; currentZoom = 1; isZoomed = false; document.getElementById('lightbox').classList.add('open'); renderLightbox(); }
+  function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); document.getElementById('lightbox-media-wrap').innerHTML = ''; currentZoom = 1; isZoomed = false; }
+  function closeLightboxOnBg(e) { if (e.target === document.getElementById('lightbox') || e.target === document.getElementById('lightbox-media-container')) closeLightbox(); }
+  function lightboxNav(dir) { lbIndex = (lbIndex + dir + lbItems.length) % lbItems.length; currentZoom = 1; isZoomed = false; renderLightbox(); }
   function toggleZoom() {
     const img = document.querySelector('#lightbox-media-wrap img');
     if (!img) return;
-    if (!isZoomed) {
-      currentZoom = 2.5;
-      img.style.transform = `scale(${currentZoom})`;
-      img.style.cursor = 'zoom-out';
-      isZoomed = true;
-    } else {
-      currentZoom = 1;
-      img.style.transform = `scale(1)`;
-      img.style.cursor = 'zoom-in';
-      isZoomed = false;
-    }
+    if (!isZoomed) { currentZoom = 2.5; img.style.transform = `scale(${currentZoom})`; img.style.cursor = 'zoom-out'; isZoomed = true; }
+    else { currentZoom = 1; img.style.transform = 'scale(1)'; img.style.cursor = 'zoom-in'; isZoomed = false; }
   }
-
   function downloadCurrentImage() {
     const item = lbItems[lbIndex];
-    if (item.type === 'img') {
-      const link = document.createElement('a');
-      link.href = item.src;
-      link.download = item.src.split('/').pop();
-      link.click();
-      showToast('📸 Descargando imagen...');
-    } else {
-      showToast('⚠️ Solo se pueden descargar imágenes');
-    }
+    if (item.type === 'img') { const l = document.createElement('a'); l.href = item.src; l.download = item.src.split('/').pop(); l.click(); showToast('📸 Descargando...'); }
+    else showToast('⚠️ Solo imágenes');
   }
-
   function renderLightbox() {
     const item = lbItems[lbIndex];
     const wrap = document.getElementById('lightbox-media-wrap');
     if (item.type === 'video') {
-      const videoId = extractYoutubeId(item.src);
-      if (videoId) {
-        wrap.innerHTML = `<iframe class="lightbox-media" src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="autoplay" allowfullscreen style="width:90vw; height:70vh; border-radius:0.5rem;"></iframe>`;
-      } else {
-        wrap.innerHTML = `<video class="lightbox-media" src="${item.src}" controls autoplay playsinline style="max-width:90vw; max-height:80vh;"></video>`;
-      }
+      const vid = extractYoutubeId(item.src);
+      wrap.innerHTML = vid ? `<iframe class="lightbox-media" src="https://www.youtube.com/embed/${vid}?autoplay=1" allow="autoplay" allowfullscreen style="width:90vw;height:70vh;border-radius:0.5rem;border:none;"></iframe>`
+        : `<video class="lightbox-media" src="${item.src}" controls autoplay playsinline style="max-width:90vw;max-height:80vh;"></video>`;
     } else {
-      wrap.innerHTML = `<img class="lightbox-media" src="${item.src}" alt="${item.label || ''}" onclick="toggleZoom()" style="cursor:zoom-in">`;
+      wrap.innerHTML = `<img class="lightbox-media" src="${item.src}" alt="${item.label||''}" onclick="toggleZoom()" style="cursor:zoom-in">`;
       const img = wrap.querySelector('img');
-      if (img) {
-        // Soporte para zoom táctil (pinch) con Hammer.js
-        const container = document.getElementById('lightbox-media-container');
-        const mc = new Hammer.Manager(container);
-        const pinch = new Hammer.Pinch();
-        mc.add(pinch);
-        mc.on('pinch', function(e) {
-          if (e.scale > 1) {
-            let newScale = currentZoom * e.scale;
-            newScale = Math.min(Math.max(newScale, 1), 3);
-            img.style.transform = `scale(${newScale})`;
-            if (newScale > 1) {
-              img.style.cursor = 'zoom-out';
-              isZoomed = true;
-            } else {
-              img.style.cursor = 'zoom-in';
-              isZoomed = false;
-            }
-            currentZoom = newScale;
-          }
-        });
+      if (img && window.Hammer) {
+        const mc = new Hammer.Manager(document.getElementById('lightbox-media-container'));
+        mc.add(new Hammer.Pinch());
+        mc.on('pinch', ev => { let s = Math.min(Math.max(currentZoom * ev.scale, 1), 3); img.style.transform = `scale(${s})`; img.style.cursor = s > 1 ? 'zoom-out' : 'zoom-in'; isZoomed = s > 1; currentZoom = s; });
       }
     }
     document.getElementById('lightbox-caption').textContent = item.label || '';
     const dots = document.getElementById('lightbox-dots');
-    dots.innerHTML = lbItems.length > 1 ? lbItems.map((_, i) =>
-      `<button class="lightbox-dot ${i === lbIndex ? 'active' : ''}" onclick="lbIndex=${i};renderLightbox()"></button>`
-    ).join('') : '';
+    dots.innerHTML = lbItems.length > 1 ? lbItems.map((_, i) => `<button class="lightbox-dot ${i===lbIndex?'active':''}" onclick="lbIndex=${i};renderLightbox()"></button>`).join('') : '';
   }
-
   function extractYoutubeId(url) {
     const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/);
     return m ? m[1] : null;
   }
-
   document.addEventListener('keydown', e => {
     if (!document.getElementById('lightbox').classList.contains('open')) return;
     if (e.key === 'ArrowLeft') lightboxNav(-1);
@@ -688,145 +445,175 @@
     const grid = document.getElementById('products-grid');
     grid.innerHTML = '<div class="loading">Cargando obras...</div>';
     try {
-      const snapshot = await db.collection('productos').orderBy('createdAt', 'desc').get();
+      const snap = await db.collection('productos').orderBy('createdAt', 'desc').get();
       products = [];
-      snapshot.forEach(doc => { products.push({ id: doc.id, ...doc.data() }); });
+      snap.forEach(doc => products.push({ id: doc.id, ...doc.data() }));
       renderShop();
-    } catch (error) {
-      console.error('Error:', error);
+    } catch(err) {
+      console.error(err);
       grid.innerHTML = '<div class="loading" style="color:var(--coral);">❌ Error al cargar.</div>';
     }
   }
 
-  function getMediaItems(product) {
+  function getMediaItems(p) {
     const items = [];
-    const allImages = product.images && product.images.length ? product.images : (product.image ? [product.image] : []);
-    allImages.forEach(img => items.push({ type: 'img', src: imgUrl(img), label: product.name }));
-    if (product.video) items.push({ type: 'video', src: product.video, label: product.name + ' · Vídeo' });
+    const imgs = p.images && p.images.length ? p.images : (p.image ? [p.image] : []);
+    imgs.forEach(img => items.push({ type:'img', src:imgUrl(img), label:p.name }));
+    if (p.video) items.push({ type:'video', src:p.video, label:p.name + ' · Vídeo' });
     return items;
+  }
+  function getMediaItemsByIdx(idx) { return getMediaItems(products[idx]); }
+
+  function productCardHtml(p, idx) {
+    const mainImg = p.images && p.images[0] ? imgUrl(p.images[0]) : (p.image ? imgUrl(p.image) : null);
+    const zones = p.shippingZones || { canarias:10, peninsula:15, europa:25, mundo:45 };
+    const obraUrl = window.location.href.split('#')[0] + '#obra-' + idx;
+    return `
+      <div class="product-card" id="obra-${idx}">
+        <div class="product-img" onclick="openLightbox(getMediaItemsByIdx(${idx}),0)">
+          ${mainImg ? `<img class="product-img-bg" src="${mainImg}" alt="${p.name}" onerror="this.style.display='none'">` : '<div class="product-img-bg" style="background:linear-gradient(135deg,#D4603A,#C8942A)"></div>'}
+          <div class="product-badge-wrap">
+            ${p.isNew ? '<span class="badge badge-new">Nuevo</span>' : ''}
+            ${p.soldOut ? '<span class="badge badge-sold">Vendido</span>' : '<span class="badge badge-original">Original</span>'}
+            ${p.video ? '<span class="badge" style="background:var(--ink);color:white;">▶ Vídeo</span>' : ''}
+          </div>
+        </div>
+        <div class="product-body">
+          <div class="product-technique">${p.technique||''} ${p.material ? '· '+p.material : ''}</div>
+          <div class="product-name">${p.name}</div>
+          <div class="product-dims">${p.width && p.height ? p.width+' × '+p.height+' cm' : ''}</div>
+          <div class="product-footer">
+            <div class="product-price ${p.soldOut?'sold-out':''}">${p.price ? p.price+' €' : ''}</div>
+            <button class="add-btn" onclick="addToCart(${idx})" ${p.soldOut?'disabled':''}>${p.soldOut?'Vendido':'Comprar'}</button>
+          </div>
+          ${!p.soldOut ? `<select class="shipping-select" id="shipping_${p.id}">
+            <option value="canarias">🇮🇨 Canarias - ${zones.canarias} €</option>
+            <option value="peninsula">🇪🇸 Península - ${zones.peninsula} €</option>
+            <option value="europa">🇪🇺 Europa - ${zones.europa} €</option>
+            <option value="mundo">🌍 Resto del mundo - ${zones.mundo} €</option>
+          </select>` : ''}
+          <button class="copy-link-btn" onclick="copyToClipboard('${obraUrl}')">🔗 Copiar enlace para compartir</button>
+        </div>
+      </div>`;
   }
 
   function renderShop() {
     const grid = document.getElementById('products-grid');
     if (!products.length) {
-      grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;text-align:center;padding:3rem;"><div style="font-size:3rem;">🎨</div><h3>Próximamente</h3><p>Entra al panel de <strong>Edición</strong> para añadir tus primeras obras.</p></div>';
+      grid.innerHTML = '<div style="text-align:center;padding:3rem;"><div style="font-size:3rem;">🎨</div><h3 style="font-family:\'Cormorant Garamond\',serif;margin:0.5rem 0;">Próximamente</h3><p>Entra al panel de <strong>Edición</strong> para añadir tus primeras obras.</p></div>';
       return;
     }
-    grid.innerHTML = products.map((p, idx) => {
-      const mainImg = p.images && p.images[0] ? imgUrl(p.images[0]) : (p.image ? imgUrl(p.image) : null);
-      const shippingZones = p.shippingZones || { canarias: 10, peninsula: 15, europa: 25, mundo: 45 };
-      const obraUrl = window.location.href.split('#')[0] + '#obra-' + idx;
-      const mediaItems = getMediaItems(p);
-      
-      return `
-        <div class="product-card" id="obra-${idx}">
-          <div class="product-img" onclick="openLightbox(getMediaItemsByIdx(${idx}), 0)">
-            ${mainImg ? `<img class="product-img-bg" src="${mainImg}" alt="${p.name}" onerror="this.style.display='none'">` : '<div class="product-img-bg" style="background:linear-gradient(135deg,#D4603A,#C8942A)"></div>'}
-            <div class="product-badge-wrap">
-              ${p.isNew ? '<span class="badge badge-new">Nuevo</span>' : ''}
-              ${p.soldOut ? '<span class="badge badge-sold">Vendido</span>' : '<span class="badge badge-original">Original</span>'}
-              ${p.video ? '<span class="badge" style="background:var(--ink);color:white;">▶ Vídeo</span>' : ''}
-            </div>
-          </div>
-          <div class="product-body">
-            <div class="product-technique">${p.technique || ''} ${p.material ? '· ' + p.material : ''}</div>
-            <div class="product-name">${p.name}</div>
-            <div class="product-dims">${p.width && p.height ? p.width + ' × ' + p.height + ' cm' : ''}</div>
-            <div class="product-footer">
-              <div class="product-price ${p.soldOut ? 'sold-out' : ''}">${p.price ? p.price + ' €' : ''}</div>
-              <button class="add-btn" onclick="addToCart(${idx})" ${p.soldOut ? 'disabled' : ''}>${p.soldOut ? 'Vendido' : 'Comprar'}</button>
-            </div>
-            ${!p.soldOut ? `
-              <select class="shipping-select" id="shipping_${p.id}">
-                <option value="canarias">🇮🇨 Canarias - ${shippingZones.canarias} €</option>
-                <option value="peninsula">🇪🇸 Península - ${shippingZones.peninsula} €</option>
-                <option value="europa">🇪🇺 Europa - ${shippingZones.europa} €</option>
-                <option value="mundo">🌍 Resto del mundo - ${shippingZones.mundo} €</option>
-              </select>
-            ` : ''}
-            <button class="copy-link-btn" onclick="copyToClipboard('${obraUrl}')">🔗 Copiar enlace para compartir</button>
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
 
-  function getMediaItemsByIdx(idx) {
-    return getMediaItems(products[idx]);
+    const lienzos = products.filter(p => p.category === 'lienzo');
+    const maderas = products.filter(p => p.category === 'madera');
+    const otros = products.filter(p => !p.category || (p.category !== 'lienzo' && p.category !== 'madera'));
+
+    let html = '';
+
+    // LIENZOS
+    html += `<div>
+      <div class="category-header">
+        <img class="category-logo" src="imagenes/logolienzomadera1.png" alt="Lienzos" onerror="this.style.display='none'">
+        <div class="category-title">Sobre <em>Lienzo</em></div>
+        <span class="category-count">${lienzos.length} obra${lienzos.length!==1?'s':''}</span>
+      </div>
+      <div class="category-grid">
+        ${lienzos.length ? lienzos.map(p => productCardHtml(p, products.indexOf(p))).join('') : '<div class="category-empty">Aún no hay obras en esta categoría — edítalas desde el panel para asignarlas</div>'}
+      </div>
+    </div>`;
+
+    // MADERAS
+    html += `<div>
+      <div class="category-header">
+        <img class="category-logo" src="imagenes/logolienzomadera2.png" alt="Maderas" onerror="this.style.display='none'">
+        <div class="category-title">Sobre <em>Madera</em></div>
+        <span class="category-count">${maderas.length} obra${maderas.length!==1?'s':''}</span>
+      </div>
+      <div class="category-grid">
+        ${maderas.length ? maderas.map(p => productCardHtml(p, products.indexOf(p))).join('') : '<div class="category-empty">Aún no hay obras en esta categoría — edítalas desde el panel para asignarlas</div>'}
+      </div>
+    </div>`;
+
+    // OTRAS (sin categoría — obras antiguas)
+    if (otros.length) {
+      html += `<div>
+        <div class="category-header">
+          <div class="category-title">Otras <em>obras</em></div>
+          <span class="category-count">${otros.length} obra${otros.length!==1?'s':''}</span>
+        </div>
+        <div class="category-grid">
+          ${otros.map(p => productCardHtml(p, products.indexOf(p))).join('')}
+        </div>
+      </div>`;
+    }
+
+    grid.innerHTML = html;
   }
 
   // Exposiciones
   const exposicionesList = [
-    { src: 'exposiciones/April 30, 2022.png', title: 'Exposición Abril 2022', year: '2022' },
-    { src: 'exposiciones/Black White Minimalist 3D Art Expo Poster.png', title: 'Art Expo Minimalista 3D', year: '' },
-    { src: 'exposiciones/Blue Minimal Professional Software Engineer Cover Letter.png', title: 'Exposición Profesional', year: '' },
-    { src: 'exposiciones/Brown White Minimalist Art Exhibition Poster.png', title: 'Art Exhibition Brown & White', year: '' },
-    { src: 'exposiciones/Documento A4 Bloc Notas Campo de Frutas Plátanos Escritura Documento hoja To Do Sencillas Carta Apuntes Amarillo....png', title: 'Notas de Campo', year: '' },
-    { src: 'exposiciones/Imagen de WhatsApp 2024-10-02 a las 13.32.28_c5362a8b.jpg', title: 'Exposición Octubre 2024', year: '2024' },
-    { src: 'exposiciones/Llamativo póster exposición de arte minimalista colorido.png', title: 'Arte Minimalista Colorido', year: '' },
-    { src: 'exposiciones/elberta woodandpencil.jpg', title: 'Elberta Wood & Pencil', year: '' }
+    { src:'exposiciones/April 30, 2022.png', title:'Exposición Abril 2022', year:'2022' },
+    { src:'exposiciones/Black White Minimalist 3D Art Expo Poster.png', title:'Art Expo Minimalista 3D', year:'' },
+    { src:'exposiciones/Blue Minimal Professional Software Engineer Cover Letter.png', title:'Exposición Profesional', year:'' },
+    { src:'exposiciones/Brown White Minimalist Art Exhibition Poster.png', title:'Art Exhibition Brown & White', year:'' },
+    { src:'exposiciones/Documento A4 Bloc Notas Campo de Frutas Plátanos Escritura Documento hoja To Do Sencillas Carta Apuntes Amarillo....png', title:'Notas de Campo', year:'' },
+    { src:'exposiciones/Imagen de WhatsApp 2024-10-02 a las 13.32.28_c5362a8b.jpg', title:'Exposición Octubre 2024', year:'2024' },
+    { src:'exposiciones/Llamativo póster exposición de arte minimalista colorido.png', title:'Arte Minimalista Colorido', year:'' },
+    { src:'exposiciones/elberta woodandpencil.jpg', title:'Elberta Wood & Pencil', year:'' }
   ];
-  
+
   function renderExposiciones() {
     const grid = document.getElementById('expoGrid');
     if (!grid) return;
-    grid.innerHTML = exposicionesList.map(expo => `
-      <div class="expo-card" onclick="openLightboxExpo('${expo.src}', '${expo.title}')">
-        <img src="${expo.src}" alt="${expo.title}" onerror="this.style.display='none'">
+    grid.innerHTML = exposicionesList.map(e => `
+      <div class="expo-card" onclick="openLightboxExpo('${e.src}','${e.title}')">
+        <img src="${e.src}" alt="${e.title}" onerror="this.style.display='none'">
         <div class="expo-card-body">
-          <div class="expo-card-title">${expo.title}</div>
-          ${expo.year ? `<div class="expo-card-year" style="font-size:0.75rem;color:var(--mist);">${expo.year}</div>` : ''}
+          <div class="expo-card-title">${e.title}</div>
+          ${e.year ? `<div style="font-size:0.75rem;color:var(--mist);">${e.year}</div>` : ''}
         </div>
-      </div>
-    `).join('');
+      </div>`).join('');
   }
-  
+
   function openLightboxExpo(src, title) {
-    const modal = document.createElement('div');
-    modal.style.position = 'fixed'; modal.style.inset = '0'; modal.style.background = 'rgba(0,0,0,0.95)'; modal.style.zIndex = '2000';
-    modal.style.display = 'flex'; modal.style.alignItems = 'center'; modal.style.justifyContent = 'center'; modal.style.cursor = 'pointer';
-    modal.innerHTML = `<div style="position:relative;max-width:90%;"><img src="${src}" style="max-width:100%;max-height:80vh;border-radius:0.5rem;"><div style="color:white;text-align:center;margin-top:0.5rem;">${title}</div><button style="position:absolute;top:-2rem;right:0;background:none;border:none;color:white;font-size:1.5rem;cursor:pointer;">✕</button></div>`;
-    modal.onclick = (e) => { if(e.target === modal) modal.remove(); };
-    modal.querySelector('button').onclick = () => modal.remove();
-    document.body.appendChild(modal);
+    const m = document.createElement('div');
+    Object.assign(m.style, { position:'fixed', inset:'0', background:'rgba(0,0,0,0.95)', zIndex:'2000', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' });
+    m.innerHTML = `<div style="position:relative;max-width:90%;"><img src="${src}" style="max-width:100%;max-height:80vh;border-radius:0.5rem;"><div style="color:white;text-align:center;margin-top:0.5rem;">${title}</div><button style="position:absolute;top:-2rem;right:0;background:none;border:none;color:white;font-size:1.5rem;cursor:pointer;">✕</button></div>`;
+    m.onclick = e => { if (e.target === m) m.remove(); };
+    m.querySelector('button').onclick = () => m.remove();
+    document.body.appendChild(m);
   }
 
   // Carrito
   let cart = JSON.parse(localStorage.getItem('cart') || '[]');
   function saveCart() { localStorage.setItem('cart', JSON.stringify(cart)); updateCartCount(); }
-  function updateCartCount() { document.getElementById('cartCount').innerText = cart.reduce((s,i)=>s+i.quantity,0); }
+  function updateCartCount() { document.getElementById('cartCount').innerText = cart.reduce((s,i) => s+i.quantity, 0); }
   function addToCart(idx) {
     const p = products[idx];
     if (p.soldOut) return;
     const zone = document.getElementById(`shipping_${p.id}`).value;
     const zones = p.shippingZones || { canarias:10, peninsula:15, europa:25, mundo:45 };
-    const cost = zones[zone];
     const existing = cart.find(i => i.id === p.id && i.zone === zone);
     if (existing) existing.quantity++;
-    else cart.push({ id: p.id, name: p.name, price: parseFloat(p.price), zone, shipping: cost, quantity: 1 });
-    saveCart();
-    renderCart();
+    else cart.push({ id:p.id, name:p.name, price:parseFloat(p.price), zone, shipping:zones[zone], quantity:1 });
+    saveCart(); renderCart();
     showToast(`✨ "${p.name}" añadida al carrito`);
   }
   function removeFromCart(i) { cart.splice(i,1); saveCart(); renderCart(); }
   function renderCart() {
-    const container = document.getElementById('cartItems');
-    if (!cart.length) { container.innerHTML = '<p style="text-align:center;padding:1rem;">Carrito vacío</p>'; document.getElementById('cartTotal').innerHTML = 'Total: 0 €'; document.getElementById('paypal-button-container').innerHTML = ''; return; }
+    const c = document.getElementById('cartItems');
+    if (!cart.length) { c.innerHTML = '<p style="text-align:center;padding:1rem;">Carrito vacío</p>'; document.getElementById('cartTotal').innerHTML = 'Total: 0 €'; document.getElementById('paypal-button-container').innerHTML = ''; return; }
     let total = 0;
-    container.innerHTML = cart.map((item, i) => {
-      const itemTotal = (item.price + item.shipping) * item.quantity;
-      total += itemTotal;
-      return `<div class="cart-item"><div><strong>${item.name}</strong><br><span style="font-size:0.75rem;color:var(--mist);">${item.zone} (envío ${item.shipping}€) x${item.quantity}</span></div><div>${itemTotal.toFixed(2)} € <button onclick="removeFromCart(${i})" style="background:none;border:none;color:var(--coral);cursor:pointer;">🗑️</button></div></div>`;
-    }).join('');
+    c.innerHTML = cart.map((item, i) => { const t = (item.price+item.shipping)*item.quantity; total += t; return `<div class="cart-item"><div><strong>${item.name}</strong><br><span style="font-size:0.75rem;color:var(--mist);">${item.zone} (envío ${item.shipping}€) x${item.quantity}</span></div><div>${t.toFixed(2)} € <button onclick="removeFromCart(${i})" style="background:none;border:none;color:var(--coral);cursor:pointer;">🗑️</button></div></div>`; }).join('');
     document.getElementById('cartTotal').innerHTML = `Total: ${total.toFixed(2)} €`;
-    const paypalContainer = document.getElementById('paypal-button-container');
-    paypalContainer.innerHTML = '';
+    const pp = document.getElementById('paypal-button-container');
+    pp.innerHTML = '';
     if (window.paypal) {
       window.paypal.Buttons({
-        style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'pay' },
-        createOrder: (data, actions) => actions.order.create({ purchase_units: [{ amount: { value: total.toFixed(2), currency_code: 'EUR' }, payee: { email_address: 'pachiberta@gmail.com' } }] }),
-        onApprove: (data, actions) => actions.order.capture().then(() => { showToast('🎉 ¡Pago completado! Gracias por tu compra'); cart = []; saveCart(); renderCart(); }),
-        onError: () => showToast('❌ Error con PayPal')
+        style:{ layout:'vertical', color:'gold', shape:'rect', label:'pay' },
+        createOrder:(d,a) => a.order.create({ purchase_units:[{ amount:{ value:total.toFixed(2), currency_code:'EUR' }, payee:{ email_address:'pachiberta@gmail.com' } }] }),
+        onApprove:(d,a) => a.order.capture().then(() => { showToast('🎉 ¡Pago completado!'); cart=[]; saveCart(); renderCart(); }),
+        onError:() => showToast('❌ Error con PayPal')
       }).render('#paypal-button-container');
     }
   }
@@ -840,49 +627,161 @@
     const phone = document.getElementById('contactPhone')?.value;
     const subject = document.getElementById('contactSubject')?.value;
     const message = document.getElementById('contactMessage')?.value;
-    if (!name || !email || !message) { showToast('⚠️ Por favor, completa los campos obligatorios'); return; }
+    if (!name || !email || !message) { showToast('⚠️ Completa los campos obligatorios'); return; }
     try {
-      await emailjs.send(EMAIL_SERVICE_ID, EMAIL_TEMPLATE_ID, { from_name: name, from_email: email, phone: phone || '', subject: subject || 'Consulta', message: message });
-      showToast('📧 ¡Mensaje enviado! Te responderé pronto');
-      document.getElementById('contactName').value = '';
-      document.getElementById('contactEmail').value = '';
-      document.getElementById('contactPhone').value = '';
-      document.getElementById('contactSubject').value = '';
-      document.getElementById('contactMessage').value = '';
-    } catch(err) {
-      showToast('❌ Error al enviar. Intenta de nuevo');
-    }
+      await emailjs.send(EMAIL_SERVICE_ID, EMAIL_TEMPLATE_ID, { from_name:name, from_email:email, phone:phone||'', subject:subject||'Consulta', message });
+      showToast('📧 ¡Mensaje enviado!');
+      ['contactName','contactEmail','contactPhone','contactSubject','contactMessage'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).value=''; });
+    } catch { showToast('❌ Error al enviar'); }
   }
 
   function showToast(msg) { const t = document.getElementById('toast'); document.getElementById('toastMsg').innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); }
 
-  // ADMIN (simplificado pero funcional)
+  // ==================== ADMIN ====================
   let adminLoggedIn = false, editingIndex = -1, activeTab = 'productos';
-  
+
   function openAdmin() { document.getElementById('adminOverlay').classList.add('open'); if (!adminLoggedIn) renderLogin(); else renderAdminContent(); }
   function closeAdmin() { document.getElementById('adminOverlay').classList.remove('open'); }
-  function renderLogin() { document.getElementById('adminBody').innerHTML = `<div style="text-align:center;padding:1rem;"><p>Contraseña para editar</p><input type="password" id="loginPass" style="width:100%;padding:0.75rem;margin:1rem 0;border:1px solid var(--light-border);border-radius:0.3rem;"><button class="btn-main" onclick="doLogin()">Entrar</button></div>`; }
-  function doLogin() { if (document.getElementById('loginPass').value === 'elberta2024') { adminLoggedIn = true; renderAdminContent(); } else showToast('Contraseña incorrecta'); }
-  function renderAdminContent() { document.getElementById('adminBody').innerHTML = `<div class="admin-tabs"><button class="admin-tab ${activeTab==='productos'?'active':''}" onclick="switchTab('productos')">Mis Obras</button><button class="admin-tab ${activeTab==='agregar'?'active':''}" onclick="switchTab('agregar')">Añadir Obra</button><button class="admin-tab ${activeTab==='ajustes'?'active':''}" onclick="switchTab('ajustes')">Ajustes</button></div><div id="tabContent"></div>`; renderTab(); }
+
+  function renderLogin() {
+    document.getElementById('adminBody').innerHTML = `<div style="text-align:center;padding:1.5rem 0;">
+      <p style="color:var(--mist);margin-bottom:1rem;">Introduce tu contraseña</p>
+      <input type="password" id="loginPass" style="width:100%;padding:0.75rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;font-size:0.92rem;text-align:center;margin-bottom:1rem;" onkeydown="if(event.key==='Enter')doLogin()" placeholder="••••••••">
+      <button class="btn-main" style="width:100%" onclick="doLogin()">Entrar</button>
+    </div>`;
+    setTimeout(() => document.getElementById('loginPass')?.focus(), 100);
+  }
+
+  function doLogin() {
+    if (document.getElementById('loginPass').value === 'elberta2024') { adminLoggedIn = true; renderAdminContent(); }
+    else showToast('Contraseña incorrecta');
+  }
+
+  function renderAdminContent() {
+    document.getElementById('adminBody').innerHTML = `
+      <div class="admin-tabs">
+        <button class="admin-tab ${activeTab==='productos'?'active':''}" onclick="switchTab('productos')">Mis Obras</button>
+        <button class="admin-tab ${activeTab==='agregar'?'active':''}" onclick="switchTab('agregar')">Añadir Obra</button>
+        <button class="admin-tab ${activeTab==='ajustes'?'active':''}" onclick="switchTab('ajustes')">Ajustes</button>
+      </div>
+      <div id="tabContent"></div>`;
+    renderTab();
+  }
+
   function switchTab(tab) { activeTab = tab; editingIndex = -1; renderAdminContent(); }
-  function renderTab() { const el = document.getElementById('tabContent'); if (activeTab === 'productos') renderProductList(el); else if (activeTab === 'agregar') renderProductForm(el, null); else if (activeTab === 'ajustes') renderSettings(el); }
+  function renderTab() {
+    const el = document.getElementById('tabContent');
+    if (activeTab === 'productos') renderProductList(el);
+    else if (activeTab === 'agregar') renderProductForm(el, null);
+    else renderSettings(el);
+  }
+
   function renderProductList(el) {
     if (editingIndex !== -1) { renderProductForm(el, products[editingIndex]); return; }
-    if (!products.length) { el.innerHTML = '<p style="text-align:center;padding:2rem;">No hay obras. Ve a "Añadir Obra"</p>'; return; }
-    el.innerHTML = `<div class="admin-product-list">${products.map((p,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:0.8rem;border:1px solid var(--light-border);border-radius:0.5rem;margin-bottom:0.5rem;"><div><strong>${p.name}</strong><br><span style="font-size:0.75rem;color:var(--mist);">${p.price || 'Sin precio'} €</span></div><div><button class="admin-tab" onclick="startEdit('${p.id}', ${i})">Editar</button><button class="admin-tab" style="background:#fee;color:#c0392b;" onclick="deleteProduct('${p.id}')">Eliminar</button></div></div>`).join('')}</div>`;
+    if (!products.length) { el.innerHTML = '<p style="text-align:center;padding:2rem;color:var(--mist);">No hay obras. Ve a "Añadir Obra"</p>'; return; }
+    const catLabel = cat => cat==='lienzo' ? '🖼 Lienzo' : cat==='madera' ? '🪵 Madera' : '—';
+    const catColor = cat => cat==='lienzo' ? '#e8f4e8' : cat==='madera' ? '#f4ede0' : '#eee';
+    el.innerHTML = products.map((p,i) => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:0.8rem;border:1px solid var(--light-border);border-radius:0.5rem;margin-bottom:0.5rem;background:#fafaf8;">
+        <div style="min-width:0;">
+          <strong style="font-size:0.92rem;">${p.name}</strong>
+          <span style="font-size:0.68rem;margin-left:0.5rem;padding:0.15rem 0.6rem;border-radius:1rem;background:${catColor(p.category)};color:var(--mist);">${catLabel(p.category)}</span>
+          <br><span style="font-size:0.75rem;color:var(--mist);">${p.price||'Sin precio'} €</span>
+        </div>
+        <div style="display:flex;gap:0.4rem;flex-shrink:0;">
+          <button class="admin-tab" onclick="startEdit('${p.id}',${i})">Editar</button>
+          <button class="admin-tab" style="background:#fee;color:#c0392b;" onclick="deleteProduct('${p.id}')">Eliminar</button>
+        </div>
+      </div>`).join('');
   }
+
   function startEdit(id, idx) { editingIndex = idx; renderAdminContent(); }
-  async function deleteProduct(id) { if (confirm('¿Eliminar esta obra?')) { await db.collection('productos').doc(id).delete(); await loadProducts(); renderAdminContent(); showToast('Obra eliminada'); } }
+
+  async function deleteProduct(id) {
+    if (confirm('¿Eliminar esta obra?')) { await db.collection('productos').doc(id).delete(); await loadProducts(); renderAdminContent(); showToast('Obra eliminada'); }
+  }
+
+  function fInput(id, placeholder, value, type='text') {
+    return `<input type="${type}" id="${id}" placeholder="${placeholder}" value="${value}" style="width:100%;padding:0.75rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;font-size:0.88rem;">`;
+  }
+
   function renderProductForm(el, product) {
     const p = product || {};
     const zones = p.shippingZones || { canarias:10, peninsula:15, europa:25, mundo:45 };
-    el.innerHTML = `<div class="product-form"><h3>${product ? 'Editar obra' : 'Nueva obra'}</h3><div class="form-group"><input type="text" id="pName" placeholder="Nombre de la obra *" value="${p.name||''}"></div><div class="form-row"><div class="form-group"><input type="text" id="pTechnique" placeholder="Técnica" value="${p.technique||''}"></div><div class="form-group"><input type="text" id="pMaterial" placeholder="Material" value="${p.material||''}"></div></div><div class="form-row"><div class="form-group"><input type="number" id="pWidth" placeholder="Ancho cm" value="${p.width||''}"></div><div class="form-group"><input type="number" id="pHeight" placeholder="Alto cm" value="${p.height||''}"></div></div><div class="form-row"><div class="form-group"><input type="number" id="pPrice" placeholder="Precio €" value="${p.price||''}"></div><div class="form-group"><select id="pSold"><option value="0" ${!p.soldOut?'selected':''}>Disponible</option><option value="1" ${p.soldOut?'selected':''}>Vendido</option></select></div></div><div class="form-group"><input type="text" id="pImages" placeholder="Nombres de fotos (separados por comas)" value="${(p.images||[]).join(', ')}"></div><div class="form-group"><input type="checkbox" id="pNew" ${p.isNew?'checked':''}> <label>Marcar como Nuevo</label></div><div class="form-group"><input type="text" id="pVideo" placeholder="URL del vídeo (YouTube)" value="${p.video||''}"></div><h4>Costes de envío por zona</h4><div class="form-row-3"><div class="form-group"><label>🇮🇨 Canarias</label><input type="number" id="shipCanarias" value="${zones.canarias}"></div><div class="form-group"><label>🇪🇸 Península</label><input type="number" id="shipPeninsula" value="${zones.peninsula}"></div><div class="form-group"><label>🇪🇺 Europa</label><input type="number" id="shipEuropa" value="${zones.europa}"></div><div class="form-group"><label>🌍 Resto mundo</label><input type="number" id="shipMundo" value="${zones.mundo}"></div></div><div style="display:flex;gap:1rem;margin-top:1rem;"><button class="btn-save" onclick="saveProductAdmin('${product ? p.id : ''}')">${product ? 'Guardar cambios' : 'Añadir obra'}</button><button class="btn-ghost" onclick="switchTab('productos')">Cancelar</button></div></div>`;
+    el.innerHTML = `<div style="background:var(--sand);border-radius:0.5rem;padding:1.5rem;">
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;margin-bottom:1.2rem;">${product?'✏️ Editar obra':'✦ Nueva obra'}</h3>
+
+      <div style="margin-bottom:1rem;">${fInput('pName','Nombre de la obra *',p.name||'')}</div>
+
+      <div style="margin-bottom:1rem;">
+        <label style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--mist);display:block;margin-bottom:0.6rem;font-weight:600;">Categoría</label>
+        <div class="cat-selector">
+          <label class="cat-option" id="catLabelLienzo">
+            <input type="radio" name="pCategory" value="lienzo" ${p.category==='lienzo'?'checked':''} onchange="updateCatStyle()">
+            <img src="imagenes/logolienzomadera1.png" alt="" onerror="this.style.display='none'" style="width:28px;height:28px;object-fit:contain;">
+            <span>Lienzo</span>
+          </label>
+          <label class="cat-option" id="catLabelMadera">
+            <input type="radio" name="pCategory" value="madera" ${p.category==='madera'?'checked':''} onchange="updateCatStyle()">
+            <img src="imagenes/logolienzomadera2.png" alt="" onerror="this.style.display='none'" style="width:28px;height:28px;object-fit:contain;">
+            <span>Madera</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-row" style="margin-bottom:1rem;">
+        <div>${fInput('pTechnique','Técnica',p.technique||'')}</div>
+        <div>${fInput('pMaterial','Material',p.material||'')}</div>
+      </div>
+      <div class="form-row" style="margin-bottom:1rem;">
+        <div>${fInput('pWidth','Ancho cm',p.width||'','number')}</div>
+        <div>${fInput('pHeight','Alto cm',p.height||'','number')}</div>
+      </div>
+      <div class="form-row" style="margin-bottom:1rem;">
+        <div>${fInput('pPrice','Precio €',p.price||'','number')}</div>
+        <div><select id="pSold" style="width:100%;padding:0.75rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;font-size:0.88rem;"><option value="0" ${!p.soldOut?'selected':''}>Disponible</option><option value="1" ${p.soldOut?'selected':''}>Vendido</option></select></div>
+      </div>
+      <div style="margin-bottom:1rem;">${fInput('pImages','Nombres de fotos separados por comas',(p.images||[]).join(', '))}</div>
+      <div style="margin-bottom:1rem;display:flex;align-items:center;gap:0.6rem;">
+        <input type="checkbox" id="pNew" ${p.isNew?'checked':''} style="width:auto;accent-color:var(--coral);">
+        <label for="pNew" style="font-size:0.88rem;cursor:pointer;">Marcar como "Nuevo"</label>
+      </div>
+      <div style="margin-bottom:1rem;">${fInput('pVideo','URL del vídeo (YouTube)',p.video||'')}</div>
+
+      <p style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--mist);margin-bottom:0.6rem;font-weight:600;">Costes de envío</p>
+      <div class="form-row-3" style="margin-bottom:1.5rem;">
+        <div><label style="font-size:0.7rem;color:var(--mist);display:block;margin-bottom:0.3rem;">🇮🇨 Canarias</label><input type="number" id="shipCanarias" value="${zones.canarias}" style="width:100%;padding:0.5rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;"></div>
+        <div><label style="font-size:0.7rem;color:var(--mist);display:block;margin-bottom:0.3rem;">🇪🇸 Península</label><input type="number" id="shipPeninsula" value="${zones.peninsula}" style="width:100%;padding:0.5rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;"></div>
+        <div><label style="font-size:0.7rem;color:var(--mist);display:block;margin-bottom:0.3rem;">🇪🇺 Europa</label><input type="number" id="shipEuropa" value="${zones.europa}" style="width:100%;padding:0.5rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;"></div>
+        <div><label style="font-size:0.7rem;color:var(--mist);display:block;margin-bottom:0.3rem;">🌍 Resto mundo</label><input type="number" id="shipMundo" value="${zones.mundo}" style="width:100%;padding:0.5rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;"></div>
+      </div>
+
+      <div style="display:flex;gap:0.8rem;">
+        <button class="btn-save" onclick="saveProductAdmin('${product?p.id:''}')">${product?'Guardar cambios':'Añadir obra'}</button>
+        <button onclick="switchTab('productos')" style="background:white;border:1.5px solid var(--light-border);padding:0.6rem 1.2rem;border-radius:0.3rem;cursor:pointer;font-family:'Jost',sans-serif;">Cancelar</button>
+      </div>
+    </div>`;
+    updateCatStyle();
   }
+
+  function updateCatStyle() {
+    const checked = document.querySelector('input[name="pCategory"]:checked');
+    ['catLabelLienzo','catLabelMadera'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const val = el.querySelector('input').value;
+      el.style.borderColor = (checked && checked.value === val) ? 'var(--coral)' : 'var(--light-border)';
+      el.style.background = (checked && checked.value === val) ? 'rgba(212,96,58,0.06)' : 'white';
+    });
+  }
+
   async function saveProductAdmin(productId) {
     const name = document.getElementById('pName').value.trim();
     if (!name) { showToast('El nombre es obligatorio'); return; }
+    const catChecked = document.querySelector('input[name="pCategory"]:checked');
     const product = {
       name,
+      category: catChecked ? catChecked.value : '',
       technique: document.getElementById('pTechnique').value,
       material: document.getElementById('pMaterial').value,
       width: document.getElementById('pWidth').value,
@@ -899,26 +798,32 @@
         mundo: parseFloat(document.getElementById('shipMundo').value)||45
       }
     };
-    if (productId) {
-      await db.collection('productos').doc(productId).update(product);
-    } else {
-      await db.collection('productos').add({ ...product, createdAt: new Date() });
-    }
+    if (productId) await db.collection('productos').doc(productId).update(product);
+    else await db.collection('productos').add({ ...product, createdAt: new Date() });
     await loadProducts();
-    showToast(productId ? 'Obra actualizada' : 'Obra añadida');
+    showToast(productId ? '✅ Obra actualizada' : '✅ Obra añadida');
     switchTab('productos');
   }
-  function renderSettings(el) {
-    el.innerHTML = `<div class="settings-section"><h3>Cambiar contraseña</h3><div class="form-group"><input type="password" id="newPass1" placeholder="Nueva contraseña"></div><div class="form-group"><input type="password" id="newPass2" placeholder="Repetir contraseña"></div><button class="btn-save" onclick="changePassword()">Guardar</button></div><div style="margin-top:2rem;"><button class="btn-ghost" onclick="logout()">Cerrar sesión</button></div>`;
-  }
-  function changePassword() { showToast('La contraseña se gestiona desde la consola de Firebase'); }
-  function logout() { adminLoggedIn=false; closeAdmin(); }
 
-  // Inicializar
+  function renderSettings(el) {
+    el.innerHTML = `<div>
+      <h3 style="font-family:'Cormorant Garamond',serif;margin-bottom:1rem;">Cambiar contraseña</h3>
+      <p style="font-size:0.8rem;color:var(--mist);margin-bottom:1rem;">La contraseña se gestiona desde la consola de Firebase.</p>
+      <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--light-border);">
+        <button onclick="logout()" style="background:white;border:1.5px solid var(--light-border);padding:0.6rem 1.5rem;border-radius:0.3rem;cursor:pointer;font-family:'Jost',sans-serif;">Cerrar sesión</button>
+      </div>
+    </div>`;
+  }
+
+  function logout() { adminLoggedIn = false; closeAdmin(); }
+
+  // Init
   renderExposiciones();
   loadProducts();
   updateCartCount();
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeCart(); closeAdmin(); if (document.getElementById('lightbox').classList.contains('open')) closeLightbox(); } });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeCart(); closeAdmin(); if (document.getElementById('lightbox').classList.contains('open')) closeLightbox(); }
+  });
 </script>
 </body>
 </html>

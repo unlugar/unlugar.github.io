@@ -386,6 +386,10 @@
   const EMAIL_SERVICE_ID = 'service_elberta';
   const EMAIL_TEMPLATE_ID = 'template_3j1pwuj';
 
+  let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+  function imgUrl(f) { return 'imagenes/' + encodeURIComponent(f); }
+
   function imgUrl(f) { return 'imagenes/' + encodeURIComponent(f); }
   function copyToClipboard(t) { navigator.clipboard.writeText(t).then(() => showToast('🔗 Enlace copiado')); }
 
@@ -585,7 +589,6 @@ html += `<div>
   }
 
   // Carrito
-  let cart = JSON.parse(localStorage.getItem('cart') || '[]');
   function saveCart() { localStorage.setItem('cart', JSON.stringify(cart)); updateCartCount(); }
   function updateCartCount() { document.getElementById('cartCount').innerText = cart.reduce((s,i) => s+i.quantity, 0); }
   function addToCart(idx) {

@@ -722,21 +722,25 @@ function payWithBizum(amount) {
 }
 
 function updateShippingUI() {
-  const postalDiv = document.getElementById('postalShippingDiv');
-  const pickupDiv = document.getElementById('pickupShippingDiv');
-  const shippingOption = document.querySelector('input[name="shippingOption"]:checked').value;
+  setTimeout(() => {
+    const postalDiv = document.getElementById('postalShippingDiv');
+    const pickupDiv = document.getElementById('pickupShippingDiv');
+    const shippingOption = document.querySelector('input[name="shippingOption"]:checked');
 
-  if (shippingOption === 'postal') {
-    postalDiv.style.display = 'block';
-    pickupDiv.style.display = 'none';
-    calculateShippingByZip();
-  } else {
-    postalDiv.style.display = 'none';
-    pickupDiv.style.display = 'block';
-    cart.forEach(item => item.shipping = 0);
-    saveCart();
-    renderCart();
-  }
+    if (!shippingOption) return;
+
+    if (shippingOption.value === 'postal') {
+      if (postalDiv) postalDiv.style.display = 'block';
+      if (pickupDiv) pickupDiv.style.display = 'none';
+      setTimeout(() => calculateShippingByZip(), 100);
+    } else {
+      if (postalDiv) postalDiv.style.display = 'none';
+      if (pickupDiv) pickupDiv.style.display = 'block';
+      cart.forEach(item => item.shipping = 0);
+      saveCart();
+      renderCart();
+    }
+  }, 50);
 }
 
 function calculateShippingByZip() {

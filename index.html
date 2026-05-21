@@ -650,14 +650,71 @@ function renderCart() {
   document.getElementById('cartTotal').innerHTML = `Total: ${total.toFixed(2)} €`;
 
   const pp = document.getElementById('paypal-button-container');
-  pp.innerHTML = '';
+  pp.innerHTML = `
+    <div style="margin-bottom:1rem;">
+      <p style="font-size:0.85rem; font-weight:600; margin-bottom:0.8rem; color:var(--ink);">Elige tu forma de pago:</p>
+    </div>
+  `;
+  
+  // BIZUM
+  const bizumBtn = document.createElement('button');
+  bizumBtn.className = 'btn-main';
+  bizumBtn.style.width = '100%';
+  bizumBtn.style.marginBottom = '0.8rem';
+  bizumBtn.innerHTML = '💸 Pagar con Bizum';
+  bizumBtn.onclick = () => payWithBizum(total.toFixed(2));
+  pp.appendChild(bizumBtn);
+  
+  // PAYPAL
+  const paypalWrapper = document.createElement('div');
+  paypalWrapper.id = 'paypal-buttons-wrapper';
+  pp.appendChild(paypalWrapper);
+  
   if (window.paypal) {
     window.paypal.Buttons({
       style:{ layout:'vertical', color:'gold', shape:'rect', label:'pay' },
       createOrder:(d,a) => a.order.create({ purchase_units:[{ amount:{ value:total.toFixed(2), currency_code:'EUR' }, payee:{ email_address:'pachiberta@gmail.com' } }] }),
       onApprove:(d,a) => a.order.capture().then(() => { showToast('🎉 ¡Pago completado!'); cart=[]; saveCart(); renderCart(); }),
       onError:() => showToast('❌ Error con PayPal')
-    }).render('#paypal-button-container');
+    }).render('#paypal-buttons-wrapper');
+  }
+}
+
+function payWithBizum(amount) {
+  const message = `
+    📱 **BIZUM MANUAL**
+    
+    Cantidad: ${amount}€
+    
+    Instrucciones:
+    1. Abre tu app del banco
+    2. Busca "Bizum"
+    3. Selecciona "Enviar dinero"
+    4. Número: +34 637 196 259 (Luis Berta)
+    5. Cantidad: ${amount}€
+    6. Concepto: "Compra Elberta Wood"
+    
+    Una vez enviado, confirma aquí ↓
+  `;
+  
+  const confirmed = confirm(message + '\n\n¿Ya enviaste el Bizum?');
+  
+  if (confirmed) {
+    showToast('✅ Bizum recibido. ¡Gracias!');
+    // Enviar email de confirmación
+    emailjs.send(EMAIL_SERVICE_ID, EMAIL_TEMPLATE_ID, {
+      from_name: 'Cliente',
+      from_email: 'bizum-pago@elberta.shop',
+      phone: 'Bizum',
+      subject: 'Pago realizado por Bizum',
+      message: `Se ha realizado un pago de ${amount}€ por Bizum.\n\nProductos:\n${cart.map(item => `- ${item.name} x${item.quantity} = ${(item.price * item.quantity)}€`).join('\n')}\n\nTotal: ${amount}€`
+    }).catch(err => console.log('Email no enviado', err));
+    
+    cart = [];
+    saveCart();
+    renderCart();
+  } else {
+    showToast('❌ Pago cancelado');
   }
 }
 

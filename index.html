@@ -601,25 +601,131 @@ html += `<div>
   }
   function removeFromCart(i) { cart.splice(i,1); saveCart(); renderCart(); }
   function renderCart() {
-    const c = document.getElementById('cartItems');
-    if (!cart.length) { c.innerHTML = '<p style="text-align:center;padding:1rem;">Carrito vacío</p>'; document.getElementById('cartTotal').innerHTML = 'Total: 0 €'; document.getElementById('paypal-button-container').innerHTML = ''; return; }
-    let total = 0;
-    c.innerHTML = cart.map((item, i) => { const t = (item.price+item.shipping)*item.quantity; total += t; return `<div class="cart-item"><div><strong>${item.name}</strong><br><span style="font-size:0.75rem;color:var(--mist);">${item.zone} (envío ${item.shipping}€) x${item.quantity}</span></div><div>${t.toFixed(2)} € <button onclick="removeFromCart(${i})" style="background:none;border:none;color:var(--coral);cursor:pointer;">🗑️</button></div></div>`; }).join('');
-    document.getElementById('cartTotal').innerHTML = `Total: ${total.toFixed(2)} €`;
-    const pp = document.getElementById('paypal-button-container');
-    pp.innerHTML = '';
-    if (window.paypal) {
-      window.paypal.Buttons({
-        style:{ layout:'vertical', color:'gold', shape:'rect', label:'pay' },
-        createOrder:(d,a) => a.order.create({ purchase_units:[{ amount:{ value:total.toFixed(2), currency_code:'EUR' }, payee:{ email_address:'pachiberta@gmail.com' } }] }),
-        onApprove:(d,a) => a.order.capture().then(() => { showToast('🎉 ¡Pago completado!'); cart=[]; saveCart(); renderCart(); }),
-        onError:() => showToast('❌ Error con PayPal')
-      }).render('#paypal-button-container');
-    }
+  const c = document.getElementById('cartItems');
+  if (!cart.length) { 
+    c.innerHTML = '<p style="text-align:center;padding:1rem;">Carrito vacío</p>'; 
+    document.getElementById('cartTotal').innerHTML = 'Total: 0 €'; 
+    document.getElementById('paypal-button-container').innerHTML = '';
+    return;
   }
-  function openCart() { renderCart(); document.getElementById('cartModal').classList.add('open'); }
-  function closeCart() { document.getElementById('cartModal').classList.remove('open'); }
 
+  // Mapa de códigos postales por zona
+  const zipCodeZones = {
+    canarias: ['35001', '35002', '35003', '35004', '35005', '35006', '35007', '35008', '35009', '35010', '35011', '35012', '35013', '35014', '35015', '35016', '35017', '35018', '35019', '35020', '35021', '35022', '35023', '35024', '35025', '35026', '35027', '35028', '35029', '35030', '35031', '35032', '35033', '35034', '35035', '35036', '35037', '35038', '35039', '35040', '35041', '35100', '35200', '35300', '35400', '35500', '35600', '35700', '35800', '35900'],
+    peninsula: ['28001', '28002', '28003', '28004', '28005', '28006', '28007', '28008', '28009', '28010', '28011', '28012', '28013', '28014', '28015', '08001', '08002', '08003', '08004', '08005', '46001', '46002', '46003', '46004', '46005', '41001', '41002', '41003', '41004', '41005', '30001', '30002', '30003', '30004', '30005'],
+    europa: [], // Cualquier código postal europeo diferente a España
+    mundo: [] // Resto del mundo
+  };
+
+  let shippingCost = 0;
+  let shippingZone = '';
+
+  // Carrito con opción de código postal
+  let html = `
+    <div style="margin-bottom:1.5rem; padding:1rem; background:#f9f9f9; border-radius:0.5rem;">
+      <label style="font-size:0.9rem; font-weight:600; display:block; margin-bottom:0.5rem;">Envío:</label>
+      <div style="display:flex; gap:0.5rem; margin-bottom:1rem;">
+        <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+          <input type="radio" name="shippingOption" value="postal" checked onchange="updateShippingUI()">
+          <span>Por código postal</span>
+        </label>
+        <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+          <input type="radio" name="shippingOption" value="pickup" onchange="updateShippingUI()">
+          <span>Recogida en Puerto del Rosario</span>
+        </label>
+      </div>
+      
+      <div id="postalShippingDiv">
+        <input type="text" id="zipCode" placeholder="Código postal" maxlength="5" style="width:100%; padding:0.6rem; border:1.5px solid rgba(100,80,50,0.2); border-radius:0.3rem; margin-bottom:0.5rem;">
+        <div id="shippingInfo" style="font-size:0.8rem; color:var(--mist);"></div>
+      </div>
+      
+      <div id="pickupShippingDiv" style="display:none; font-size:0.85rem; color:var(--forest);">
+        ✓ Recogida gratis en Puerto del Rosario, Fuerteventura
+      </div>
+    </div>
+  `;
+
+  let total = 0;
+  html += cart.map((item, i) => { 
+    const t = (item.price + item.shipping) * item.quantity; 
+    total += t; 
+    return `<div class="cart-item"><div><strong>${item.name}</strong><br><span style="font-size:0.75rem;color:var(--mist);">${item.quantity}x ${item.price}€ + ${item.shipping}€ envío</span></div><div><strong>${t.toFixed(2)}€</strong><button onclick="removeFromCart(${i})" style="background:none;border:none;color:var(--coral);cursor:pointer;font-size:1.2rem;margin-left:0.5rem;">✕</button></div></div>`;
+  }).join('');
+
+  c.innerHTML = html;
+  document.getElementById('cartTotal').innerHTML = `Total: ${total.toFixed(2)} €`;
+
+  const pp = document.getElementById('paypal-button-container');
+  pp.innerHTML = '';
+  if (window.paypal) {
+    window.paypal.Buttons({
+      style:{ layout:'vertical', color:'gold', shape:'rect', label:'pay' },
+      createOrder:(d,a) => a.order.create({ purchase_units:[{ amount:{ value:total.toFixed(2), currency_code:'EUR' }, payee:{ email_address:'pachiberta@gmail.com' } }] }),
+      onApprove:(d,a) => a.order.capture().then(() => { showToast('🎉 ¡Pago completado!'); cart=[]; saveCart(); renderCart(); }),
+      onError:() => showToast('❌ Error con PayPal')
+    }).render('#paypal-button-container');
+  }
+}
+
+function updateShippingUI() {
+  const postalDiv = document.getElementById('postalShippingDiv');
+  const pickupDiv = document.getElementById('pickupShippingDiv');
+  const shippingOption = document.querySelector('input[name="shippingOption"]:checked').value;
+
+  if (shippingOption === 'postal') {
+    postalDiv.style.display = 'block';
+    pickupDiv.style.display = 'none';
+    calculateShippingByZip();
+  } else {
+    postalDiv.style.display = 'none';
+    pickupDiv.style.display = 'block';
+    // Envío gratis para recogida
+    cart.forEach(item => item.shipping = 0);
+    saveCart();
+    renderCart();
+  }
+}
+
+function calculateShippingByZip() {
+  const zipCode = document.getElementById('zipCode').value.trim();
+  const infoDiv = document.getElementById('shippingInfo');
+  
+  if (!zipCode) {
+    infoDiv.innerHTML = '';
+    return;
+  }
+
+  let zone = 'mundo';
+  const canariasCodes = ['35001', '35002', '35003', '35004', '35005', '35006', '35007', '35008', '35009', '35010', '35011', '35012', '35013', '35014', '35015', '35016', '35017', '35018', '35019', '35020', '35021', '35022', '35023', '35024', '35025', '35026', '35027', '35028', '35029', '35030', '35031', '35032', '35033', '35034', '35035', '35036', '35037', '35038', '35039', '35040', '35041', '35100', '35200', '35300', '35400', '35500', '35600', '35700', '35800', '35900'];
+  const peninsulaCodes = /^(0[1-9]|[1-4][0-9]|5[0-2])\d{3}$/; // Códigos 01000-52999
+
+  if (canariasCodes.includes(zipCode)) {
+    zone = 'canarias';
+  } else if (peninsulaCodes.test(zipCode)) {
+    zone = 'peninsula';
+  } else if (/^\d{5}$/.test(zipCode)) {
+    // Asume que otros códigos de 5 dígitos son Europa
+    zone = 'europa';
+  }
+
+  const zones = { canarias:10, peninsula:15, europa:25, mundo:45 };
+  const labels = { canarias:'Canarias', peninsula:'Península', europa:'Europa', mundo:'Resto del mundo' };
+  
+  infoDiv.innerHTML = `✓ ${labels[zone]} - ${zones[zone]}€`;
+  
+  // Actualizar carrito con el nuevo envío
+  cart.forEach(item => item.shipping = zones[zone]);
+  saveCart();
+  renderCart();
+}
+
+// Agregar evento para detectar cambios en el código postal
+document.addEventListener('keyup', (e) => {
+  if (e.target.id === 'zipCode') {
+    calculateShippingByZip();
+  }
+});
   // Email
   async function sendEmail() {
     const name = document.getElementById('contactName')?.value;

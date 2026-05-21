@@ -715,6 +715,15 @@ document.addEventListener('keyup', (e) => {
     calculateShippingByZip();
   }
 });
+    function openCart() {
+    document.getElementById('cartModal').classList.add('open');
+    renderCart();
+  }
+
+  function closeCart() {
+    document.getElementById('cartModal').classList.remove('open');
+  }
+
   // Email
   async function sendEmail() {
     const name = document.getElementById('contactName')?.value;

@@ -628,7 +628,7 @@ function renderCart() {
       </div>
       
       <div id="postalShippingDiv">
-        <input type="text" id="zipCode" placeholder="Código postal" maxlength="5" style="width:100%; padding:0.6rem; border:1.5px solid rgba(100,80,50,0.2); border-radius:0.3rem; margin-bottom:0.5rem;">
+              <input type="text" id="zipCode" placeholder="Código postal" maxlength="5" style="width:100%; padding:0.6rem; border:1.5px solid rgba(100,80,50,0.2); border-radius:0.3rem; margin-bottom:0.5rem;" oninput="calculateShippingByZip()" onchange="calculateShippingByZip()"> 
         <div id="shippingInfo" style="font-size:0.8rem; color:var(--mist);"></div>
       </div>
       

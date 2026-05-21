@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8">º
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>Elberta Wood & Pencil Shop</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -431,7 +431,7 @@
     const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/);
     return m ? m[1] : null;
   }
-  document.addEventListener('keydown', e => {
+  renderCart('keydown', e => {
     if (!document.getElementById('lightbox').classList.contains('open')) return;
     if (e.key === 'ArrowLeft') lightboxNav(-1);
     if (e.key === 'ArrowRight') lightboxNav(1);
@@ -629,7 +629,7 @@ function renderCart() {
       </div>
       
       <div id="postalShippingDiv">
-        <input type="text" id="zipCode" placeholder="Código postal" maxlength="5" style="width:100%; padding:0.6rem; border:1.5px solid rgba(100,80,50,0.2); border-radius:0.3rem; margin-bottom:0.5rem;">
+       <input type="text" id="zipCode" placeholder="Código postal" maxlength="5" style="width:100%; padding:0.6rem; border:1.5px solid rgba(100,80,50,0.2); border-radius:0.3rem; margin-bottom:0.5rem;" oninput="calculateShippingByZip()" onchange="calculateShippingByZip()">
         <div id="shippingInfo" style="font-size:0.8rem; color:var(--mist);"></div>
       </div>
       
@@ -767,7 +767,7 @@ function calculateShippingByZip() {
   renderCart();
 }
 
-document.addEventListener('keyup', (e) => {
+renderCart('keyup', (e) => {
   if (e.target.id === 'zipCode') {
     calculateShippingByZip();
   }
@@ -982,7 +982,7 @@ document.addEventListener('keyup', (e) => {
   renderExposiciones();
   loadProducts();
   updateCartCount();
-  document.addEventListener('keydown', e => {
+  renderCart('keydown', e => {
     if (e.key === 'Escape') { closeCart(); closeAdmin(); if (document.getElementById('lightbox').classList.contains('open')) closeLightbox(); }
   });
 </script>

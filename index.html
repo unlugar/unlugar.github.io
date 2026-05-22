@@ -652,10 +652,10 @@ function renderCart() {
   setTimeout(() => {
     const zipInput = document.getElementById('zipCode');
     if (zipInput) {
-      zipInput.addEventListener('input', calculateShippingByZip);
-      zipInput.addEventListener('change', calculateShippingByZip);
-    }
-  }, 100);
+      zipInput.removeEventListener('input', calculateShippingByZip);
+      zipInput.removeEventListener('change', calculateShippingByZip);
+      zipInput.addEventListener('input', calculate
+
 
   const pp = document.getElementById('paypal-button-container');
   pp.innerHTML = `
@@ -749,40 +749,45 @@ function updateShippingUI() {
 }
 
 function calculateShippingByZip() {
-  const zipCode = document.getElementById('zipCode').value.trim();
-  const infoDiv = document.getElementById('shippingInfo');
+  const zipInput = document.getElementById('zipCode');
+  if (!zipInput) return;
   
-  if (!zipCode) {
-    infoDiv.innerHTML = '';
+  const zip = zipInput.value.trim();
+  console.log('Código postal:', zip);
+  
+  if (!zip || zip.length < 3) {
+    document.getElementById('shippingInfo').innerHTML = '<span style="color:var(--mist);">Ingresa al menos 3 dígitos</span>';
     return;
   }
 
+  let shippingCost = 45;
   let zone = 'mundo';
-  const canariasCodes = ['35001', '35002', '35003', '35004', '35005', '35006', '35007', '35008', '35009', '35010', '35011', '35012', '35013', '35014', '35015', '35016', '35017', '35018', '35019', '35020', '35021', '35022', '35023', '35024', '35025', '35026', '35027', '35028', '35029', '35030', '35031', '35032', '35033', '35034', '35035', '35036', '35037', '35038', '35039', '35040', '35041', '35100', '35200', '35300', '35400', '35500', '35600', '35700', '35800', '35900'];
-  const peninsulaCodes = /^(0[1-9]|[1-4][0-9]|5[0-2])\d{3}$/;
 
-  if (canariasCodes.includes(zipCode)) {
+  if (zip.startsWith('35') || zip.startsWith('38')) {
+    shippingCost = 10;
     zone = 'canarias';
-  } else if (peninsulaCodes.test(zipCode)) {
+  } else if (/^[0-9]/.test(zip)) {
+    shippingCost = 15;
     zone = 'peninsula';
-  } else if (/^\d{5}$/.test(zipCode)) {
-    zone = 'europa';
   }
 
-  const zones = { canarias:10, peninsula:15, europa:25, mundo:45 };
-  const labels = { canarias:'Canarias', peninsula:'Península', europa:'Europa', mundo:'Resto del mundo' };
+  document.getElementById('shippingInfo').innerHTML = `<span style="color:var(--forest);">✓ Envío a ${zone}: ${shippingCost}€</span>`;
+
+  cart.forEach(item => {
+    item.shipping = shippingCost;
+  });
   
-  infoDiv.innerHTML = `✓ ${labels[zone]} - ${zones[zone]}€`;
-  
-  cart.forEach(item => item.shipping = zones[zone]);
   saveCart();
-  renderCart();
+  updateCartTotals();
 }
 
-renderCart('keyup', (e) => {
-  if (e.target.id === 'zipCode') {
-    calculateShippingByZip();
-  }
+function updateCartTotals() {
+  let total = 0;
+  cart.forEach(item => {
+    total += (item.price + item.shipping) * item.quantity;
+  });
+  document.getElementById('cartTotal').innerHTML = `Total: ${total.toFixed(2)} €`;
+}
 });
     function openCart() {
     document.getElementById('cartModal').classList.add('open');

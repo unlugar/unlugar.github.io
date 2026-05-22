@@ -66,40 +66,55 @@
     .section-label { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--coral); font-weight: 600; margin-bottom: 0.8rem; }
     .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 3vw, 3rem); line-height: 1.1; }
     .section-title em { font-style: italic; color: var(--coral); }
-
     #products-grid { display: flex; flex-direction: column; gap: 3.5rem; }
 
-    /* ===== CATEGORIAS ===== */
     .category-header { display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--light-border); }
     .category-logo { width: 50px; height: 50px; object-fit: contain; }
     .category-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.5rem, 2.5vw, 2rem); font-weight: 600; color: var(--ink); }
     .category-title em { font-style: italic; color: var(--coral); }
     .category-count { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mist); margin-left: auto; }
-    .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
+    .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.2rem; }
     .category-empty { grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--mist); font-size: 0.9rem; font-style: italic; }
 
     .product-card { background: white; border-radius: 0.5rem; overflow: hidden; border: 1px solid var(--light-border); transition: all 0.4s cubic-bezier(0.23,1,0.32,1); }
     .product-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
-    .product-img { height: 280px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .product-img { height: 168px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; }
     .product-img-bg { width: 100%; height: 100%; transition: transform 0.5s ease; object-fit: cover; }
     .product-card:hover .product-img-bg { transform: scale(1.04); }
-    .product-badge-wrap { position: absolute; top: 1rem; left: 1rem; display: flex; gap: 0.4rem; flex-wrap: wrap; }
-    .badge { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.25rem 0.7rem; border-radius: 2rem; }
+    .product-badge-wrap { position: absolute; top: 0.5rem; left: 0.5rem; display: flex; gap: 0.3rem; flex-wrap: wrap; }
+    .badge { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.2rem 0.5rem; border-radius: 2rem; }
     .badge-new { background: var(--coral); color: white; }
     .badge-sold { background: var(--mist); color: white; }
     .badge-original { background: var(--forest); color: white; }
-    .product-body { padding: 1.3rem 1.4rem 1.5rem; }
-    .product-technique { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.4rem; }
-    .product-name { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; margin-bottom: 0.3rem; }
-    .product-dims { font-size: 0.78rem; color: var(--mist); margin-bottom: 1rem; }
-    .product-footer { margin-top: 1rem; display: flex; align-items: center; justify-content: space-between; }
-    .product-price { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; color: var(--coral); }
-    .shipping-select { width: 100%; padding: 0.4rem; margin: 0.5rem 0; border-radius: 0.3rem; border: 1px solid var(--light-border); font-family: 'Jost', sans-serif; }
-    .add-btn { background: var(--ink); color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; font-family: 'Jost', sans-serif; font-size: 0.75rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+    .product-body { padding: 0.78rem 0.84rem 0.9rem; }
+    .product-technique { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.3rem; }
+    .product-name { font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.2rem; }
+    .product-dims { font-size: 0.72rem; color: var(--mist); margin-bottom: 0.6rem; }
+    .product-footer { display: flex; align-items: center; justify-content: space-between; }
+    .product-price { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 600; color: var(--coral); }
+    .add-btn { background: var(--ink); color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 0.25rem; font-family: 'Jost', sans-serif; font-size: 0.72rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
     .add-btn:hover { background: var(--coral); }
     .add-btn:disabled { background: #ccc; cursor: not-allowed; }
-    .copy-link-btn { width: 100%; padding: 0.4rem; margin-top: 0.5rem; background: var(--sand); border: 1px solid var(--light-border); border-radius: 0.3rem; font-size: 0.7rem; cursor: pointer; font-family: 'Jost', sans-serif; }
+    .copy-link-btn { width: 100%; padding: 0.35rem; margin-top: 0.4rem; background: var(--sand); border: 1px solid var(--light-border); border-radius: 0.3rem; font-size: 0.68rem; cursor: pointer; font-family: 'Jost', sans-serif; }
     .copy-link-btn:hover { background: var(--gold); color: white; }
+
+    /* Cart shipping section */
+    .shipping-box { background: #f9f6f0; border-radius: 0.5rem; padding: 1rem; margin-bottom: 1.2rem; border: 1px solid var(--light-border); }
+    .shipping-box label { font-size: 0.82rem; font-weight: 600; display: block; margin-bottom: 0.8rem; color: var(--ink); }
+    .shipping-options { display: flex; gap: 1rem; margin-bottom: 0.8rem; flex-wrap: wrap; }
+    .shipping-option-label { display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-size: 0.85rem; }
+    .shipping-option-label input { accent-color: var(--coral); }
+    .zip-input { width: 100%; padding: 0.6rem 0.8rem; border: 1.5px solid rgba(100,80,50,0.2); border-radius: 0.3rem; font-family: 'Jost', sans-serif; font-size: 0.9rem; margin-bottom: 0.4rem; }
+    .zip-input:focus { outline: none; border-color: var(--coral); }
+    .shipping-result { font-size: 0.82rem; padding: 0.4rem 0.6rem; border-radius: 0.3rem; }
+    .shipping-result.ok { background: #e8f4e8; color: var(--forest); }
+    .shipping-result.info { background: #f0f4ff; color: #3355aa; }
+
+    /* Payment buttons */
+    .pay-section { margin-top: 1rem; }
+    .pay-label { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.8rem; display: block; }
+    .bizum-btn { width: 100%; padding: 0.8rem; background: #00b259; color: white; border: none; border-radius: 0.4rem; font-family: 'Jost', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; margin-bottom: 0.8rem; transition: background 0.2s; }
+    .bizum-btn:hover { background: #009a4d; }
 
     .lightbox { display: none; position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; }
     .lightbox.open { display: flex; flex-direction: column; }
@@ -119,9 +134,9 @@
 
     .cart-modal { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); align-items: center; justify-content: center; }
     .cart-modal.open { display: flex; }
-    .cart-panel { background: white; border-radius: 1rem; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; padding: 2rem; }
-    .cart-item { display: flex; justify-content: space-between; padding: 1rem 0; border-bottom: 1px solid var(--light-border); }
-    .cart-total { margin-top: 1rem; text-align: right; font-size: 1.2rem; font-weight: bold; }
+    .cart-panel { background: white; border-radius: 1rem; max-width: 500px; width: 90%; max-height: 85vh; overflow-y: auto; padding: 1.5rem 2rem 2rem; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; border-bottom: 1px solid var(--light-border); gap: 0.5rem; }
+    .cart-total { margin-top: 1rem; text-align: right; font-size: 1.2rem; font-weight: bold; color: var(--ink); }
 
     .about { padding: 7rem 3rem; background: var(--ink); display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
     .about-art { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; height: 450px; }
@@ -156,7 +171,7 @@
     .instagram-link:hover { transform: translateY(-2px); }
 
     footer { background: #0F0C07; padding: 2rem 3rem; text-align: center; color: rgba(255,255,255,0.5); }
-    .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--ink); color: white; padding: 1rem 1.5rem; border-radius: 0.5rem; z-index: 9999; transition: all 0.3s; transform: translateY(100px); opacity: 0; }
+    .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--ink); color: white; padding: 1rem 1.5rem; border-radius: 0.5rem; z-index: 9999; transition: all 0.3s; transform: translateY(100px); opacity: 0; max-width: 280px; }
     .toast.show { transform: translateY(0); opacity: 1; }
 
     .admin-overlay { display: none; position: fixed; inset: 0; z-index: 500; background: rgba(15,12,7,0.7); backdrop-filter: blur(4px); align-items: center; justify-content: center; }
@@ -168,18 +183,15 @@
     .admin-tab { padding: 0.5rem 1rem; background: var(--sand); border: none; cursor: pointer; border-radius: 0.3rem; font-family: 'Jost', sans-serif; font-size: 0.82rem; }
     .admin-tab.active { background: var(--coral); color: white; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.8rem; }
+    .form-row-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.8rem; }
     .btn-save { background: var(--coral); color: white; padding: 0.6rem 1.5rem; border: none; border-radius: 0.3rem; cursor: pointer; font-family: 'Jost', sans-serif; font-size: 0.85rem; }
     .btn-save:hover { background: var(--ink); }
     .loading { text-align: center; padding: 3rem; }
-
-    /* Category selector in admin */
     .cat-selector { display: flex; gap: 1rem; flex-wrap: wrap; }
     .cat-option { display: flex; align-items: center; gap: 0.6rem; cursor: pointer; font-size: 0.9rem; padding: 0.6rem 1.2rem; border: 1.5px solid var(--light-border); border-radius: 0.4rem; transition: all 0.2s; background: white; }
     .cat-option:hover { border-color: var(--coral); }
     .cat-option input[type="radio"] { accent-color: var(--coral); width: auto; }
     .cat-option img { width: 28px; height: 28px; object-fit: contain; }
-    .cat-option.selected { border-color: var(--coral); background: rgba(212,96,58,0.06); }
 
     @media (max-width: 768px) {
       nav { padding: 0.9rem 1.2rem; }
@@ -192,8 +204,8 @@
       .contact { padding: 4rem 1.5rem; }
       .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
       .expo-grid { grid-template-columns: 1fr; }
-      .category-grid { grid-template-columns: 1fr; }
-      .form-row-3 { grid-template-columns: 1fr 1fr; }
+      .category-grid { grid-template-columns: repeat(2, 1fr); }
+      .form-row-4 { grid-template-columns: 1fr 1fr; }
       .lightbox-nav { width: 40px; height: 40px; font-size: 1rem; }
       .lightbox-prev { left: 0.5rem; } .lightbox-next { right: 0.5rem; }
       .lightbox-controls button { width: 35px; height: 35px; font-size: 1rem; }
@@ -231,6 +243,7 @@
     </div>
   </div>
   <div class="hero-float">
+    <img src="imagenes/logotipofinal.png" alt="Logo" style="width:340px;height:340px;margin-bottom:1rem;object-fit:contain;">
     <div class="hero-float-num">100%</div>
     <div class="hero-float-label">Piezas originales</div>
   </div>
@@ -348,10 +361,12 @@
 
 <div class="cart-modal" id="cartModal">
   <div class="cart-panel">
-    <h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.98 1.61h9.72a2 2 0 001.98-1.61L23 6H6"/></svg>Carrito</h3>
+    <h3 style="margin-bottom:1rem;font-family:'Cormorant Garamond',serif;font-size:1.3rem;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:6px"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.98 1.61h9.72a2 2 0 001.98-1.61L23 6H6"/></svg>Tu Carrito
+    </h3>
     <div id="cartItems"></div>
     <div class="cart-total" id="cartTotal">Total: 0 €</div>
-    <div id="paypal-button-container"></div>
+    <div class="pay-section" id="paySection"></div>
     <button class="btn-ghost" style="margin-top:1rem;width:100%" onclick="closeCart()">Cerrar</button>
   </div>
 </div>
@@ -369,6 +384,7 @@
 </div>
 
 <script>
+  // ==================== FIREBASE ====================
   const firebaseConfig = {
     apiKey: "AIzaSyA4q-NJusufkt1TztulJJI-GY9lhIqRjwM",
     authDomain: "elbertashop.firebaseapp.com",
@@ -429,14 +445,6 @@
     const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/);
     return m ? m[1] : null;
   }
-  document.addEventListener('keydown', e => {
-    if (!document.getElementById('lightbox').classList.contains('open')) return;
-    if (e.key === 'ArrowLeft') lightboxNav(-1);
-    if (e.key === 'ArrowRight') lightboxNav(1);
-    if (e.key === 'Escape') closeLightbox();
-    if (e.key === '+' || e.key === '=') toggleZoom();
-    if (e.key === '-' && isZoomed) toggleZoom();
-  });
 
   // ==================== PRODUCTOS ====================
   let products = [];
@@ -466,7 +474,6 @@
 
   function productCardHtml(p, idx) {
     const mainImg = p.images && p.images[0] ? imgUrl(p.images[0]) : (p.image ? imgUrl(p.image) : null);
-    const zones = p.shippingZones || { canarias:10, peninsula:15, europa:25, mundo:45 };
     const obraUrl = window.location.href.split('#')[0] + '#obra-' + idx;
     return `
       <div class="product-card" id="obra-${idx}">
@@ -475,7 +482,7 @@
           <div class="product-badge-wrap">
             ${p.isNew ? '<span class="badge badge-new">Nuevo</span>' : ''}
             ${p.soldOut ? '<span class="badge badge-sold">Vendido</span>' : '<span class="badge badge-original">Original</span>'}
-            ${p.video ? '<span class="badge" style="background:var(--ink);color:white;">▶ Vídeo</span>' : ''}
+            ${p.video ? '<span class="badge" style="background:var(--ink);color:white;">▶</span>' : ''}
           </div>
         </div>
         <div class="product-body">
@@ -486,13 +493,7 @@
             <div class="product-price ${p.soldOut?'sold-out':''}">${p.price ? p.price+' €' : ''}</div>
             <button class="add-btn" onclick="addToCart(${idx})" ${p.soldOut?'disabled':''}>${p.soldOut?'Vendido':'Comprar'}</button>
           </div>
-          ${!p.soldOut ? `<select class="shipping-select" id="shipping_${p.id}">
-            <option value="canarias">🇮🇨 Canarias - ${zones.canarias} €</option>
-            <option value="peninsula">🇪🇸 Península - ${zones.peninsula} €</option>
-            <option value="europa">🇪🇺 Europa - ${zones.europa} €</option>
-            <option value="mundo">🌍 Resto del mundo - ${zones.mundo} €</option>
-          </select>` : ''}
-          <button class="copy-link-btn" onclick="copyToClipboard('${obraUrl}')">🔗 Copiar enlace para compartir</button>
+          <button class="copy-link-btn" onclick="copyToClipboard('${obraUrl}')">🔗 Compartir</button>
         </div>
       </div>`;
   }
@@ -503,50 +504,36 @@
       grid.innerHTML = '<div style="text-align:center;padding:3rem;"><div style="font-size:3rem;">🎨</div><h3 style="font-family:\'Cormorant Garamond\',serif;margin:0.5rem 0;">Próximamente</h3><p>Entra al panel de <strong>Edición</strong> para añadir tus primeras obras.</p></div>';
       return;
     }
-
     const lienzos = products.filter(p => p.category === 'lienzo');
     const maderas = products.filter(p => p.category === 'madera');
     const otros = products.filter(p => !p.category || (p.category !== 'lienzo' && p.category !== 'madera'));
-
     let html = '';
 
-    // LIENZOS
     html += `<div>
       <div class="category-header">
-        <img class="category-logo" src="imagenes/logolienzomadera1.png" alt="Lienzos" onerror="this.style.display='none'">
-        <div class="category-title">Sobre <em>Lienzo</em></div>
+        <div class="category-title">Sobre <em>Lienzo</em> <img src="imagenes/logolienzomadera1.png" onerror="this.style.display='none'" style="width:60px;height:60px;vertical-align:middle;margin-left:0.5rem;"></div>
         <span class="category-count">${lienzos.length} obra${lienzos.length!==1?'s':''}</span>
       </div>
-      <div class="category-grid">
-        ${lienzos.length ? lienzos.map(p => productCardHtml(p, products.indexOf(p))).join('') : '<div class="category-empty">Aún no hay obras en esta categoría — edítalas desde el panel para asignarlas</div>'}
-      </div>
+      <div class="category-grid">${lienzos.length ? lienzos.map(p => productCardHtml(p, products.indexOf(p))).join('') : '<div class="category-empty">Aún no hay obras — edítalas desde el panel para asignarlas</div>'}</div>
     </div>`;
 
-    // MADERAS
     html += `<div>
       <div class="category-header">
-        <img class="category-logo" src="imagenes/logolienzomadera2.png" alt="Maderas" onerror="this.style.display='none'">
-        <div class="category-title">Sobre <em>Madera</em></div>
+        <div class="category-title">Sobre <em>Madera</em> <img src="imagenes/logolienzomadera2.png" onerror="this.style.display='none'" style="width:60px;height:60px;vertical-align:middle;margin-left:0.5rem;"></div>
         <span class="category-count">${maderas.length} obra${maderas.length!==1?'s':''}</span>
       </div>
-      <div class="category-grid">
-        ${maderas.length ? maderas.map(p => productCardHtml(p, products.indexOf(p))).join('') : '<div class="category-empty">Aún no hay obras en esta categoría — edítalas desde el panel para asignarlas</div>'}
-      </div>
+      <div class="category-grid">${maderas.length ? maderas.map(p => productCardHtml(p, products.indexOf(p))).join('') : '<div class="category-empty">Aún no hay obras — edítalas desde el panel para asignarlas</div>'}</div>
     </div>`;
 
-    // OTRAS (sin categoría — obras antiguas)
     if (otros.length) {
       html += `<div>
         <div class="category-header">
           <div class="category-title">Otras <em>obras</em></div>
           <span class="category-count">${otros.length} obra${otros.length!==1?'s':''}</span>
         </div>
-        <div class="category-grid">
-          ${otros.map(p => productCardHtml(p, products.indexOf(p))).join('')}
-        </div>
+        <div class="category-grid">${otros.map(p => productCardHtml(p, products.indexOf(p))).join('')}</div>
       </div>`;
     }
-
     grid.innerHTML = html;
   }
 
@@ -561,20 +548,15 @@
     { src:'exposiciones/Llamativo póster exposición de arte minimalista colorido.png', title:'Arte Minimalista Colorido', year:'' },
     { src:'exposiciones/elberta woodandpencil.jpg', title:'Elberta Wood & Pencil', year:'' }
   ];
-
   function renderExposiciones() {
     const grid = document.getElementById('expoGrid');
     if (!grid) return;
     grid.innerHTML = exposicionesList.map(e => `
       <div class="expo-card" onclick="openLightboxExpo('${e.src}','${e.title}')">
         <img src="${e.src}" alt="${e.title}" onerror="this.style.display='none'">
-        <div class="expo-card-body">
-          <div class="expo-card-title">${e.title}</div>
-          ${e.year ? `<div style="font-size:0.75rem;color:var(--mist);">${e.year}</div>` : ''}
-        </div>
+        <div class="expo-card-body"><div class="expo-card-title">${e.title}</div>${e.year?`<div style="font-size:0.75rem;color:var(--mist);">${e.year}</div>`:''}</div>
       </div>`).join('');
   }
-
   function openLightboxExpo(src, title) {
     const m = document.createElement('div');
     Object.assign(m.style, { position:'fixed', inset:'0', background:'rgba(0,0,0,0.95)', zIndex:'2000', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' });
@@ -584,40 +566,187 @@
     document.body.appendChild(m);
   }
 
-  // Carrito
+  // ==================== CARRITO + ENVÍO POR CP ====================
   let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  let currentShippingZone = '';
+  let currentShippingCost = 0;
+
+  // Rangos de códigos postales españoles por zona
+  function getZoneFromZip(zip) {
+    if (!zip || zip.length !== 5 || !/^\d{5}$/.test(zip)) return null;
+    const n = parseInt(zip);
+    // Canarias: 35000-35999 (Las Palmas) y 38000-38999 (Santa Cruz de Tenerife)
+    if ((n >= 35000 && n <= 35999) || (n >= 38000 && n <= 38999)) return 'canarias';
+    // Ceuta: 51000-51999, Melilla: 52000-52999
+    if (n >= 51000 && n <= 52999) return 'peninsula';
+    // Baleares: 07000-07999
+    if (n >= 7000 && n <= 7999) return 'peninsula';
+    // Península e islas: 01000-52999
+    if (n >= 1000 && n <= 52999) return 'peninsula';
+    return null;
+  }
+
+  const ZONE_LABELS = { canarias:'🇮🇨 Canarias', peninsula:'🇪🇸 Península / Baleares', europa:'🇪🇺 Europa', mundo:'🌍 Resto del mundo' };
+  const DEFAULT_ZONES = { canarias:10, peninsula:15, europa:25, mundo:45 };
+
+  function getShippingCost(zone) {
+    // Use first product's shippingZones as reference, or defaults
+    const ref = cart.length && products.length ? products.find(p => p.id === cart[0].id) : null;
+    const zones = ref && ref.shippingZones ? ref.shippingZones : DEFAULT_ZONES;
+    return zones[zone] || DEFAULT_ZONES[zone] || 45;
+  }
+
   function saveCart() { localStorage.setItem('cart', JSON.stringify(cart)); updateCartCount(); }
   function updateCartCount() { document.getElementById('cartCount').innerText = cart.reduce((s,i) => s+i.quantity, 0); }
+
   function addToCart(idx) {
     const p = products[idx];
     if (p.soldOut) return;
-    const zone = document.getElementById(`shipping_${p.id}`).value;
-    const zones = p.shippingZones || { canarias:10, peninsula:15, europa:25, mundo:45 };
-    const existing = cart.find(i => i.id === p.id && i.zone === zone);
+    const existing = cart.find(i => i.id === p.id);
     if (existing) existing.quantity++;
-    else cart.push({ id:p.id, name:p.name, price:parseFloat(p.price), zone, shipping:zones[zone], quantity:1 });
-    saveCart(); renderCart();
+    else cart.push({ id:p.id, name:p.name, price:parseFloat(p.price), shippingZones: p.shippingZones || DEFAULT_ZONES, quantity:1 });
+    saveCart();
+    renderCartItems();
     showToast(`✨ "${p.name}" añadida al carrito`);
   }
-  function removeFromCart(i) { cart.splice(i,1); saveCart(); renderCart(); }
-  function renderCart() {
+  function removeFromCart(i) { cart.splice(i,1); saveCart(); renderCartItems(); }
+
+  function renderCartItems() {
     const c = document.getElementById('cartItems');
-    if (!cart.length) { c.innerHTML = '<p style="text-align:center;padding:1rem;">Carrito vacío</p>'; document.getElementById('cartTotal').innerHTML = 'Total: 0 €'; document.getElementById('paypal-button-container').innerHTML = ''; return; }
-    let total = 0;
-    c.innerHTML = cart.map((item, i) => { const t = (item.price+item.shipping)*item.quantity; total += t; return `<div class="cart-item"><div><strong>${item.name}</strong><br><span style="font-size:0.75rem;color:var(--mist);">${item.zone} (envío ${item.shipping}€) x${item.quantity}</span></div><div>${t.toFixed(2)} € <button onclick="removeFromCart(${i})" style="background:none;border:none;color:var(--coral);cursor:pointer;">🗑️</button></div></div>`; }).join('');
-    document.getElementById('cartTotal').innerHTML = `Total: ${total.toFixed(2)} €`;
-    const pp = document.getElementById('paypal-button-container');
-    pp.innerHTML = '';
+    if (!cart.length) {
+      c.innerHTML = '<p style="text-align:center;padding:1.5rem;color:var(--mist);">Carrito vacío</p>';
+      document.getElementById('cartTotal').innerHTML = 'Total: 0 €';
+      document.getElementById('paySection').innerHTML = '';
+      return;
+    }
+
+    // Items
+    let subtotal = 0;
+    c.innerHTML = cart.map((item, i) => {
+      subtotal += item.price * item.quantity;
+      return `<div class="cart-item">
+        <div style="flex:1;min-width:0;">
+          <strong style="font-size:0.9rem;">${item.name}</strong>
+          <br><span style="font-size:0.75rem;color:var(--mist);">${item.quantity} × ${item.price} €</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;">
+          <strong>${(item.price * item.quantity).toFixed(2)} €</strong>
+          <button onclick="removeFromCart(${i})" style="background:none;border:none;color:var(--coral);cursor:pointer;font-size:1.1rem;line-height:1;">✕</button>
+        </div>
+      </div>`;
+    }).join('');
+
+    // Shipping box
+    c.innerHTML += `
+      <div class="shipping-box" style="margin-top:1rem;">
+        <label>📦 Datos de envío</label>
+        <div class="shipping-options">
+          <label class="shipping-option-label">
+            <input type="radio" name="shipMode" value="postal" checked onchange="onShipModeChange()"> Por código postal
+          </label>
+          <label class="shipping-option-label">
+            <input type="radio" name="shipMode" value="pickup" onchange="onShipModeChange()"> Recogida gratuita
+          </label>
+        </div>
+        <div id="postalDiv">
+          <input type="text" class="zip-input" id="zipInput" placeholder="Escribe tu código postal (ej: 35600)" maxlength="5" oninput="onZipChange(this.value)">
+          <div id="zipResult"></div>
+        </div>
+        <div id="pickupDiv" style="display:none;font-size:0.85rem;color:var(--forest);padding:0.3rem 0;">✅ Recogida gratuita en Puerto del Rosario</div>
+      </div>`;
+
+    updateTotal(subtotal);
+  }
+
+  function onShipModeChange() {
+    const mode = document.querySelector('input[name="shipMode"]:checked')?.value;
+    const postalDiv = document.getElementById('postalDiv');
+    const pickupDiv = document.getElementById('pickupDiv');
+    if (mode === 'pickup') {
+      postalDiv.style.display = 'none';
+      pickupDiv.style.display = 'block';
+      currentShippingZone = 'recogida';
+      currentShippingCost = 0;
+    } else {
+      postalDiv.style.display = 'block';
+      pickupDiv.style.display = 'none';
+      currentShippingZone = '';
+      currentShippingCost = 0;
+      const zip = document.getElementById('zipInput')?.value;
+      if (zip) onZipChange(zip);
+    }
+    let subtotal = cart.reduce((s,i) => s + i.price * i.quantity, 0);
+    updateTotal(subtotal);
+  }
+
+  function onZipChange(zip) {
+    const result = document.getElementById('zipResult');
+    if (!zip || zip.length < 5) { result.innerHTML = ''; currentShippingZone = ''; currentShippingCost = 0; updateTotal(cart.reduce((s,i)=>s+i.price*i.quantity,0)); return; }
+    const zone = getZoneFromZip(zip);
+    if (zone) {
+      const cost = getShippingCost(zone);
+      currentShippingZone = zone;
+      currentShippingCost = cost;
+      result.innerHTML = `<div class="shipping-result ok">✓ ${ZONE_LABELS[zone]} — Envío: <strong>${cost} €</strong></div>`;
+    } else if (zip.length === 5) {
+      // CP extranjero de 5 dígitos o no reconocido → Europa o Mundo
+      const cost = getShippingCost('europa');
+      currentShippingZone = 'europa';
+      currentShippingCost = cost;
+      result.innerHTML = `<div class="shipping-result info">ℹ️ Envío internacional — <strong>${cost} €</strong> (Europa). Para otros destinos contáctanos.</div>`;
+    }
+    updateTotal(cart.reduce((s,i)=>s+i.price*i.quantity,0));
+  }
+
+  function updateTotal(subtotal) {
+    const total = subtotal + currentShippingCost;
+    let totalHtml = `<div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--mist);margin-bottom:0.3rem;"><span>Subtotal obras</span><span>${subtotal.toFixed(2)} €</span></div>`;
+    if (currentShippingCost > 0) totalHtml += `<div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--mist);margin-bottom:0.3rem;"><span>Envío (${ZONE_LABELS[currentShippingZone]||currentShippingZone})</span><span>${currentShippingCost.toFixed(2)} €</span></div>`;
+    else if (currentShippingZone === 'recogida') totalHtml += `<div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--forest);margin-bottom:0.3rem;"><span>Recogida</span><span>Gratis</span></div>`;
+    totalHtml += `<div style="display:flex;justify-content:space-between;font-size:1.1rem;font-weight:700;padding-top:0.5rem;border-top:1px solid var(--light-border);"><span>Total</span><span>${total.toFixed(2)} €</span></div>`;
+    document.getElementById('cartTotal').innerHTML = totalHtml;
+    renderPayButtons(total);
+  }
+
+  function renderPayButtons(total) {
+    const ps = document.getElementById('paySection');
+    if (!cart.length) { ps.innerHTML = ''; return; }
+
+    const needsShipping = currentShippingZone === '' ;
+    if (needsShipping) {
+      ps.innerHTML = `<p style="text-align:center;font-size:0.82rem;color:var(--mist);padding:1rem 0;">Introduce tu código postal para continuar con el pago</p>`;
+      return;
+    }
+
+    ps.innerHTML = `<span class="pay-label">Elige tu forma de pago</span>
+      <button class="bizum-btn" onclick="payWithBizum('${total.toFixed(2)}')">💸 Pagar con Bizum — ${total.toFixed(2)} €</button>
+      <div id="paypal-button-container"></div>`;
+
     if (window.paypal) {
       window.paypal.Buttons({
         style:{ layout:'vertical', color:'gold', shape:'rect', label:'pay' },
         createOrder:(d,a) => a.order.create({ purchase_units:[{ amount:{ value:total.toFixed(2), currency_code:'EUR' }, payee:{ email_address:'pachiberta@gmail.com' } }] }),
-        onApprove:(d,a) => a.order.capture().then(() => { showToast('🎉 ¡Pago completado!'); cart=[]; saveCart(); renderCart(); }),
+        onApprove:(d,a) => a.order.capture().then(() => { showToast('🎉 ¡Pago completado! Gracias'); cart=[]; saveCart(); renderCartItems(); }),
         onError:() => showToast('❌ Error con PayPal')
       }).render('#paypal-button-container');
     }
   }
-  function openCart() { renderCart(); document.getElementById('cartModal').classList.add('open'); }
+
+  function payWithBizum(amount) {
+    const items = cart.map(i => `• ${i.name} x${i.quantity} = ${(i.price*i.quantity).toFixed(2)}€`).join('\n');
+    const msg = `💸 INSTRUCCIONES DE PAGO POR BIZUM\n\n${items}\nEnvío: ${currentShippingCost.toFixed(2)}€\nTOTAL: ${amount}€\n\n1. Abre tu app del banco\n2. Busca "Bizum" → Enviar dinero\n3. Número: +34 637 196 259 (Luis Berta)\n4. Importe: ${amount}€\n5. Concepto: "Compra Elberta Wood"\n\n¿Ya has enviado el Bizum?`;
+    if (confirm(msg)) {
+      emailjs.send(EMAIL_SERVICE_ID, EMAIL_TEMPLATE_ID, {
+        from_name:'Cliente Web', from_email:'bizum@elbertawoodandpencil.art',
+        phone:'Bizum', subject:`Pago Bizum ${amount}€`,
+        message:`Pago por Bizum de ${amount}€\n\n${items}\nEnvío zona: ${currentShippingZone}\nEnvío coste: ${currentShippingCost}€`
+      }).catch(()=>{});
+      showToast('✅ ¡Gracias! Confirmaremos tu pedido pronto');
+      cart=[]; saveCart(); renderCartItems();
+    }
+  }
+
+  function openCart() { document.getElementById('cartModal').classList.add('open'); renderCartItems(); }
   function closeCart() { document.getElementById('cartModal').classList.remove('open'); }
 
   // Email
@@ -635,7 +764,7 @@
     } catch { showToast('❌ Error al enviar'); }
   }
 
-  function showToast(msg) { const t = document.getElementById('toast'); document.getElementById('toastMsg').innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); }
+  function showToast(msg) { const t = document.getElementById('toast'); document.getElementById('toastMsg').innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3500); }
 
   // ==================== ADMIN ====================
   let adminLoggedIn = false, editingIndex = -1, activeTab = 'productos';
@@ -651,12 +780,10 @@
     </div>`;
     setTimeout(() => document.getElementById('loginPass')?.focus(), 100);
   }
-
   function doLogin() {
     if (document.getElementById('loginPass').value === 'elberta2024') { adminLoggedIn = true; renderAdminContent(); }
     else showToast('Contraseña incorrecta');
   }
-
   function renderAdminContent() {
     document.getElementById('adminBody').innerHTML = `
       <div class="admin-tabs">
@@ -667,7 +794,6 @@
       <div id="tabContent"></div>`;
     renderTab();
   }
-
   function switchTab(tab) { activeTab = tab; editingIndex = -1; renderAdminContent(); }
   function renderTab() {
     const el = document.getElementById('tabContent');
@@ -675,7 +801,6 @@
     else if (activeTab === 'agregar') renderProductForm(el, null);
     else renderSettings(el);
   }
-
   function renderProductList(el) {
     if (editingIndex !== -1) { renderProductForm(el, products[editingIndex]); return; }
     if (!products.length) { el.innerHTML = '<p style="text-align:center;padding:2rem;color:var(--mist);">No hay obras. Ve a "Añadir Obra"</p>'; return; }
@@ -694,25 +819,19 @@
         </div>
       </div>`).join('');
   }
-
   function startEdit(id, idx) { editingIndex = idx; renderAdminContent(); }
-
   async function deleteProduct(id) {
     if (confirm('¿Eliminar esta obra?')) { await db.collection('productos').doc(id).delete(); await loadProducts(); renderAdminContent(); showToast('Obra eliminada'); }
   }
-
   function fInput(id, placeholder, value, type='text') {
     return `<input type="${type}" id="${id}" placeholder="${placeholder}" value="${value}" style="width:100%;padding:0.75rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;font-size:0.88rem;">`;
   }
-
   function renderProductForm(el, product) {
     const p = product || {};
     const zones = p.shippingZones || { canarias:10, peninsula:15, europa:25, mundo:45 };
     el.innerHTML = `<div style="background:var(--sand);border-radius:0.5rem;padding:1.5rem;">
       <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;margin-bottom:1.2rem;">${product?'✏️ Editar obra':'✦ Nueva obra'}</h3>
-
       <div style="margin-bottom:1rem;">${fInput('pName','Nombre de la obra *',p.name||'')}</div>
-
       <div style="margin-bottom:1rem;">
         <label style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--mist);display:block;margin-bottom:0.6rem;font-weight:600;">Categoría</label>
         <div class="cat-selector">
@@ -728,7 +847,6 @@
           </label>
         </div>
       </div>
-
       <div class="form-row" style="margin-bottom:1rem;">
         <div>${fInput('pTechnique','Técnica',p.technique||'')}</div>
         <div>${fInput('pMaterial','Material',p.material||'')}</div>
@@ -747,15 +865,13 @@
         <label for="pNew" style="font-size:0.88rem;cursor:pointer;">Marcar como "Nuevo"</label>
       </div>
       <div style="margin-bottom:1rem;">${fInput('pVideo','URL del vídeo (YouTube)',p.video||'')}</div>
-
-      <p style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--mist);margin-bottom:0.6rem;font-weight:600;">Costes de envío</p>
-      <div class="form-row-3" style="margin-bottom:1.5rem;">
+      <p style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--mist);margin-bottom:0.6rem;font-weight:600;">Costes de envío por zona</p>
+      <div class="form-row-4" style="margin-bottom:1.5rem;">
         <div><label style="font-size:0.7rem;color:var(--mist);display:block;margin-bottom:0.3rem;">🇮🇨 Canarias</label><input type="number" id="shipCanarias" value="${zones.canarias}" style="width:100%;padding:0.5rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;"></div>
         <div><label style="font-size:0.7rem;color:var(--mist);display:block;margin-bottom:0.3rem;">🇪🇸 Península</label><input type="number" id="shipPeninsula" value="${zones.peninsula}" style="width:100%;padding:0.5rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;"></div>
         <div><label style="font-size:0.7rem;color:var(--mist);display:block;margin-bottom:0.3rem;">🇪🇺 Europa</label><input type="number" id="shipEuropa" value="${zones.europa}" style="width:100%;padding:0.5rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;"></div>
         <div><label style="font-size:0.7rem;color:var(--mist);display:block;margin-bottom:0.3rem;">🌍 Resto mundo</label><input type="number" id="shipMundo" value="${zones.mundo}" style="width:100%;padding:0.5rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;"></div>
       </div>
-
       <div style="display:flex;gap:0.8rem;">
         <button class="btn-save" onclick="saveProductAdmin('${product?p.id:''}')">${product?'Guardar cambios':'Añadir obra'}</button>
         <button onclick="switchTab('productos')" style="background:white;border:1.5px solid var(--light-border);padding:0.6rem 1.2rem;border-radius:0.3rem;cursor:pointer;font-family:'Jost',sans-serif;">Cancelar</button>
@@ -763,7 +879,6 @@
     </div>`;
     updateCatStyle();
   }
-
   function updateCatStyle() {
     const checked = document.querySelector('input[name="pCategory"]:checked');
     ['catLabelLienzo','catLabelMadera'].forEach(id => {
@@ -774,14 +889,12 @@
       el.style.background = (checked && checked.value === val) ? 'rgba(212,96,58,0.06)' : 'white';
     });
   }
-
   async function saveProductAdmin(productId) {
     const name = document.getElementById('pName').value.trim();
     if (!name) { showToast('El nombre es obligatorio'); return; }
     const catChecked = document.querySelector('input[name="pCategory"]:checked');
     const product = {
-      name,
-      category: catChecked ? catChecked.value : '',
+      name, category: catChecked ? catChecked.value : '',
       technique: document.getElementById('pTechnique').value,
       material: document.getElementById('pMaterial').value,
       width: document.getElementById('pWidth').value,
@@ -804,17 +917,13 @@
     showToast(productId ? '✅ Obra actualizada' : '✅ Obra añadida');
     switchTab('productos');
   }
-
   function renderSettings(el) {
     el.innerHTML = `<div>
-      <h3 style="font-family:'Cormorant Garamond',serif;margin-bottom:1rem;">Cambiar contraseña</h3>
-      <p style="font-size:0.8rem;color:var(--mist);margin-bottom:1rem;">La contraseña se gestiona desde la consola de Firebase.</p>
-      <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--light-border);">
-        <button onclick="logout()" style="background:white;border:1.5px solid var(--light-border);padding:0.6rem 1.5rem;border-radius:0.3rem;cursor:pointer;font-family:'Jost',sans-serif;">Cerrar sesión</button>
-      </div>
+      <h3 style="font-family:'Cormorant Garamond',serif;margin-bottom:1rem;">Ajustes</h3>
+      <p style="font-size:0.8rem;color:var(--mist);margin-bottom:1.5rem;">La contraseña se gestiona desde la consola de Firebase.</p>
+      <button onclick="logout()" style="background:white;border:1.5px solid var(--light-border);padding:0.6rem 1.5rem;border-radius:0.3rem;cursor:pointer;font-family:'Jost',sans-serif;">Cerrar sesión</button>
     </div>`;
   }
-
   function logout() { adminLoggedIn = false; closeAdmin(); }
 
   // Init
@@ -822,7 +931,17 @@
   loadProducts();
   updateCartCount();
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { closeCart(); closeAdmin(); if (document.getElementById('lightbox').classList.contains('open')) closeLightbox(); }
+    if (e.key === 'Escape') {
+      closeCart();
+      closeAdmin();
+      if (document.getElementById('lightbox').classList.contains('open')) closeLightbox();
+    }
+    if (document.getElementById('lightbox').classList.contains('open')) {
+      if (e.key === 'ArrowLeft') lightboxNav(-1);
+      if (e.key === 'ArrowRight') lightboxNav(1);
+      if (e.key === '+' || e.key === '=') toggleZoom();
+      if (e.key === '-' && isZoomed) toggleZoom();
+    }
   });
 </script>
 </body>

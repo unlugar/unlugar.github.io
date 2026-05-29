@@ -8,7 +8,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script src="https://www.paypal.com/sdk/js?client-id=test&currency=EUR"></script>
+  <script src="https://www.paypal.com/sdk/js?client-id=AYaxsu2Iv7e1aVuRj4rfC4RTP0mKSIBLJFLxfvJ-iTTRQY3TQS0dDaRS9HTyk-3pdHScujXtEpNdOgxH&currency=EUR"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
   <style>
     :root {
@@ -193,85 +193,23 @@
     .cat-option input[type="radio"] { accent-color: var(--coral); width: auto; }
     .cat-option img { width: 28px; height: 28px; object-fit: contain; }
 
-@media (max-width: 768px) {
-  nav { padding: 0.9rem 1.2rem; }
-  nav ul { display: none; }
-
-  .nav-logo {
-    font-size: clamp(1.15rem, 7vw, 1.7rem);
-    white-space: nowrap;
-  }
-
-  .hero {
-    min-height: auto;
-    padding: 7rem 1.5rem 4rem;
-    display: block;
-  }
-
-  .hero-decor { display: none; }
-
-  .hero-content {
-    max-width: 100%;
-  }
-
-  .hero h1 {
-    font-size: clamp(2.8rem, 15vw, 4.2rem);
-  }
-
-  .hero-sub {
-    max-width: 100%;
-  }
-
-  .hero-actions {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.8rem;
-  }
-
-  .btn-main,
-  .btn-ghost {
-    width: 100%;
-    text-align: center;
-  }
-
-  .hero-float {
-    position: static;
-    transform: none;
-    margin: 2rem auto 0;
-    width: 100%;
-    color: var(--ink);
-  }
-
-  .hero-float img {
-    width: min(260px, 78vw) !important;
-    height: auto !important;
-    display: block;
-    margin: 0 auto 1rem !important;
-  }
-
-  .hero-float-num {
-    font-size: 3rem;
-    color: rgba(30, 24, 16, 0.12);
-  }
-
-  .hero-float-label {
-    color: var(--mist);
-    opacity: 1;
-  }
-
-  .shop { padding: 4rem 1.5rem; }
-  .about { grid-template-columns: 1fr; padding: 4rem 1.5rem; gap: 2rem; }
-  .about-art { height: 250px; }
-  .contact { padding: 4rem 1.5rem; }
-  .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
-  .expo-grid { grid-template-columns: 1fr; }
-  .category-grid { grid-template-columns: repeat(2, 1fr); }
-  .form-row-4 { grid-template-columns: 1fr 1fr; }
-  .lightbox-nav { width: 40px; height: 40px; font-size: 1rem; }
-  .lightbox-prev { left: 0.5rem; }
-  .lightbox-next { right: 0.5rem; }
-  .lightbox-controls button { width: 35px; height: 35px; font-size: 1rem; }
-}
+    @media (max-width: 768px) {
+      nav { padding: 0.9rem 1.2rem; }
+      nav ul { display: none; }
+      .hero { padding: 7rem 1.5rem 4rem; }
+      .hero-decor { display: none; }
+      .shop { padding: 4rem 1.5rem; }
+      .about { grid-template-columns: 1fr; padding: 4rem 1.5rem; gap: 2rem; }
+      .about-art { height: 250px; }
+      .contact { padding: 4rem 1.5rem; }
+      .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .expo-grid { grid-template-columns: 1fr; }
+      .category-grid { grid-template-columns: repeat(2, 1fr); }
+      .form-row-4 { grid-template-columns: 1fr 1fr; }
+      .lightbox-nav { width: 40px; height: 40px; font-size: 1rem; }
+      .lightbox-prev { left: 0.5rem; } .lightbox-next { right: 0.5rem; }
+      .lightbox-controls button { width: 35px; height: 35px; font-size: 1rem; }
+    }
   </style>
 </head>
 <body>

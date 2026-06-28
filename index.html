@@ -66,15 +66,20 @@
     .section-label { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--coral); font-weight: 600; margin-bottom: 0.8rem; }
     .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 3vw, 3rem); line-height: 1.1; }
     .section-title em { font-style: italic; color: var(--coral); }
-    #products-grid { display: flex; flex-direction: column; gap: 3.5rem; }
+    #products-grid { display: flex; flex-direction: column; }
 
-    .category-header { display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--light-border); }
-    .category-logo { width: 50px; height: 50px; object-fit: contain; }
-    .category-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.5rem, 2.5vw, 2rem); font-weight: 600; color: var(--ink); }
-    .category-title em { font-style: italic; color: var(--coral); }
-    .category-count { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mist); margin-left: auto; }
     .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.2rem; }
     .category-empty { grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--mist); font-size: 0.9rem; font-style: italic; }
+
+    /* Shop category tabs */
+    .shop-tabs { display: flex; gap: 0.8rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
+    .shop-tab { display: flex; align-items: center; gap: 0.6rem; padding: 0.7rem 1.4rem; background: white; border: 1.5px solid var(--light-border); border-radius: 0.4rem; cursor: pointer; font-family: 'Jost', sans-serif; font-size: 0.88rem; font-weight: 500; color: var(--ink); transition: all 0.25s; }
+    .shop-tab img { width: 26px; height: 26px; object-fit: contain; }
+    .shop-tab:hover { border-color: var(--coral); }
+    .shop-tab.active { background: var(--ink); border-color: var(--ink); color: white; }
+    .shop-tab-count { font-size: 0.72rem; opacity: 0.6; }
+    .category-panel { display: none; }
+    .category-panel.active { display: block; }
 
     .product-card { background: white; border-radius: 0.5rem; overflow: hidden; border: 1px solid var(--light-border); transition: all 0.4s cubic-bezier(0.23,1,0.32,1); }
     .product-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
@@ -198,6 +203,7 @@
       nav ul { display: none; }
       .hero { padding: 7rem 1.5rem 4rem; }
       .hero-decor { display: none; }
+      /* ── FIX: ocultar logo flotante en móvil ── */
       .hero-float { display: none; }
       .shop { padding: 4rem 1.5rem; }
       .about { grid-template-columns: 1fr; padding: 4rem 1.5rem; gap: 2rem; }
@@ -206,6 +212,9 @@
       .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
       .expo-grid { grid-template-columns: 1fr; }
       .category-grid { grid-template-columns: repeat(2, 1fr); }
+      .shop-tabs { gap: 0.5rem; }
+      .shop-tab { padding: 0.6rem 1rem; font-size: 0.8rem; flex: 1; justify-content: center; }
+      .shop-tab img { width: 20px; height: 20px; }
       .form-row-4 { grid-template-columns: 1fr 1fr; }
       .lightbox-nav { width: 40px; height: 40px; font-size: 1rem; }
       .lightbox-prev { left: 0.5rem; } .lightbox-next { right: 0.5rem; }
@@ -244,7 +253,7 @@
     </div>
   </div>
   <div class="hero-float">
-    <img src="imagenes/logotipofinal.png" alt="Logo" style="width:clamp(120px,20vw,300px);height:clamp(120px,20vw,300px);margin-bottom:1rem;object-fit:contain;">
+    <img src="imagenes/logotipofinal.png" alt="Logo" style="width:340px;height:340px;margin-bottom:1rem;object-fit:contain;">
     <div class="hero-float-num">100%</div>
     <div class="hero-float-label">Piezas originales</div>
   </div>
@@ -499,6 +508,14 @@
       </div>`;
   }
 
+  let activeShopTab = 'lienzo';
+
+  function switchShopTab(tab) {
+    activeShopTab = tab;
+    document.querySelectorAll('.shop-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+    document.querySelectorAll('.category-panel').forEach(p => p.classList.toggle('active', p.dataset.tab === tab));
+  }
+
   function renderShop() {
     const grid = document.getElementById('products-grid');
     if (!products.length) {
@@ -508,34 +525,38 @@
     const lienzos = products.filter(p => p.category === 'lienzo');
     const maderas = products.filter(p => p.category === 'madera');
     const otros = products.filter(p => !p.category || (p.category !== 'lienzo' && p.category !== 'madera'));
-    let html = '';
 
-    html += `<div>
-      <div class="category-header">
-        <div class="category-title">Sobre <em>Lienzo</em> <img src="imagenes/logolienzomadera1.png" onerror="this.style.display='none'" style="width:60px;height:60px;vertical-align:middle;margin-left:0.5rem;"></div>
-        <span class="category-count">${lienzos.length} obra${lienzos.length!==1?'s':''}</span>
-      </div>
-      <div class="category-grid">${lienzos.length ? lienzos.map(p => productCardHtml(p, products.indexOf(p))).join('') : '<div class="category-empty">Aún no hay obras — edítalas desde el panel para asignarlas</div>'}</div>
-    </div>`;
-
-    html += `<div>
-      <div class="category-header">
-        <div class="category-title">Sobre <em>Madera</em> <img src="imagenes/logolienzomadera2.png" onerror="this.style.display='none'" style="width:60px;height:60px;vertical-align:middle;margin-left:0.5rem;"></div>
-        <span class="category-count">${maderas.length} obra${maderas.length!==1?'s':''}</span>
-      </div>
-      <div class="category-grid">${maderas.length ? maderas.map(p => productCardHtml(p, products.indexOf(p))).join('') : '<div class="category-empty">Aún no hay obras — edítalas desde el panel para asignarlas</div>'}</div>
-    </div>`;
-
+    let tabsHtml = `<div class="shop-tabs">
+      <button class="shop-tab ${activeShopTab==='lienzo'?'active':''}" data-tab="lienzo" onclick="switchShopTab('lienzo')">
+        <img src="imagenes/logolienzomadera1.png" onerror="this.style.display='none'">
+        Sobre Lienzo <span class="shop-tab-count">(${lienzos.length})</span>
+      </button>
+      <button class="shop-tab ${activeShopTab==='madera'?'active':''}" data-tab="madera" onclick="switchShopTab('madera')">
+        <img src="imagenes/logolienzomadera2.png" onerror="this.style.display='none'">
+        Sobre Madera <span class="shop-tab-count">(${maderas.length})</span>
+      </button>`;
     if (otros.length) {
-      html += `<div>
-        <div class="category-header">
-          <div class="category-title">Otras <em>obras</em></div>
-          <span class="category-count">${otros.length} obra${otros.length!==1?'s':''}</span>
-        </div>
+      tabsHtml += `<button class="shop-tab ${activeShopTab==='otros'?'active':''}" data-tab="otros" onclick="switchShopTab('otros')">
+        Otras obras <span class="shop-tab-count">(${otros.length})</span>
+      </button>`;
+    }
+    tabsHtml += `</div>`;
+
+    let panelsHtml = `
+      <div class="category-panel ${activeShopTab==='lienzo'?'active':''}" data-tab="lienzo">
+        <div class="category-grid">${lienzos.length ? lienzos.map(p => productCardHtml(p, products.indexOf(p))).join('') : '<div class="category-empty">Aún no hay obras en esta categoría</div>'}</div>
+      </div>
+      <div class="category-panel ${activeShopTab==='madera'?'active':''}" data-tab="madera">
+        <div class="category-grid">${maderas.length ? maderas.map(p => productCardHtml(p, products.indexOf(p))).join('') : '<div class="category-empty">Aún no hay obras en esta categoría</div>'}</div>
+      </div>`;
+    if (otros.length) {
+      panelsHtml += `
+      <div class="category-panel ${activeShopTab==='otros'?'active':''}" data-tab="otros">
         <div class="category-grid">${otros.map(p => productCardHtml(p, products.indexOf(p))).join('')}</div>
       </div>`;
     }
-    grid.innerHTML = html;
+
+    grid.innerHTML = tabsHtml + panelsHtml;
   }
 
   // Exposiciones
@@ -572,17 +593,12 @@
   let currentShippingZone = '';
   let currentShippingCost = 0;
 
-  // Rangos de códigos postales españoles por zona
   function getZoneFromZip(zip) {
     if (!zip || zip.length !== 5 || !/^\d{5}$/.test(zip)) return null;
     const n = parseInt(zip);
-    // Canarias: 35000-35999 (Las Palmas) y 38000-38999 (Santa Cruz de Tenerife)
     if ((n >= 35000 && n <= 35999) || (n >= 38000 && n <= 38999)) return 'canarias';
-    // Ceuta: 51000-51999, Melilla: 52000-52999
     if (n >= 51000 && n <= 52999) return 'peninsula';
-    // Baleares: 07000-07999
     if (n >= 7000 && n <= 7999) return 'peninsula';
-    // Península e islas: 01000-52999
     if (n >= 1000 && n <= 52999) return 'peninsula';
     return null;
   }
@@ -591,7 +607,6 @@
   const DEFAULT_ZONES = { canarias:10, peninsula:15, europa:25, mundo:45 };
 
   function getShippingCost(zone) {
-    // Use first product's shippingZones as reference, or defaults
     const ref = cart.length && products.length ? products.find(p => p.id === cart[0].id) : null;
     const zones = ref && ref.shippingZones ? ref.shippingZones : DEFAULT_ZONES;
     return zones[zone] || DEFAULT_ZONES[zone] || 45;
@@ -621,7 +636,6 @@
       return;
     }
 
-    // Items
     let subtotal = 0;
     c.innerHTML = cart.map((item, i) => {
       subtotal += item.price * item.quantity;
@@ -637,7 +651,6 @@
       </div>`;
     }).join('');
 
-    // Shipping box
     c.innerHTML += `
       <div class="shipping-box" style="margin-top:1rem;">
         <label>📦 Datos de envío</label>
@@ -690,7 +703,6 @@
       currentShippingCost = cost;
       result.innerHTML = `<div class="shipping-result ok">✓ ${ZONE_LABELS[zone]} — Envío: <strong>${cost} €</strong></div>`;
     } else if (zip.length === 5) {
-      // CP extranjero de 5 dígitos o no reconocido → Europa o Mundo
       const cost = getShippingCost('europa');
       currentShippingZone = 'europa';
       currentShippingCost = cost;
@@ -712,17 +724,14 @@
   function renderPayButtons(total) {
     const ps = document.getElementById('paySection');
     if (!cart.length) { ps.innerHTML = ''; return; }
-
-    const needsShipping = currentShippingZone === '' ;
+    const needsShipping = currentShippingZone === '';
     if (needsShipping) {
       ps.innerHTML = `<p style="text-align:center;font-size:0.82rem;color:var(--mist);padding:1rem 0;">Introduce tu código postal para continuar con el pago</p>`;
       return;
     }
-
     ps.innerHTML = `<span class="pay-label">Elige tu forma de pago</span>
       <button class="bizum-btn" onclick="payWithBizum('${total.toFixed(2)}')">💸 Pagar con Bizum — ${total.toFixed(2)} €</button>
       <div id="paypal-button-container"></div>`;
-
     if (window.paypal) {
       window.paypal.Buttons({
         style:{ layout:'vertical', color:'gold', shape:'rect', label:'pay' },
@@ -750,7 +759,6 @@
   function openCart() { document.getElementById('cartModal').classList.add('open'); renderCartItems(); }
   function closeCart() { document.getElementById('cartModal').classList.remove('open'); }
 
-  // Email
   async function sendEmail() {
     const name = document.getElementById('contactName')?.value;
     const email = document.getElementById('contactEmail')?.value;

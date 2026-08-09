@@ -588,28 +588,148 @@
     document.body.appendChild(m);
   }
 
-  // ==================== CARRITO + ENVÍO POR CP ====================
+  // ==================== CARRITO + ENVÍO POR PAÍS ====================
   let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-  let currentShippingZone = '';
+  let currentShippingCountry = '';
   let currentShippingCost = 0;
 
-  function getZoneFromZip(zip) {
-    if (!zip || zip.length !== 5 || !/^\d{5}$/.test(zip)) return null;
-    const n = parseInt(zip);
-    if ((n >= 35000 && n <= 35999) || (n >= 38000 && n <= 38999)) return 'canarias';
-    if (n >= 51000 && n <= 52999) return 'peninsula';
-    if (n >= 7000 && n <= 7999) return 'peninsula';
-    if (n >= 1000 && n <= 52999) return 'peninsula';
-    return null;
+  // Tarifas de envío por país (desde Canarias, arte embalado)
+  // Ajustables también desde el panel de admin por obra (zona canarias/peninsula/europa/mundo)
+  const COUNTRY_SHIPPING = {
+    // España
+    'ES-IC': { label:'🇮🇨 Canarias (España)',        zone:'canarias',  cost:10 },
+    'ES':    { label:'🇪🇸 España (Península/Baleares)', zone:'peninsula', cost:15 },
+    // Europa — UE
+    'DE': { label:'🇩🇪 Alemania',     zone:'europa', cost:22 },
+    'AT': { label:'🇦🇹 Austria',      zone:'europa', cost:24 },
+    'BE': { label:'🇧🇪 Bélgica',      zone:'europa', cost:20 },
+    'BG': { label:'🇧🇬 Bulgaria',     zone:'europa', cost:28 },
+    'CY': { label:'🇨🇾 Chipre',       zone:'europa', cost:30 },
+    'HR': { label:'🇭🇷 Croacia',      zone:'europa', cost:26 },
+    'DK': { label:'🇩🇰 Dinamarca',    zone:'europa', cost:22 },
+    'SK': { label:'🇸🇰 Eslovaquia',   zone:'europa', cost:26 },
+    'SI': { label:'🇸🇮 Eslovenia',    zone:'europa', cost:25 },
+    'EE': { label:'🇪🇪 Estonia',      zone:'europa', cost:28 },
+    'FI': { label:'🇫🇮 Finlandia',    zone:'europa', cost:26 },
+    'FR': { label:'🇫🇷 Francia',      zone:'europa', cost:18 },
+    'GR': { label:'🇬🇷 Grecia',       zone:'europa', cost:28 },
+    'HU': { label:'🇭🇺 Hungría',      zone:'europa', cost:27 },
+    'IE': { label:'🇮🇪 Irlanda',      zone:'europa', cost:24 },
+    'IT': { label:'🇮🇹 Italia',       zone:'europa', cost:20 },
+    'LV': { label:'🇱🇻 Letonia',      zone:'europa', cost:28 },
+    'LT': { label:'🇱🇹 Lituania',     zone:'europa', cost:28 },
+    'LU': { label:'🇱🇺 Luxemburgo',   zone:'europa', cost:20 },
+    'MT': { label:'🇲🇹 Malta',        zone:'europa', cost:30 },
+    'NL': { label:'🇳🇱 Países Bajos', zone:'europa', cost:20 },
+    'PL': { label:'🇵🇱 Polonia',      zone:'europa', cost:26 },
+    'PT': { label:'🇵🇹 Portugal',     zone:'europa', cost:14 },
+    'CZ': { label:'🇨🇿 República Checa', zone:'europa', cost:26 },
+    'RO': { label:'🇷🇴 Rumanía',      zone:'europa', cost:28 },
+    'SE': { label:'🇸🇪 Suecia',       zone:'europa', cost:24 },
+    // Europa — no UE
+    'CH': { label:'🇨🇭 Suiza',        zone:'europa', cost:30 },
+    'NO': { label:'🇳🇴 Noruega',      zone:'europa', cost:30 },
+    'GB': { label:'🇬🇧 Reino Unido',  zone:'europa', cost:28 },
+    'IS': { label:'🇮🇸 Islandia',     zone:'europa', cost:35 },
+    // Resto del mundo
+    'US': { label:'🇺🇸 Estados Unidos', zone:'mundo', cost:55 },
+    'CA': { label:'🇨🇦 Canadá',         zone:'mundo', cost:60 },
+    'MX': { label:'🇲🇽 México',         zone:'mundo', cost:55 },
+    'AR': { label:'🇦🇷 Argentina',       zone:'mundo', cost:58 },
+    'BR': { label:'🇧🇷 Brasil',          zone:'mundo', cost:60 },
+    'AU': { label:'🇦🇺 Australia',       zone:'mundo', cost:70 },
+    'JP': { label:'🇯🇵 Japón',           zone:'mundo', cost:65 },
+    'CN': { label:'🇨🇳 China',           zone:'mundo', cost:65 },
+    'OTHER': { label:'🌍 Otro país',      zone:'mundo', cost:60 },
+  };
+
+  // Formatos de CP válidos por país (regex)
+  const ZIP_PATTERNS = {
+    'ES-IC': /^(35|38)\d{3}$/,
+    'ES':    /^(0[1-9]|[1-4]\d|5[0-2])\d{3}$/,
+    'DE':    /^\d{5}$/,
+    'AT':    /^\d{4}$/,
+    'BE':    /^\d{4}$/,
+    'BG':    /^\d{4}$/,
+    'CY':    /^\d{4}$/,
+    'HR':    /^\d{5}$/,
+    'DK':    /^\d{4}$/,
+    'SK':    /^\d{5}$/,
+    'SI':    /^\d{4}$/,
+    'EE':    /^\d{5}$/,
+    'FI':    /^\d{5}$/,
+    'FR':    /^\d{5}$/,
+    'GR':    /^\d{5}$/,
+    'HU':    /^\d{4}$/,
+    'IE':    /^[A-Z]\d{2}\s?[A-Z0-9]{4}$/i,
+    'IT':    /^\d{5}$/,
+    'LV':    /^(LV-)?\d{4}$/i,
+    'LT':    /^(LT-)?\d{5}$/i,
+    'LU':    /^\d{4}$/,
+    'MT':    /^[A-Z]{3}\s?\d{4}$/i,
+    'NL':    /^\d{4}\s?[A-Z]{2}$/i,
+    'PL':    /^\d{2}-\d{3}$/,
+    'PT':    /^\d{4}-\d{3}$/,
+    'CZ':    /^\d{3}\s?\d{2}$/,
+    'RO':    /^\d{6}$/,
+    'SE':    /^\d{5}$/,
+    'CH':    /^\d{4}$/,
+    'NO':    /^\d{4}$/,
+    'GB':    /^[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}$/i,
+    'IS':    /^\d{3}$/,
+    'US':    /^\d{5}(-\d{4})?$/,
+    'CA':    /^[A-Z]\d[A-Z]\s?\d[A-Z]\d$/i,
+    'MX':    /^\d{5}$/,
+    'AR':    /^[A-Z]?\d{4}[A-Z]{0,3}$/i,
+    'BR':    /^\d{5}-?\d{3}$/,
+    'AU':    /^\d{4}$/,
+    'JP':    /^\d{3}-?\d{4}$/,
+    'CN':    /^\d{6}$/,
+    'OTHER': /.*/,
+  };
+
+  function getCountryInfo(code) { return COUNTRY_SHIPPING[code] || COUNTRY_SHIPPING['OTHER']; }
+
+  function validateZip(countryCode, zip) {
+    if (!zip) return false;
+    // España: detectar si es Canarias o Península según CP
+    if (countryCode === 'ES') {
+      const n = parseInt(zip);
+      if (/^(35|38)\d{3}$/.test(zip)) return 'ES-IC'; // Canarias
+      if (/^(0[1-9]|[1-4]\d|5[0-2])\d{3}$/.test(zip)) return 'ES';
+      return false;
+    }
+    const pattern = ZIP_PATTERNS[countryCode];
+    return pattern && pattern.test(zip.trim()) ? countryCode : false;
   }
 
-  const ZONE_LABELS = { canarias:'🇮🇨 Canarias', peninsula:'🇪🇸 Península / Baleares', europa:'🇪🇺 Europa', mundo:'🌍 Resto del mundo' };
-  const DEFAULT_ZONES = { canarias:10, peninsula:15, europa:25, mundo:45 };
-
-  function getShippingCost(zone) {
+  function getShippingCostForCountry(countryCode) {
+    const info = getCountryInfo(countryCode);
+    // Intentar usar tarifa personalizada del producto si existe
     const ref = cart.length && products.length ? products.find(p => p.id === cart[0].id) : null;
-    const zones = ref && ref.shippingZones ? ref.shippingZones : DEFAULT_ZONES;
-    return zones[zone] || DEFAULT_ZONES[zone] || 45;
+    if (ref && ref.shippingZones && ref.shippingZones[info.zone] !== undefined) {
+      return ref.shippingZones[info.zone];
+    }
+    return info.cost;
+  }
+
+  // Generar opciones del selector de país
+  function countrySelectOptions() {
+    const groups = [
+      { label: '🇪🇸 España', codes: ['ES-IC', 'ES'] },
+      { label: '🇪🇺 Europa', codes: ['DE','AT','BE','BG','CY','HR','DK','SK','SI','EE','FI','FR','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','CZ','RO','SE','CH','NO','GB','IS'] },
+      { label: '🌍 Resto del mundo', codes: ['US','CA','MX','AR','BR','AU','JP','CN','OTHER'] },
+    ];
+    let html = '<option value="">— Selecciona tu país —</option>';
+    groups.forEach(g => {
+      html += `<optgroup label="${g.label}">`;
+      g.codes.forEach(code => {
+        const info = COUNTRY_SHIPPING[code];
+        if (info) html += `<option value="${code}">${info.label}</option>`;
+      });
+      html += '</optgroup>';
+    });
+    return html;
   }
 
   function saveCart() { localStorage.setItem('cart', JSON.stringify(cart)); updateCartCount(); }
@@ -620,7 +740,7 @@
     if (p.soldOut) return;
     const existing = cart.find(i => i.id === p.id);
     if (existing) existing.quantity++;
-    else cart.push({ id:p.id, name:p.name, price:parseFloat(p.price), shippingZones: p.shippingZones || DEFAULT_ZONES, quantity:1 });
+    else cart.push({ id:p.id, name:p.name, price:parseFloat(p.price), shippingZones: p.shippingZones || {}, quantity:1 });
     saveCart();
     renderCartItems();
     showToast(`✨ "${p.name}" añadida al carrito`);
@@ -656,15 +776,20 @@
         <label>📦 Datos de envío</label>
         <div class="shipping-options">
           <label class="shipping-option-label">
-            <input type="radio" name="shipMode" value="postal" checked onchange="onShipModeChange()"> Por código postal
+            <input type="radio" name="shipMode" value="postal" checked onchange="onShipModeChange()"> Envío a domicilio
           </label>
           <label class="shipping-option-label">
             <input type="radio" name="shipMode" value="pickup" onchange="onShipModeChange()"> Recogida gratuita
           </label>
         </div>
         <div id="postalDiv">
-          <input type="text" class="zip-input" id="zipInput" placeholder="Escribe tu código postal (ej: 35600)" maxlength="5" oninput="onZipChange(this.value)">
-          <div id="zipResult"></div>
+          <select id="countrySelect" onchange="onCountryChange()" style="width:100%;padding:0.6rem 0.8rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;font-size:0.88rem;margin-bottom:0.6rem;background:white;">
+            ${countrySelectOptions()}
+          </select>
+          <div id="zipRow" style="display:none;">
+            <input type="text" class="zip-input" id="zipInput" placeholder="Código postal" oninput="onZipChange(this.value)">
+            <div id="zipResult" style="margin-top:0.3rem;"></div>
+          </div>
         </div>
         <div id="pickupDiv" style="display:none;font-size:0.85rem;color:var(--forest);padding:0.3rem 0;">✅ Recogida gratuita en Puerto del Rosario</div>
       </div>`;
@@ -674,39 +799,60 @@
 
   function onShipModeChange() {
     const mode = document.querySelector('input[name="shipMode"]:checked')?.value;
-    const postalDiv = document.getElementById('postalDiv');
-    const pickupDiv = document.getElementById('pickupDiv');
     if (mode === 'pickup') {
-      postalDiv.style.display = 'none';
-      pickupDiv.style.display = 'block';
-      currentShippingZone = 'recogida';
+      document.getElementById('postalDiv').style.display = 'none';
+      document.getElementById('pickupDiv').style.display = 'block';
+      currentShippingCountry = 'recogida';
       currentShippingCost = 0;
     } else {
-      postalDiv.style.display = 'block';
-      pickupDiv.style.display = 'none';
-      currentShippingZone = '';
+      document.getElementById('postalDiv').style.display = 'block';
+      document.getElementById('pickupDiv').style.display = 'none';
+      currentShippingCountry = '';
       currentShippingCost = 0;
-      const zip = document.getElementById('zipInput')?.value;
-      if (zip) onZipChange(zip);
     }
-    let subtotal = cart.reduce((s,i) => s + i.price * i.quantity, 0);
-    updateTotal(subtotal);
+    updateTotal(cart.reduce((s,i) => s + i.price * i.quantity, 0));
+  }
+
+  function onCountryChange() {
+    const code = document.getElementById('countrySelect').value;
+    const zipRow = document.getElementById('zipRow');
+    document.getElementById('zipInput') && (document.getElementById('zipInput').value = '');
+    document.getElementById('zipResult') && (document.getElementById('zipResult').innerHTML = '');
+    currentShippingCountry = '';
+    currentShippingCost = 0;
+
+    if (!code) { zipRow.style.display = 'none'; updateTotal(cart.reduce((s,i)=>s+i.price*i.quantity,0)); return; }
+
+    // Mostrar campo CP con placeholder adecuado
+    const placeholders = {
+      'ES-IC':'35600 (Canarias)', 'ES':'28001 (Madrid)', 'DE':'10115', 'FR':'75001',
+      'IT':'00100', 'PT':'1000-001', 'NL':'1011 AB', 'BE':'1000', 'PL':'00-001',
+      'GB':'SW1A 1AA', 'CH':'8001', 'US':'90210', 'CA':'K1A 0A6', 'OTHER':'Tu código postal'
+    };
+    document.getElementById('zipInput').placeholder = placeholders[code] || 'Tu código postal';
+    zipRow.style.display = 'block';
+    updateTotal(cart.reduce((s,i)=>s+i.price*i.quantity,0));
   }
 
   function onZipChange(zip) {
+    const code = document.getElementById('countrySelect')?.value;
     const result = document.getElementById('zipResult');
-    if (!zip || zip.length < 5) { result.innerHTML = ''; currentShippingZone = ''; currentShippingCost = 0; updateTotal(cart.reduce((s,i)=>s+i.price*i.quantity,0)); return; }
-    const zone = getZoneFromZip(zip);
-    if (zone) {
-      const cost = getShippingCost(zone);
-      currentShippingZone = zone;
+    if (!code || !zip) { result.innerHTML = ''; currentShippingCountry = ''; currentShippingCost = 0; updateTotal(cart.reduce((s,i)=>s+i.price*i.quantity,0)); return; }
+
+    const validated = validateZip(code, zip);
+    if (validated) {
+      const finalCode = validated; // puede ser 'ES-IC' si detectó Canarias
+      const info = getCountryInfo(finalCode);
+      const cost = getShippingCostForCountry(finalCode);
+      currentShippingCountry = finalCode;
       currentShippingCost = cost;
-      result.innerHTML = `<div class="shipping-result ok">✓ ${ZONE_LABELS[zone]} — Envío: <strong>${cost} €</strong></div>`;
-    } else if (zip.length === 5) {
-      const cost = getShippingCost('europa');
-      currentShippingZone = 'europa';
-      currentShippingCost = cost;
-      result.innerHTML = `<div class="shipping-result info">ℹ️ Envío internacional — <strong>${cost} €</strong> (Europa). Para otros destinos contáctanos.</div>`;
+      result.innerHTML = `<div class="shipping-result ok">✓ ${info.label} — Envío: <strong>${cost} €</strong></div>`;
+    } else {
+      result.innerHTML = zip.length >= 3
+        ? `<div class="shipping-result" style="background:#fff3e0;color:#c0620a;">⚠️ Código postal no válido para el país seleccionado</div>`
+        : '';
+      currentShippingCountry = '';
+      currentShippingCost = 0;
     }
     updateTotal(cart.reduce((s,i)=>s+i.price*i.quantity,0));
   }
@@ -714,8 +860,12 @@
   function updateTotal(subtotal) {
     const total = subtotal + currentShippingCost;
     let totalHtml = `<div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--mist);margin-bottom:0.3rem;"><span>Subtotal obras</span><span>${subtotal.toFixed(2)} €</span></div>`;
-    if (currentShippingCost > 0) totalHtml += `<div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--mist);margin-bottom:0.3rem;"><span>Envío (${ZONE_LABELS[currentShippingZone]||currentShippingZone})</span><span>${currentShippingCost.toFixed(2)} €</span></div>`;
-    else if (currentShippingZone === 'recogida') totalHtml += `<div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--forest);margin-bottom:0.3rem;"><span>Recogida</span><span>Gratis</span></div>`;
+    if (currentShippingCost > 0) {
+      const info = getCountryInfo(currentShippingCountry);
+      totalHtml += `<div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--mist);margin-bottom:0.3rem;"><span>Envío · ${info.label}</span><span>${currentShippingCost.toFixed(2)} €</span></div>`;
+    } else if (currentShippingCountry === 'recogida') {
+      totalHtml += `<div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--forest);margin-bottom:0.3rem;"><span>Recogida en estudio</span><span>Gratis</span></div>`;
+    }
     totalHtml += `<div style="display:flex;justify-content:space-between;font-size:1.1rem;font-weight:700;padding-top:0.5rem;border-top:1px solid var(--light-border);"><span>Total</span><span>${total.toFixed(2)} €</span></div>`;
     document.getElementById('cartTotal').innerHTML = totalHtml;
     renderPayButtons(total);
@@ -724,9 +874,8 @@
   function renderPayButtons(total) {
     const ps = document.getElementById('paySection');
     if (!cart.length) { ps.innerHTML = ''; return; }
-    const needsShipping = currentShippingZone === '';
-    if (needsShipping) {
-      ps.innerHTML = `<p style="text-align:center;font-size:0.82rem;color:var(--mist);padding:1rem 0;">Introduce tu código postal para continuar con el pago</p>`;
+    if (!currentShippingCountry) {
+      ps.innerHTML = `<p style="text-align:center;font-size:0.82rem;color:var(--mist);padding:1rem 0;">Selecciona tu país e introduce el código postal para continuar</p>`;
       return;
     }
     ps.innerHTML = `<span class="pay-label">Elige tu forma de pago</span>
@@ -744,12 +893,13 @@
 
   function payWithBizum(amount) {
     const items = cart.map(i => `• ${i.name} x${i.quantity} = ${(i.price*i.quantity).toFixed(2)}€`).join('\n');
-    const msg = `💸 INSTRUCCIONES DE PAGO POR BIZUM\n\n${items}\nEnvío: ${currentShippingCost.toFixed(2)}€\nTOTAL: ${amount}€\n\n1. Abre tu app del banco\n2. Busca "Bizum" → Enviar dinero\n3. Número: +34 637 196 259 (Luis Berta)\n4. Importe: ${amount}€\n5. Concepto: "Compra Elberta Wood"\n\n¿Ya has enviado el Bizum?`;
+    const countryLabel = currentShippingCountry === 'recogida' ? 'Recogida en estudio' : (getCountryInfo(currentShippingCountry).label || currentShippingCountry);
+    const msg = `💸 INSTRUCCIONES DE PAGO POR BIZUM\n\n${items}\nEnvío (${countryLabel}): ${currentShippingCost.toFixed(2)}€\nTOTAL: ${amount}€\n\n1. Abre tu app del banco\n2. Busca "Bizum" → Enviar dinero\n3. Número: +34 637 196 259 (Luis Berta)\n4. Importe: ${amount}€\n5. Concepto: "Compra Elberta Wood"\n\n¿Ya has enviado el Bizum?`;
     if (confirm(msg)) {
       emailjs.send(EMAIL_SERVICE_ID, EMAIL_TEMPLATE_ID, {
         from_name:'Cliente Web', from_email:'bizum@elbertawoodandpencil.art',
         phone:'Bizum', subject:`Pago Bizum ${amount}€`,
-        message:`Pago por Bizum de ${amount}€\n\n${items}\nEnvío zona: ${currentShippingZone}\nEnvío coste: ${currentShippingCost}€`
+        message:`Pago por Bizum de ${amount}€\n\n${items}\nDestino: ${countryLabel}\nEnvío: ${currentShippingCost.toFixed(2)}€`
       }).catch(()=>{});
       showToast('✅ ¡Gracias! Confirmaremos tu pedido pronto');
       cart=[]; saveCart(); renderCartItems();
@@ -874,12 +1024,13 @@
         <label for="pNew" style="font-size:0.88rem;cursor:pointer;">Marcar como "Nuevo"</label>
       </div>
       <div style="margin-bottom:1rem;">${fInput('pVideo','URL del vídeo (YouTube)',p.video||'')}</div>
-      <p style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--mist);margin-bottom:0.6rem;font-weight:600;">Costes de envío por zona</p>
+      <p style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--mist);margin-bottom:0.3rem;font-weight:600;">Costes de envío por zona</p>
+      <p style="font-size:0.75rem;color:var(--mist);margin-bottom:0.8rem;">Tarifa base por zona. Cada país usa la tarifa de su zona salvo que definas precios individuales.</p>
       <div class="form-row-4" style="margin-bottom:1.5rem;">
-        <div><label style="font-size:0.7rem;color:var(--mist);display:block;margin-bottom:0.3rem;">🇮🇨 Canarias</label><input type="number" id="shipCanarias" value="${zones.canarias}" style="width:100%;padding:0.5rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;"></div>
-        <div><label style="font-size:0.7rem;color:var(--mist);display:block;margin-bottom:0.3rem;">🇪🇸 Península</label><input type="number" id="shipPeninsula" value="${zones.peninsula}" style="width:100%;padding:0.5rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;"></div>
-        <div><label style="font-size:0.7rem;color:var(--mist);display:block;margin-bottom:0.3rem;">🇪🇺 Europa</label><input type="number" id="shipEuropa" value="${zones.europa}" style="width:100%;padding:0.5rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;"></div>
-        <div><label style="font-size:0.7rem;color:var(--mist);display:block;margin-bottom:0.3rem;">🌍 Resto mundo</label><input type="number" id="shipMundo" value="${zones.mundo}" style="width:100%;padding:0.5rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;"></div>
+        <div><label style="font-size:0.7rem;color:var(--mist);display:block;margin-bottom:0.3rem;">🇮🇨 Canarias</label><input type="number" id="shipCanarias" value="${zones.canarias||10}" style="width:100%;padding:0.5rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;"></div>
+        <div><label style="font-size:0.7rem;color:var(--mist);display:block;margin-bottom:0.3rem;">🇪🇸 Península</label><input type="number" id="shipPeninsula" value="${zones.peninsula||15}" style="width:100%;padding:0.5rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;"></div>
+        <div><label style="font-size:0.7rem;color:var(--mist);display:block;margin-bottom:0.3rem;">🇪🇺 Europa</label><input type="number" id="shipEuropa" value="${zones.europa||25}" style="width:100%;padding:0.5rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;"></div>
+        <div><label style="font-size:0.7rem;color:var(--mist);display:block;margin-bottom:0.3rem;">🌍 Resto mundo</label><input type="number" id="shipMundo" value="${zones.mundo||45}" style="width:100%;padding:0.5rem;border:1.5px solid rgba(100,80,50,0.2);border-radius:0.3rem;font-family:'Jost',sans-serif;"></div>
       </div>
       <div style="display:flex;gap:0.8rem;">
         <button class="btn-save" onclick="saveProductAdmin('${product?p.id:''}')">${product?'Guardar cambios':'Añadir obra'}</button>

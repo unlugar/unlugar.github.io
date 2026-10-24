@@ -91,6 +91,15 @@
     .badge-new { background: var(--coral); color: white; }
     .badge-sold { background: var(--mist); color: white; }
     .badge-original { background: var(--forest); color: white; }
+    .badge-out { background: #1E1810; color: #FFD700; letter-spacing: 0.12em; font-size: 0.58rem; border: 1px solid #FFD700; }
+
+    /* Banner colección out — franja diagonal en esquina */
+    .collection-out-banner { position: absolute; top: 14px; right: -22px; background: linear-gradient(90deg,#1a1206,#2e1f08); color: #FFD700; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; padding: 0.28rem 2.2rem; transform: rotate(35deg); transform-origin: center; box-shadow: 0 2px 8px rgba(0,0,0,0.35); z-index: 3; white-space: nowrap; border-top: 1px solid rgba(255,215,0,0.4); border-bottom: 1px solid rgba(255,215,0,0.4); }
+
+    /* Precio rebajado */
+    .price-original { font-size: 0.8rem; color: var(--mist); text-decoration: line-through; margin-right: 0.3rem; font-family: 'Cormorant Garamond', serif; }
+    .price-sale { color: #c0320a; }
+    .price-discount-tag { font-size: 0.6rem; font-weight: 700; background: #c0320a; color: white; padding: 0.1rem 0.4rem; border-radius: 2rem; margin-left: 0.3rem; vertical-align: middle; }
     .product-body { padding: 0.78rem 0.84rem 0.9rem; }
     .product-technique { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.3rem; }
     .product-name { font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.2rem; }
@@ -485,13 +494,22 @@
   function productCardHtml(p, idx) {
     const mainImg = p.images && p.images[0] ? imgUrl(p.images[0]) : (p.image ? imgUrl(p.image) : null);
     const obraUrl = window.location.href.split('#')[0] + '#obra-' + idx;
+
+    // Precio: si hay salePrice activo mostramos tachado + rebajado + % descuento
+    const hasDiscount = p.collectionOut && p.salePrice && parseFloat(p.salePrice) < parseFloat(p.price);
+    const displayPrice = hasDiscount
+      ? `<span class="price-original">${p.price} €</span><span class="product-price price-sale">${p.salePrice} €</span><span class="price-discount-tag">-${Math.round((1 - p.salePrice/p.price)*100)}%</span>`
+      : `<span class="product-price">${p.price ? p.price+' €' : ''}</span>`;
+
     return `
-      <div class="product-card" id="obra-${idx}">
+      <div class="product-card" id="obra-${idx}" style="${p.collectionOut && !p.soldOut ? 'box-shadow:0 0 0 2px #FFD700;' : ''}">
         <div class="product-img" onclick="openLightbox(getMediaItemsByIdx(${idx}),0)">
           ${mainImg ? `<img class="product-img-bg" src="${mainImg}" alt="${p.name}" onerror="this.style.display='none'">` : '<div class="product-img-bg" style="background:linear-gradient(135deg,#D4603A,#C8942A)"></div>'}
+          ${p.collectionOut && !p.soldOut ? '<div class="collection-out-banner">Colección Out</div>' : ''}
           <div class="product-badge-wrap">
             ${p.isNew ? '<span class="badge badge-new">Nuevo</span>' : ''}
             ${p.soldOut ? '<span class="badge badge-sold">Vendido</span>' : '<span class="badge badge-original">Original</span>'}
+            ${p.collectionOut && !p.soldOut ? '<span class="badge badge-out">⚡ Out</span>' : ''}
             ${p.video ? '<span class="badge" style="background:var(--ink);color:white;">▶</span>' : ''}
           </div>
         </div>
@@ -500,7 +518,7 @@
           <div class="product-name">${p.name}</div>
           <div class="product-dims">${p.width && p.height ? p.width+' × '+p.height+' cm' : ''}</div>
           <div class="product-footer">
-            <div class="product-price ${p.soldOut?'sold-out':''}">${p.price ? p.price+' €' : ''}</div>
+            <div style="display:flex;align-items:center;flex-wrap:wrap;gap:0.2rem;">${p.soldOut ? '<span class="product-price" style="color:var(--mist);">Vendido</span>' : displayPrice}</div>
             <button class="add-btn" onclick="addToCart(${idx})" ${p.soldOut?'disabled':''}>${p.soldOut?'Vendido':'Comprar'}</button>
           </div>
           <button class="copy-link-btn" onclick="copyToClipboard('${obraUrl}')">🔗 Compartir</button>
@@ -740,7 +758,11 @@
     if (p.soldOut) return;
     const existing = cart.find(i => i.id === p.id);
     if (existing) existing.quantity++;
-    else cart.push({ id:p.id, name:p.name, price:parseFloat(p.price), shippingZones: p.shippingZones || {}, quantity:1 });
+    else {
+      const effectivePrice = (p.collectionOut && p.salePrice && parseFloat(p.salePrice) < parseFloat(p.price))
+        ? parseFloat(p.salePrice) : parseFloat(p.price);
+      cart.push({ id:p.id, name:p.name, price:effectivePrice, originalPrice: parseFloat(p.price), shippingZones: p.shippingZones || {}, quantity:1 });
+    }
     saveCart();
     renderCartItems();
     showToast(`✨ "${p.name}" añadida al carrito`);
@@ -762,7 +784,7 @@
       return `<div class="cart-item">
         <div style="flex:1;min-width:0;">
           <strong style="font-size:0.9rem;">${item.name}</strong>
-          <br><span style="font-size:0.75rem;color:var(--mist);">${item.quantity} × ${item.price} €</span>
+          <br><span style="font-size:0.75rem;color:var(--mist);">${item.quantity} × ${item.price} €${item.originalPrice && item.originalPrice > item.price ? ` <span style="text-decoration:line-through;color:#bbb;">${item.originalPrice} €</span>` : ''}</span>
         </div>
         <div style="display:flex;align-items:center;gap:0.5rem;">
           <strong>${(item.price * item.quantity).toFixed(2)} €</strong>
@@ -1023,6 +1045,19 @@
         <input type="checkbox" id="pNew" ${p.isNew?'checked':''} style="width:auto;accent-color:var(--coral);">
         <label for="pNew" style="font-size:0.88rem;cursor:pointer;">Marcar como "Nuevo"</label>
       </div>
+
+      <div style="background:linear-gradient(135deg,#1a1206,#2e1f08);border-radius:0.5rem;padding:1rem;margin-bottom:1rem;border:1.5px solid #FFD700;">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.8rem;">
+          <input type="checkbox" id="pCollectionOut" ${p.collectionOut?'checked':''} style="width:auto;accent-color:#FFD700;" onchange="toggleSalePriceField()">
+          <label for="pCollectionOut" style="font-size:0.9rem;cursor:pointer;color:#FFD700;font-weight:600;letter-spacing:0.06em;">⚡ COLECCIÓN OUT — acelerar salida de stock</label>
+        </div>
+        <p style="font-size:0.72rem;color:rgba(255,215,0,0.6);margin-bottom:0.8rem;">Activa esto para mostrar el banner "Colección Out" y el borde dorado en la obra.</p>
+        <div id="salePriceField" style="display:${p.collectionOut?'block':'none'};">
+          <label style="font-size:0.72rem;color:rgba(255,215,0,0.8);display:block;margin-bottom:0.4rem;font-weight:600;">Precio rebajado € <span style="opacity:0.6;">(deja vacío para mantener el precio original)</span></label>
+          ${fInput('pSalePrice','Ej: 180',p.salePrice||'','number')}
+        </div>
+      </div>
+
       <div style="margin-bottom:1rem;">${fInput('pVideo','URL del vídeo (YouTube)',p.video||'')}</div>
       <p style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--mist);margin-bottom:0.3rem;font-weight:600;">Costes de envío por zona</p>
       <p style="font-size:0.75rem;color:var(--mist);margin-bottom:0.8rem;">Tarifa base por zona. Cada país usa la tarifa de su zona salvo que definas precios individuales.</p>
@@ -1039,6 +1074,12 @@
     </div>`;
     updateCatStyle();
   }
+  function toggleSalePriceField() {
+    const checked = document.getElementById('pCollectionOut')?.checked;
+    const field = document.getElementById('salePriceField');
+    if (field) field.style.display = checked ? 'block' : 'none';
+  }
+
   function updateCatStyle() {
     const checked = document.querySelector('input[name="pCategory"]:checked');
     ['catLabelLienzo','catLabelMadera'].forEach(id => {
@@ -1062,6 +1103,8 @@
       price: document.getElementById('pPrice').value,
       soldOut: document.getElementById('pSold').value === '1',
       isNew: document.getElementById('pNew').checked,
+      collectionOut: document.getElementById('pCollectionOut')?.checked || false,
+      salePrice: document.getElementById('pSalePrice')?.value ? parseFloat(document.getElementById('pSalePrice').value) : null,
       images: document.getElementById('pImages').value.split(',').map(s=>s.trim()).filter(Boolean),
       video: document.getElementById('pVideo').value.trim(),
       shippingZones: {
